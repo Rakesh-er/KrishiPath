@@ -1,7 +1,7 @@
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
+import jwt from 'jsonwebtoken';
+import User from '../models/User.js';
 
-const authMiddleware = async (req, res, next) => {
+export const authMiddleware = async (req, res, next) => {
     try {
         const token = req.header('Authorization')?.replace('Bearer ', '');
 
@@ -18,18 +18,14 @@ const authMiddleware = async (req, res, next) => {
 
         req.user = { id: user._id, role: user.role, email: user.email };
         next();
-    } catch (error) {
+    } catch {
         res.status(401).json({ message: 'Invalid token.' });
     }
 };
 
-const roleMiddleware = (allowedRoles) => {
-    return (req, res, next) => {
-        if (!allowedRoles.includes(req.user.role)) {
-            return res.status(403).json({ message: 'Access denied. Insufficient permissions.' });
-        }
-        next();
-    };
+export const roleMiddleware = (allowedRoles) => (req, res, next) => {
+    if (!allowedRoles.includes(req.user.role)) {
+        return res.status(403).json({ message: 'Access denied. Insufficient permissions.' });
+    }
+    next();
 };
-
-module.exports = { authMiddleware, roleMiddleware };

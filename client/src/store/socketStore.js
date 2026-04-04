@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import io from 'socket.io-client';
+import { SERVER_URL } from '../config';
 
 export const useSocketStore = create((set, get) => ({
     socket: null,
@@ -7,7 +8,12 @@ export const useSocketStore = create((set, get) => ({
     notifications: [],
 
     connect: (token) => {
-        const socket = io(process.env.REACT_APP_SOCKET_URL || 'http://localhost:5000', {
+        const prev = get().socket;
+        if (prev) {
+            prev.disconnect();
+        }
+
+        const socket = io(SERVER_URL, {
             auth: { token }
         });
 

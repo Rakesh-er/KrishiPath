@@ -1,14 +1,17 @@
-const express = require('express');
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
-const { authMiddleware } = require('../middleware/auth');
+import express from 'express';
+import jwt from 'jsonwebtoken';
+import User from '../models/User.js';
+import { authMiddleware } from '../middleware/auth.js';
 
 const router = express.Router();
 
-// Register
 router.post('/register', async (req, res) => {
     try {
         const { name, email, password, role, address, phone, walletAddress } = req.body;
+
+        if (!name || !email || !password || !role) {
+            return res.status(400).json({ message: 'Name, email, password, and role are required' });
+        }
 
         const existingUser = await User.findOne({ email });
         if (existingUser) {
@@ -45,14 +48,18 @@ router.post('/register', async (req, res) => {
             }
         });
     } catch (error) {
+        console.error('Register error:', error);
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 });
 
-// Login
 router.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
+
+        if (!email || !password) {
+            return res.status(400).json({ message: 'Email and password are required' });
+        }
 
         const user = await User.findOne({ email });
         if (!user) {
@@ -82,18 +89,21 @@ router.post('/login', async (req, res) => {
             }
         });
     } catch (error) {
+        console.error('Login error:', error);
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 });
 
-// Get user profile
 router.get('/profile', authMiddleware, async (req, res) => {
     try {
         const user = await User.findById(req.user.id).select('-password');
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
         res.json(user);
     } catch (error) {
         res.status(500).json({ message: 'Server error' });
     }
 });
 
-module.exports = router;
+export default router;

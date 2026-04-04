@@ -1,11 +1,11 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const produceBatchSchema = new mongoose.Schema({
     batchId: { type: String, required: true, unique: true },
     farmerId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     produceName: { type: String, required: true },
     quantity: { type: Number, required: true },
-    unit: { type: String, required: true }, // kg, tons, etc.
+    unit: { type: String, required: true },
     harvestDate: { type: Date, required: true },
     location: {
         latitude: Number,
@@ -41,4 +41,4 @@ const produceBatchSchema = new mongoose.Schema({
     timestamps: true
 });
 
-module.exports = mongoose.model('ProduceBatch', produceBatchSchema);
+export default mongoose.model('ProduceBatch', produceBatchSchema);

@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const transactionSchema = new mongoose.Schema({
     batchId: { type: String, required: true },
@@ -14,11 +14,11 @@ const transactionSchema = new mongoose.Schema({
     },
     type: {
         type: String,
-        enum: ['payment', 'reward', 'penalty'],
+        enum: ['payment', 'reward', 'penalty', 'batch_creation'],
         default: 'payment'
     },
     metadata: {
-        gasUsed: Number,
+        gasUsed: String,
         gasPrice: String,
         blockNumber: Number
     }
@@ -26,4 +26,4 @@ const transactionSchema = new mongoose.Schema({
     timestamps: true
 });
 
-module.exports = mongoose.model('Transaction', transactionSchema);
+export default mongoose.model('Transaction', transactionSchema);

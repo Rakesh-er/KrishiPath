@@ -1,14 +1,13 @@
-const express = require('express');
-const QRCode = require('qrcode');
-const ProduceBatch = require('../models/ProduceBatch');
-const User = require('../models/User');
-const Reward = require('../models/Reward');
-const { authMiddleware, roleMiddleware } = require('../middleware/auth');
-const { v4: uuidv4 } = require('uuid');
+import express from 'express';
+import QRCode from 'qrcode';
+import { v4 as uuidv4 } from 'uuid';
+import ProduceBatch from '../models/ProduceBatch.js';
+import User from '../models/User.js';
+import Reward from '../models/Reward.js';
+import { authMiddleware, roleMiddleware } from '../middleware/auth.js';
 
 const router = express.Router();
 
-// Add new produce batch (Farmer only)
 router.post('/add', authMiddleware, roleMiddleware(['farmer']), async (req, res) => {
     try {
         const {
@@ -21,43 +20,53 @@ router.post('/add', authMiddleware, roleMiddleware(['farmer']), async (req, res)
             pricePerUnit
         } = req.body;
 
-        const batchId = `BATCH-${Date.now()}-${uuidv4().substr(0, 8)}`;
+        const batchId = `BATCH-${Date.now()}-${uuidv4().slice(0, 8)}`;
 
-        // Generate QR Code
         const qrData = {
             batchId,
             produceName,
             farmerId: req.user.id,
             harvestDate,
-            verificationUrl: `${process.env.CLIENT_URL}/verify/${batchId}`
+            verificationUrl: `${process.env.CLIENT_URL || 'http://localhost:3000'}/verify/${batchId}`
         };
 
         const qrCode = await QRCode.toDataURL(JSON.stringify(qrData));
+
+        const loc = location || {};
+        const timelineLocation = typeof loc === 'object' && loc.address != null
+            ? String(loc.address)
+            : '';
 
         const produceBatch = new ProduceBatch({
             batchId,
             farmerId: req.user.id,
             produceName,
-            quantity,
+            quantity: Number(quantity),
             unit,
-            harvestDate,
-            location,
-            quality,
+            harvestDate: harvestDate ? new Date(harvestDate) : new Date(),
+            location: {
+                latitude: loc.latitude != null && loc.latitude !== '' ? Number(loc.latitude) : undefined,
+                longitude: loc.longitude != null && loc.longitude !== '' ? Number(loc.longitude) : undefined,
+                address: loc.address
+            },
+            quality: quality || {
+                grade: 'B',
+                testResults: { pesticides: false, organicCertified: false, qualityScore: 70 }
+            },
             qrCode,
             currentHolder: req.user.id,
-            pricePerUnit,
+            pricePerUnit: pricePerUnit !== '' && pricePerUnit != null ? Number(pricePerUnit) : undefined,
             timeline: [{
                 status: 'harvested',
                 timestamp: new Date(),
                 handledBy: req.user.id,
-                location: location.address,
+                location: timelineLocation,
                 notes: 'Produce harvested and batch created'
             }]
         });
 
         await produceBatch.save();
 
-        // Award points to farmer
         const reward = new Reward({
             userId: req.user.id,
             points: 10,
@@ -70,12 +79,13 @@ router.post('/add', authMiddleware, roleMiddleware(['farmer']), async (req, res)
             $inc: { rewardPoints: 10 }
         });
 
-        // Emit real-time event
         const io = req.app.get('io');
-        io.emit('produceUpdated', {
-            action: 'created',
-            batch: produceBatch
-        });
+        if (io) {
+            io.emit('produceUpdated', {
+                action: 'created',
+                batch: produceBatch
+            });
+        }
 
         res.status(201).json({
             message: 'Produce batch created successfully',
@@ -84,11 +94,11 @@ router.post('/add', authMiddleware, roleMiddleware(['farmer']), async (req, res)
             batch: produceBatch
         });
     } catch (error) {
+        console.error('Produce add error:', error);
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 });
 
-// Update batch status
 router.put('/update/:batchId', authMiddleware, async (req, res) => {
     try {
         const { batchId } = req.params;
@@ -99,19 +109,17 @@ router.put('/update/:batchId', authMiddleware, async (req, res) => {
             return res.status(404).json({ message: 'Batch not found' });
         }
 
-        // Check authorization
         const allowedRoles = {
-            'in_transit': ['farmer', 'transporter'],
-            'at_retailer': ['transporter', 'retailer'],
-            'sold': ['retailer'],
-            'expired': ['government', 'retailer']
+            in_transit: ['farmer', 'transporter'],
+            at_retailer: ['transporter', 'retailer'],
+            sold: ['retailer'],
+            expired: ['government', 'retailer']
         };
 
-        if (!allowedRoles[status] || !allowedRoles[status].includes(req.user.role)) {
+        if (!status || !allowedRoles[status] || !allowedRoles[status].includes(req.user.role)) {
             return res.status(403).json({ message: 'Not authorized for this status update' });
         }
 
-        // Update batch
         batch.status = status;
         if (status === 'in_transit' || status === 'at_retailer') {
             batch.currentHolder = req.user.id;
@@ -121,30 +129,31 @@ router.put('/update/:batchId', authMiddleware, async (req, res) => {
             status,
             timestamp: new Date(),
             handledBy: req.user.id,
-            location,
-            notes
+            location: location ?? '',
+            notes: notes ?? ''
         });
 
         await batch.save();
 
-        // Emit real-time event
         const io = req.app.get('io');
-        io.emit('produceUpdated', {
-            action: 'updated',
-            batch,
-            updatedBy: req.user.id
-        });
+        if (io) {
+            io.emit('produceUpdated', {
+                action: 'updated',
+                batch,
+                updatedBy: req.user.id
+            });
+        }
 
         res.json({
             message: 'Batch status updated successfully',
             batch
         });
     } catch (error) {
+        console.error('Produce update error:', error);
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 });
 
-// Get all batches (filtered by user role)
 router.get('/list', authMiddleware, async (req, res) => {
     try {
         let query = {};
@@ -154,7 +163,6 @@ router.get('/list', authMiddleware, async (req, res) => {
         } else if (req.user.role === 'transporter' || req.user.role === 'retailer') {
             query.currentHolder = req.user.id;
         }
-        // Government can see all
 
         const batches = await ProduceBatch.find(query)
             .populate('farmerId', 'name email')
@@ -163,11 +171,11 @@ router.get('/list', authMiddleware, async (req, res) => {
 
         res.json(batches);
     } catch (error) {
+        console.error('Produce list error:', error);
         res.status(500).json({ message: 'Server error' });
     }
 });
 
-// Get batch details by ID
 router.get('/:batchId', async (req, res) => {
     try {
         const { batchId } = req.params;
@@ -183,8 +191,9 @@ router.get('/:batchId', async (req, res) => {
 
         res.json(batch);
     } catch (error) {
+        console.error('Produce get error:', error);
         res.status(500).json({ message: 'Server error' });
     }
 });
 
-module.exports = router;
+export default router;

@@ -1,55 +1,56 @@
-const express = require('express');
-const axios = require('axios');
-const { authMiddleware } = require('../middleware/auth');
+import express from 'express';
+import axios from 'axios';
+import { authMiddleware } from '../middleware/auth.js';
+import { computeCompositeQualityScore, gradeFromScore } from '../lib/quality.js';
 
 const router = express.Router();
 
-// AI Anomaly Detection
 router.post('/detect-anomaly', authMiddleware, async (req, res) => {
     try {
-        const { batchId, imageUrl, description, quality } = req.body;
+        const { batchId, description, quality } = req.body;
 
-        // Simple rule-based anomaly detection
         let anomalyScore = 0;
         const flags = [];
 
-        // Quality checks
-        if (quality.qualityScore < 70) {
+        if (quality?.testResults?.qualityScore != null && quality.testResults.qualityScore < 70) {
             anomalyScore += 30;
             flags.push('Low quality score');
         }
 
-        if (quality.pesticides === true) {
+        if (quality?.testResults?.pesticides === true) {
             anomalyScore += 50;
             flags.push('Pesticide residue detected');
         }
 
-        // If OpenAI API is available, use it for advanced detection
         if (process.env.OPENAI_API_KEY && description) {
             try {
-                const openaiResponse = await axios.post('https://api.openai.com/v1/chat/completions', {
-                    model: 'gpt-3.5-turbo',
-                    messages: [{
-                        role: 'user',
-                        content: `Analyze this produce description for potential anomalies or quality issues: "${description}". Rate the anomaly risk from 0-100 and explain briefly.`
-                    }],
-                    max_tokens: 150
-                }, {
-                    headers: {
-                        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-                        'Content-Type': 'application/json'
+                const openaiResponse = await axios.post(
+                    'https://api.openai.com/v1/chat/completions',
+                    {
+                        model: 'gpt-3.5-turbo',
+                        messages: [{
+                            role: 'user',
+                            content: `Analyze this produce description for potential anomalies or quality issues: "${description}". Rate the anomaly risk from 0-100 and explain briefly.`
+                        }],
+                        max_tokens: 150
+                    },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+                            'Content-Type': 'application/json'
+                        }
                     }
-                });
+                );
 
                 const aiAnalysis = openaiResponse.data.choices[0].message.content;
-                const aiScore = parseInt(aiAnalysis.match(/\d+/)?.[0] || '0');
+                const aiScore = parseInt(aiAnalysis.match(/\d+/)?.[0] || '0', 10);
 
                 if (aiScore > 70) {
                     anomalyScore += aiScore;
                     flags.push('AI detected potential quality issues');
                 }
             } catch (aiError) {
-                console.log('OpenAI API unavailable, using rule-based detection');
+                console.warn('OpenAI API unavailable, using rule-based detection only');
             }
         }
 
@@ -63,43 +64,34 @@ router.post('/detect-anomaly', authMiddleware, async (req, res) => {
             recommendation: isAnomalous ? 'Further inspection required' : 'Quality acceptable',
             timestamp: new Date()
         });
-
     } catch (error) {
+        console.error('Anomaly detection error:', error);
         res.status(500).json({ message: 'Anomaly detection failed', error: error.message });
     }
 });
 
-// Batch quality assessment
 router.post('/assess-quality', authMiddleware, async (req, res) => {
     try {
         const { batchId, metrics } = req.body;
 
-        // Calculate composite quality score
-        const weights = {
-            appearance: 0.3,
-            freshness: 0.25,
-            size: 0.15,
-            contamination: 0.3
-        };
-
-        let qualityScore = 0;
-        for (const [metric, value] of Object.entries(metrics)) {
-            qualityScore += (weights[metric] || 0) * value;
+        if (!metrics || typeof metrics !== 'object') {
+            return res.status(400).json({ message: 'metrics object is required' });
         }
 
-        const grade = qualityScore >= 90 ? 'A' : qualityScore >= 75 ? 'B' : 'C';
+        const rawScore = computeCompositeQualityScore(metrics);
+        const grade = gradeFromScore(rawScore);
 
         res.json({
             batchId,
-            qualityScore: Math.round(qualityScore),
+            qualityScore: Math.round(rawScore),
             grade,
             metrics,
-            assessment: qualityScore >= 80 ? 'Premium Quality' : qualityScore >= 60 ? 'Standard Quality' : 'Below Standard'
+            assessment: rawScore >= 80 ? 'Premium Quality' : rawScore >= 60 ? 'Standard Quality' : 'Below Standard'
         });
-
     } catch (error) {
+        console.error('Quality assessment error:', error);
         res.status(500).json({ message: 'Quality assessment failed', error: error.message });
     }
 });
 
-module.exports = router;
+export default router;

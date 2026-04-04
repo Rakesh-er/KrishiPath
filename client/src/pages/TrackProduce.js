@@ -6,6 +6,14 @@ import axios from 'axios';
 const TrackProduce = () => {
     const { t } = useTranslation();
     const { user } = useAuthStore();
+
+    if (!user) {
+        return (
+            <div className="flex justify-center items-center min-h-screen">
+                <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-green-500" />
+            </div>
+        );
+    }
     const [batches, setBatches] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedBatch, setSelectedBatch] = useState(null);
@@ -314,3 +322,5 @@ const TrackProduce = () => {
         </div>
     );
 };
+
+export default TrackProduce;

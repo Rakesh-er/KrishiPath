@@ -406,3 +406,5 @@ const AddProduce = () => {
         </div>
     );
 };
+
+export default AddProduce;

@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const rewardSchema = new mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
@@ -11,4 +11,4 @@ const rewardSchema = new mongoose.Schema({
     timestamps: true
 });
 
-module.exports = mongoose.model('Reward', rewardSchema);
+export default mongoose.model('Reward', rewardSchema);

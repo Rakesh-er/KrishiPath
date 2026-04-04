@@ -7,6 +7,14 @@ import axios from 'axios';
 const Dashboard = () => {
     const { t } = useTranslation();
     const { user } = useAuthStore();
+
+    if (!user) {
+        return (
+            <div className="flex justify-center items-center min-h-screen">
+                <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-green-500" />
+            </div>
+        );
+    }
     const { notifications, removeNotification } = useSocketStore();
     const [stats, setStats] = useState({
         totalBatches: 0,
@@ -255,3 +263,5 @@ const Dashboard = () => {
         </div>
     );
 };
+
+export default Dashboard;

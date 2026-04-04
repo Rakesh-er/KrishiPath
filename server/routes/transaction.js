@@ -1,54 +1,79 @@
-const express = require('express');
-const { ethers } = require('ethers');
-const Transaction = require('../models/Transaction');
-const ProduceBatch = require('../models/ProduceBatch');
-const { authMiddleware } = require('../middleware/auth');
+import express from 'express';
+import { ethers } from 'ethers';
+import Transaction from '../models/Transaction.js';
+import ProduceBatch from '../models/ProduceBatch.js';
+import { authMiddleware } from '../middleware/auth.js';
 
 const router = express.Router();
 
-// Smart contract ABI (simplified)
 const contractABI = [
-    "function createBatch(string memory batchId, address farmer, uint256 timestamp, uint8 quality) public",
-    "function updateBatchStatus(string memory batchId, uint8 status, uint256 timestamp) public",
-    "function releaseFarmerPayment(string memory batchId, address farmer, uint256 amount) public payable",
-    "event BatchCreated(string batchId, address farmer, uint256 timestamp)",
-    "event BatchUpdated(string batchId, uint8 status, uint256 timestamp)",
-    "event PaymentReleased(string batchId, address farmer, uint256 amount)"
+    'function createBatch(string memory batchId, address farmer, uint256 timestamp, uint8 quality) public',
+    'function updateBatchStatus(string memory batchId, uint8 status, uint256 timestamp) public',
+    'function releaseFarmerPayment(string memory batchId, address farmer, uint256 amount) public payable',
+    'event BatchCreated(string batchId, address farmer, uint256 timestamp)',
+    'event BatchUpdated(string batchId, uint8 status, uint256 timestamp)',
+    'event PaymentReleased(string batchId, address farmer, uint256 amount)'
 ];
 
-// Initialize blockchain connection
-const provider = new ethers.JsonRpcProvider(process.env.BLOCKCHAIN_RPC_URL);
-const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
-const contract = new ethers.Contract(
-    process.env.BLOCKCHAIN_CONTRACT_ADDRESS,
-    contractABI,
-    wallet
-);
+let blockchain = null;
 
-// Create blockchain transaction for batch
+function getBlockchain() {
+    if (blockchain?.disabled) return blockchain;
+    if (blockchain?.contract) return blockchain;
+
+    const rpc = process.env.BLOCKCHAIN_RPC_URL;
+    const pk = process.env.PRIVATE_KEY;
+    const contractAddress = process.env.BLOCKCHAIN_CONTRACT_ADDRESS;
+
+    if (!rpc || !pk || !contractAddress) {
+        blockchain = { disabled: true, reason: 'Blockchain env vars not set' };
+        return blockchain;
+    }
+
+    try {
+        const provider = new ethers.JsonRpcProvider(rpc);
+        const wallet = new ethers.Wallet(pk, provider);
+        const contract = new ethers.Contract(contractAddress, contractABI, wallet);
+        blockchain = { contract, wallet, provider };
+        return blockchain;
+    } catch (err) {
+        console.error('Blockchain init failed:', err.message);
+        blockchain = { disabled: true, reason: err.message };
+        return blockchain;
+    }
+}
+
 router.post('/create-batch', authMiddleware, async (req, res) => {
     try {
-        const { batchId } = req.body;
+        const bc = getBlockchain();
+        if (!bc.contract) {
+            return res.status(503).json({
+                message: 'Blockchain not configured or unavailable',
+                detail: bc.reason || bc.disabled
+            });
+        }
 
+        const { batchId } = req.body;
         const batch = await ProduceBatch.findOne({ batchId }).populate('farmerId');
         if (!batch) {
             return res.status(404).json({ message: 'Batch not found' });
         }
 
-        // Create blockchain transaction
-        const tx = await contract.createBatch(
+        const grade = batch.quality?.grade;
+        const qualityVal = grade === 'A' ? 3 : grade === 'B' ? 2 : 1;
+
+        const tx = await bc.contract.createBatch(
             batchId,
-            batch.farmerId.walletAddress || wallet.address,
+            batch.farmerId.walletAddress || bc.wallet.address,
             Math.floor(Date.now() / 1000),
-            batch.quality.grade === 'A' ? 3 : batch.quality.grade === 'B' ? 2 : 1
+            qualityVal
         );
 
-        // Save transaction record
         const transaction = new Transaction({
             batchId,
             from: req.user.id,
             to: batch.farmerId._id,
-            amount: 0, // No payment for batch creation
+            amount: 0,
             blockchainTxHash: tx.hash,
             status: 'pending',
             type: 'batch_creation'
@@ -56,28 +81,27 @@ router.post('/create-batch', authMiddleware, async (req, res) => {
 
         await transaction.save();
 
-        // Update batch with transaction hash
         batch.blockchainTxHash = tx.hash;
         await batch.save();
 
-        // Wait for confirmation
         const receipt = await tx.wait();
 
         transaction.status = 'confirmed';
         transaction.metadata = {
-            gasUsed: receipt.gasUsed.toString(),
-            gasPrice: tx.gasPrice.toString(),
+            gasUsed: receipt.gasUsed != null ? String(receipt.gasUsed) : undefined,
+            gasPrice: tx.gasPrice != null ? String(tx.gasPrice) : undefined,
             blockNumber: receipt.blockNumber
         };
         await transaction.save();
 
-        // Emit real-time event
         const io = req.app.get('io');
-        io.emit('transactionConfirmed', {
-            batchId,
-            txHash: tx.hash,
-            status: 'confirmed'
-        });
+        if (io) {
+            io.emit('transactionConfirmed', {
+                batchId,
+                txHash: tx.hash,
+                status: 'confirmed'
+            });
+        }
 
         res.json({
             message: 'Batch created on blockchain',
@@ -90,26 +114,36 @@ router.post('/create-batch', authMiddleware, async (req, res) => {
     }
 });
 
-// Release payment to farmer
 router.post('/release-payment', authMiddleware, async (req, res) => {
     try {
+        const bc = getBlockchain();
+        if (!bc.contract) {
+            return res.status(503).json({
+                message: 'Blockchain not configured or unavailable',
+                detail: bc.reason || bc.disabled
+            });
+        }
+
         const { batchId, amount } = req.body;
+
+        if (amount == null || Number(amount) <= 0) {
+            return res.status(400).json({ message: 'Valid amount is required' });
+        }
 
         const batch = await ProduceBatch.findOne({ batchId }).populate('farmerId');
         if (!batch) {
             return res.status(404).json({ message: 'Batch not found' });
         }
 
-        // Only retailers can release payments
         if (req.user.role !== 'retailer') {
             return res.status(403).json({ message: 'Only retailers can release payments' });
         }
 
-        const amountWei = ethers.parseEther(amount.toString());
+        const amountWei = ethers.parseEther(String(amount));
 
-        const tx = await contract.releaseFarmerPayment(
+        const tx = await bc.contract.releaseFarmerPayment(
             batchId,
-            batch.farmerId.walletAddress || wallet.address,
+            batch.farmerId.walletAddress || bc.wallet.address,
             amountWei,
             { value: amountWei }
         );
@@ -118,9 +152,10 @@ router.post('/release-payment', authMiddleware, async (req, res) => {
             batchId,
             from: req.user.id,
             to: batch.farmerId._id,
-            amount,
+            amount: Number(amount),
             blockchainTxHash: tx.hash,
-            status: 'pending'
+            status: 'pending',
+            type: 'payment'
         });
 
         await transaction.save();
@@ -129,19 +164,21 @@ router.post('/release-payment', authMiddleware, async (req, res) => {
 
         transaction.status = 'confirmed';
         transaction.metadata = {
-            gasUsed: receipt.gasUsed.toString(),
-            gasPrice: tx.gasPrice.toString(),
+            gasUsed: receipt.gasUsed != null ? String(receipt.gasUsed) : undefined,
+            gasPrice: tx.gasPrice != null ? String(tx.gasPrice) : undefined,
             blockNumber: receipt.blockNumber
         };
         await transaction.save();
 
         const io = req.app.get('io');
-        io.emit('transactionConfirmed', {
-            batchId,
-            txHash: tx.hash,
-            amount,
-            to: batch.farmerId.name
-        });
+        if (io) {
+            io.emit('transactionConfirmed', {
+                batchId,
+                txHash: tx.hash,
+                amount,
+                to: batch.farmerId.name
+            });
+        }
 
         res.json({
             message: 'Payment released successfully',
@@ -154,7 +191,6 @@ router.post('/release-payment', authMiddleware, async (req, res) => {
     }
 });
 
-// Get transaction history
 router.get('/history', authMiddleware, async (req, res) => {
     try {
         const transactions = await Transaction.find({
@@ -163,8 +199,9 @@ router.get('/history', authMiddleware, async (req, res) => {
 
         res.json(transactions);
     } catch (error) {
+        console.error('Transaction history error:', error);
         res.status(500).json({ message: 'Server error' });
     }
 });
 
-module.exports = router;
+export default router;

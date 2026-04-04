@@ -1,13 +1,14 @@
 import { create } from 'zustand';
 import axios from 'axios';
-
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+import { API_URL } from '../config';
 
 export const useAuthStore = create((set, get) => ({
     user: null,
     token: localStorage.getItem('token'),
     isAuthenticated: !!localStorage.getItem('token'),
     loading: false,
+    /** False until `initializeAuth` has finished (persisted session or not). */
+    hydrated: false,
 
     login: async (email, password) => {
         set({ loading: true });
@@ -85,17 +86,21 @@ export const useAuthStore = create((set, get) => ({
                 set({
                     user: response.data,
                     token,
-                    isAuthenticated: true
+                    isAuthenticated: true,
+                    hydrated: true
                 });
-            } catch (error) {
+            } catch {
                 localStorage.removeItem('token');
                 delete axios.defaults.headers.common['Authorization'];
                 set({
                     user: null,
                     token: null,
-                    isAuthenticated: false
+                    isAuthenticated: false,
+                    hydrated: true
                 });
             }
+        } else {
+            set({ hydrated: true });
         }
     }
 }));
