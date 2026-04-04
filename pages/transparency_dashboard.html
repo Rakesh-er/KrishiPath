@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Transparency Dashboard - KrishiPath Transparency</title>
+    <meta name="description"
+        content="Premium supply chain visualization and management dashboard. Monitor KPIs, track products, and optimize operations with real-time blockchain-verified data." />
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script type="module"
+        src="https://static.rocket.new/rocket-web.js?_cfg=https%3A%2F%2Fagrichain5007back.builtwithrocket.new&_be=https%3A%2F%2Fapplication.rocket.new&_v=0.1.8"></script>
+    <style>
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h2 {
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+        }
+
+        /* Floating Help Button Styles */
+        .help-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+
+        .main-help-button {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff8a00, #e52e71);
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .main-help-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .main-help-button i {
+            font-size: 28px;
+        }
+
+        .help-options {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+
+        .help-options.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .help-option {
+            display: flex;
+            align-items: center;
+            background: white;
+            color: #333;
+            text-decoration: none;
+            padding: 12px 20px;
+            margin-bottom: 15px;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            width: 200px;
+        }
+
+        .help-option:hover {
+            transform: translateX(-5px);
+            background: #f8f8f8;
+        }
+
+        .help-option i {
+            margin-right: 10px;
+            font-size: 20px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tutorial i {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .chatbot i {
+            background: #2196F3;
+            color: white;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            p {
+                font-size: 1rem;
+            }
+
+            .main-help-button {
+                width: 60px;
+                height: 60px;
+            }
+
+            .help-container {
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-background text-text-primary">
+    <!-- Floating Help Button -->
+    <div class="help-container">
+        <div class="help-options" id="helpOptions">
+            <a href="https://youtu.be/PIxT5nxzVgE?si=ShP9OGQTJ4i6EvZc" class="help-option tutorial">
+                <i class="fas fa-play-circle"></i>
+                Watch Tutorial
+            </a>
+            <a href="./chatbot.html" class="help-option chatbot">
+                <i class="fas fa-comments"></i>
+                Chatbot
+            </a>
+        </div>
+        <button class="main-help-button" id="helpButton">
+            <i class="fas fa-question"></i>
+        </button>
+    </div>
+    <!-- Navigation Header -->
+    <header class="bg-white shadow-subtle sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                         <svg class="h-8 w-8 text-primary" viewBox="0 0 32 32" fill="currentColor">
+                           <path d="M16 2L8 6v10c0 6.627 3.373 10 8 10s8-3.373 8-10V6l-8-4z" />
+                           <image href="/assets/logo.png" x="0" y="0" width="32" height="32" />
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <h1 class="text-xl font-bold text-primary">KrishiPath</h1>
+                        <p class="text-xs text-text-secondary">Transparency</p>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="homepage.html"
+                            class="text-text-secondary hover:text-primary px-3 py-2 rounded-md text-sm transition-smooth">Home</a>
+                        <a href="product_journey_viewer.html"
+                            class="text-text-secondary hover:text-primary px-3 py-2 rounded-md text-sm transition-smooth">Product
+                            Tracker</a>
+                        <a href="transparency_dashboard.html"
+                            class="text-primary font-semibold px-3 py-2 rounded-md text-sm">Dashboard</a>
+                        <a href="case_studies_success_stories.html"
+                            class="text-text-secondary hover:text-primary px-3 py-2 rounded-md text-sm transition-smooth">Case
+                            Studies</a>
+                        <a href="pricing_plans.html"
+                            class="text-text-secondary hover:text-primary px-3 py-2 rounded-md text-sm transition-smooth">Pricing</a>
+                        <a href="stakeholder_registration_hub.html" class="btn-primary text-sm">Get Started</a>
+                    </div>
+                </div>
+
+                <!-- User Profile & Notifications -->
+                <div class="hidden md:flex items-center space-x-4">
+                    <!-- Notifications -->
+                    <button class="relative p-2 text-text-secondary hover:text-primary transition-smooth"
+                        onclick="toggleNotifications()">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 17h5l-5-5V9a6 6 0 10-12 0v3l-5 5h5m7 0v1a3 3 0 01-6 0v-1m6 0H9" />
+                        </svg>
+                        <span
+                            class="absolute -top-1 -right-1 bg-error text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
+                    </button>
+
+                    <!-- User Profile -->
+                    <div class="relative">
+                        <button onclick="toggleUserMenu()"
+                            class="flex items-center space-x-3 p-2 rounded-lg hover:bg-surface transition-smooth">
+                            <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N//AABEIAJQAlAMBIgACEQEDEQH/xAAcAAEAAQUBAQAAAAAAAAAAAAAABwEEBQYIAgP/xAA8EAABAwIDBgMECAQHAAAAAAABAAIDBAUGETEHEiFBYXFRgZETIjKhCBRCYnKCssEjJFLRM0NEY5Ki0v/EABYBAQEBAAAAAAAAAAAAAAAAAAABAv/EABYRAQEBAAAAAAAAAAAAAAAAAAABEf/aAAwDAQACEQMRAD8AnFERAREQEREBERARW9VXUlGwvq6qGBo5yyBo+atYb/Zp3iOC72+V5+yyqYT6AoMkio1wcM2kEHmFVAREQEREBERAREQEREBERARF8aqoipKeWoqJGxwxML3vdo1o4koLK/3y34ft0lfdKhsMLNObnn+lo5nooLxZtXvl5kfDaXvtVFoPZke2ePvO+z2b6rBY5xZU4uvDquQvjo4yW0lOf8tvifvHU+i11FkVne+plM1U988p1klcXu9TxXhzGuGTmNPcL0iKy1kxNe7FK19qudRA1pGcW/vRuHgWHh+6mfAO1Klv0kdvvTI6K4u4RvDv4U58Bn8Luh8ioCVOvMaHwQx2MDmqqOdkGNJcQW+W2XKQvuNEwH2rtZ49A7q4aHuDzUjIyIiICIiAiIgIiICIiAo2263h1DhWK3RPLZLlNuOyPH2bcnO8id0HupJUI/SEe43WyMz91tPMQOpcz+yCJ0REaEREBERBmsF3h1hxVbbiHlrGTBk3HgY3e67PoAc/ILqxcbTf4Mn4Suwbc90lvppH/E6FhPfIIyuEREBERAREQEREBERAUP8A0hLe51NZrk1pLYpJKd58N4Bzf0EeamBYPGdhjxLhystTyGulZvRP/okac2n1Az6IOVUX0qaeejqJaasidDUQvLJY3ascNQvmjQiIgIiIPtRUUlyraeggGclVK2Fvdxyz+a6+jY2ONsbBk1oAHYKB9h+GX3C9uv1RG76pQZtgJ0kmIIPfdB9SPBT0jIiIgIiICIiAiIgIiICItVxvji24Rpx9YJnrZBnDSRkbzup8G9fRBgtp+zpuI966Wj2cV2a3KRjvdbUgDIZnk4AZA+R5ZQLV0tRRVUlLW08tPURn34pWFrm+RUjWbbHeYbtJNeYIqmglPGCBu66D8BJ49d7XxGikdsmCto1I0PFJWStbwa47lTDn/wBm+XBBzaim6v2IW173Ot14rIAdGTMbIB5jIqyg2Gnf/mMQZs/26XI/NxRdQ8ttwNgG54sqWSFr6W1A/wASrcMt4eEeY949dB10Ur2fZVhSxj61cA+vLOJfcHt9m38oAbl3zVli3azabTA6kw0I6+qDcmSNH8vF5j4uzeHUIJDtFso7PboaC3QNgpoW7rGN+Z6kniTzKvFCeCtr9RHUCkxYWyQPd7lbGzJ0f4wNW9QOHPPVTRTzR1ELJoJGyRvaHMew5hwPMFEfRERAREQEREBERARF5kc1jHPe4Na0ZknQBBrG0DF8GErKagtElbNmylgJ+N2XEn7o1PpqVzXca+quddNXV8zp6mZ29JI7n/YDkOSzGPMRyYoxJUV+Z+qsJipWZ8GxgnI93anvlyWvIsEaS17XscWvbo5pyI7EaIiKz9BjbFFvY1lLfq7cbo2WT2uX/PNXku0jGEjC03uVufNkUYP6VqiIYvLjdbldXl9zuNZVnwnnc8DsCch5KzREBSJspx4/D9ZFaLnITaZ37sbnf6ZxOo+4TqOWvio7VCARkQCPAoldjAg8RoqqPNjGJ33rDzrfWSb9Zbt2Pec7N0kWXuOPXgR5dVIaIIiICIiAiIgLS9r13NpwPXezcWy1mVLHkcj7/wAWX5Q5booh+kJUfyVlpczkZpJSOzd0fqKCF0REaEREBERAREQEREG37J7sbTjmgzfuxVhNJIM8gd/4fPeDfVdLjRcgUExpq+kqGnJ0M8cgPVrgf2XXrHbzGuGhGaMvSIiAiIgIiICiT6QNvmkoLXcmNc6KCV0MpA+HfyLSembcu5HipbVtcaGmuVHNR10LJqaZhZJG8ZhwKDkJFI+M9k10tMklTh9r7jQ6iEcZ4+mX2+449Co5lY+GV0MzHxys+JkjS1ze4PEIqiIiKIiICIiAiHhrwWWw/hm9YjlEdnoJZmk8Z3Atib3eeHpmeiCztVDNdLnR0FMwvmqZmxtAGep4nsBmT0BXXUTdyJjM891oGa0fZ5s7pMKN+t1T21d1e3J0wb7kQ5tZnx7nU9NFvSMiIiAiIgIiICIiChGaxl3w9Z71HuXW20tXlo6WMFw7HULKIgjm47G8MVJLqR1dQk8opt9vo8H5FYCr2Gu1osQZdJqXP5hwUyoggmTYjewf4d2tzx4uY9v7FeBsTv8AzuVsH5pP/KnlEEH0+w+5OI+sX2kYOYjpnO+ZcFmaLYhbGEGuvFbL4iFjIwfUFSuiDULTs0wla3B8dpjqJBxD6smY59ncB5BbYyNkbQyNoawaNaMgF7RAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQf/9k="
+                                alt="User Avatar" class="w-8 h-8 rounded-full object-cover" loading="lazy"
+                                onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;" />
+                            <div class="text-left">
+                                <p class="text-sm font-semibold text-text-primary">Pawan</p>
+                                <p class="text-xs text-text-secondary">Farm Manager</p>
+                            </div>
+                            <svg class="w-4 h-4 text-text-secondary" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+
+                        <!-- User Dropdown Menu -->
+                        <div id="user-menu"
+                            class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-elevated border border-border-light z-50">
+                            <div class="py-2">
+                                <a href="javascript:void(0)"
+                                    class="block px-4 py-2 text-sm text-text-primary hover:bg-surface transition-smooth">Profile
+                                    Settings</a>
+                                <a href="javascript:void(0)"
+                                    class="block px-4 py-2 text-sm text-text-primary hover:bg-surface transition-smooth">Account
+                                    Preferences</a>
+                                <a href="javascript:void(0)"
+                                    class="block px-4 py-2 text-sm text-text-primary hover:bg-surface transition-smooth">Billing
+                                    & Plans</a>
+                                <div class="border-t border-border-light my-1"></div>
+                                <a href="javascript:void(0)"
+                                    class="block px-4 py-2 text-sm text-text-primary hover:bg-surface transition-smooth">Help
+                                    & Support</a>
+                                <a href="homepage.html"
+                                    class="block px-4 py-2 text-sm text-error hover:bg-error-50 transition-smooth">Sign
+                                    Out</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden">
+                    <button type="button"
+                        class="text-text-secondary hover:text-primary focus:outline-none focus:text-primary"
+                        onclick="toggleMobileMenu()">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Navigation Menu -->
+            <div id="mobile-menu" class="md:hidden hidden">
+                <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-border-light">
+                    <a href="homepage.html"
+                        class="text-text-secondary hover:text-primary block px-3 py-2 rounded-md text-base transition-smooth">Home</a>
+                    <a href="product_journey_viewer.html"
+                        class="text-text-secondary hover:text-primary block px-3 py-2 rounded-md text-base transition-smooth">Product
+                        Tracker</a>
+                    <a href="transparency_dashboard.html"
+                        class="text-primary font-semibold block px-3 py-2 rounded-md text-base">Dashboard</a>
+                    <a href="case_studies_success_stories.html"
+                        class="text-text-secondary hover:text-primary block px-3 py-2 rounded-md text-base transition-smooth">Case
+                        Studies</a>
+                    <a href="pricing_plans.html"
+                        class="text-text-secondary hover:text-primary block px-3 py-2 rounded-md text-base transition-smooth">Pricing</a>
+                    <a href="stakeholder_registration_hub.html" class="btn-primary block text-center mt-4">Get
+                        Started</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Dashboard Layout -->
+    <div class="flex h-screen bg-background">
+        <!-- Sidebar -->
+        <aside class="hidden lg:flex lg:flex-shrink-0">
+            <div class="flex flex-col w-64 bg-white border-r border-border-light">
+                <!-- Dashboard Navigation -->
+                <div class="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
+                    <nav class="mt-5 flex-1 px-2 space-y-1">
+                        <!-- Overview -->
+                        <a href="javascript:void(0)" onclick="showDashboardSection('overview')"
+                            class="dashboard-nav-item active group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                            <svg class="mr-3 h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                            </svg>
+                            Overview
+                        </a>
+
+                        <!-- Supply Chain Map -->
+                        <a href="javascript:void(0)" onclick="showDashboardSection('supply-chain')"
+                            class="dashboard-nav-item group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                            <svg class="mr-3 h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                            </svg>
+                            Supply Chain Map
+                        </a>
+
+                        <!-- Products & Batches -->
+                        <a href="javascript:void(0)" onclick="showDashboardSection('products')"
+                            class="dashboard-nav-item group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                            <svg class="mr-3 h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                            </svg>
+                            Products & Batches
+                        </a>
+
+                        <!-- Analytics -->
+                        <a href="javascript:void(0)" onclick="showDashboardSection('analytics')"
+                            class="dashboard-nav-item group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                            <svg class="mr-3 h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                            </svg>
+                            Analytics
+                        </a>
+
+                        <!-- Compliance -->
+                        <a href="javascript:void(0)" onclick="showDashboardSection('compliance')"
+                            class="dashboard-nav-item group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                            <svg class="mr-3 h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                            </svg>
+                            Compliance
+                        </a>
+
+                        <!-- Alerts -->
+                        <a href="javascript:void(0)" onclick="showDashboardSection('alerts')"
+                            class="dashboard-nav-item group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                            <svg class="mr-3 h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 17h5l-5-5V9a6 6 0 10-12 0v3l-5 5h5m7 0v1a3 3 0 01-6 0v-1m6 0H9" />
+                            </svg>
+                            Alerts
+                            <span class="ml-auto bg-error text-white text-xs rounded-full px-2 py-1">3</span>
+                        </a>
+
+                        <!-- Collaboration -->
+                        <a href="javascript:void(0)" onclick="showDashboardSection('collaboration')"
+                            class="dashboard-nav-item group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                            <svg class="mr-3 h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                            Collaboration
+                        </a>
+                    </nav>
+                </div>
+
+                <!-- Role Selector -->
+                <div class="flex-shrink-0 p-4 border-t border-border-light">
+                    <div class="relative">
+                        <select onchange="switchRole(this.value)"
+                            class="w-full bg-surface border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500">
+                            <option value="farmer">Farmer View</option>
+                            <option value="distributor">Distributor View</option>
+                            <option value="retailer">Retailer View</option>
+                            <option value="regulator">Regulator View</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-hidden">
+            <div class="h-full overflow-y-auto">
+                <!-- Dashboard Header -->
+                <div class="bg-white border-b border-border-light px-6 py-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h1 class="text-2xl font-bold text-text-primary">Dashboard Overview</h1>
+                            <p class="text-text-secondary">Welcome back, Sarah. Here's what's happening with your supply
+                                chain.</p>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <!-- Date Range Selector -->
+                            <select
+                                class="bg-white border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500">
+                                <option>Last 7 days</option>
+                                <option>Last 30 days</option>
+                                <option>Last 90 days</option>
+                                <option>Custom range</option>
+                            </select>
+
+                            <!-- Export Button -->
+                            <button class="btn-secondary text-sm">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                                Export Report
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dashboard Content Sections -->
+
+                <!-- Overview Section -->
+                <div id="overview-section" class="dashboard-section p-6">
+                    <!-- KPI Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <!-- Total Products Tracked -->
+                        <div class="bg-white rounded-lg p-6 shadow-subtle border border-border-light">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-text-secondary text-sm font-medium">Products Tracked</p>
+                                    <p class="text-3xl font-bold text-text-primary">2,847</p>
+                                    <p class="text-success text-sm">+12% from last month</p>
+                                </div>
+                                <div class="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                                        <path
+                                            d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Blockchain Verifications -->
+                        <div class="bg-white rounded-lg p-6 shadow-subtle border border-border-light">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-text-secondary text-sm font-medium">KrishiPath Verifications</p>
+                                    <p class="text-3xl font-bold text-text-primary">15,892</p>
+                                    <p class="text-success text-sm">99.97% success rate</p>
+                                </div>
+                                <div class="w-12 h-12 bg-secondary-100 rounded-lg flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-secondary" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Active Stakeholders -->
+                        <div class="bg-white rounded-lg p-6 shadow-subtle border border-border-light">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-text-secondary text-sm font-medium">Active Stakeholders</p>
+                                    <p class="text-3xl font-bold text-text-primary">847</p>
+                                    <p class="text-success text-sm">+23 this week</p>
+                                </div>
+                                <div class="w-12 h-12 bg-accent-100 rounded-lg flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-accent" fill="currentColor" viewBox="0 0 20 20">
+                                        <path
+                                            d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Compliance Score -->
+                        <div class="bg-white rounded-lg p-6 shadow-subtle border border-border-light">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-text-secondary text-sm font-medium">Compliance Score</p>
+                                    <p class="text-3xl font-bold text-text-primary">98.5%</p>
+                                    <p class="text-success text-sm">Excellent rating</p>
+                                </div>
+                                <div class="w-12 h-12 bg-success-100 rounded-lg flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-success" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts Row -->
+                    <div class="grid lg:grid-cols-2 gap-6 mb-8">
+                        <!-- Supply Chain Activity Chart -->
+                        <div class="bg-white rounded-lg p-6 shadow-subtle border border-border-light">
+                            <div class="flex items-center justify-between mb-6">
+                                <h3 class="text-lg font-semibold text-text-primary">Supply Chain Activity</h3>
+                                <select
+                                    class="text-sm border border-border rounded-lg px-3 py-1 focus:outline-none focus:ring-2 focus:ring-primary-500">
+                                    <option>Last 7 days</option>
+                                    <option>Last 30 days</option>
+                                    <option>Last 90 days</option>
+                                </select>
+                            </div>
+                            <div class="h-64 bg-surface rounded-lg flex items-center justify-center">
+                                <svg class="w-full h-full" viewBox="0 0 400 200">
+                                    <!-- Chart Background -->
+                                    <defs>
+                                        <linearGradient id="chartGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                            <stop offset="0%" style="stop-color:#2D5A27;stop-opacity:0.3" />
+                                            <stop offset="100%" style="stop-color:#2D5A27;stop-opacity:0" />
+                                        </linearGradient>
+                                    </defs>
+                                    <!-- Chart Line -->
+                                    <path
+                                        d="M20 160 L60 140 L100 120 L140 100 L180 80 L220 90 L260 70 L300 60 L340 50 L380 40"
+                                        stroke="#2D5A27" stroke-width="3" fill="none" />
+                                    <!-- Chart Area -->
+                                    <path
+                                        d="M20 160 L60 140 L100 120 L140 100 L180 80 L220 90 L260 70 L300 60 L340 50 L380 40 L380 180 L20 180 Z"
+                                        fill="url(#chartGradient)" />
+                                    <!-- Data Points -->
+                                    <circle cx="60" cy="140" r="4" fill="#2D5A27" />
+                                    <circle cx="140" cy="100" r="4" fill="#2D5A27" />
+                                    <circle cx="220" cy="90" r="4" fill="#2D5A27" />
+                                    <circle cx="300" cy="60" r="4" fill="#2D5A27" />
+                                    <circle cx="380" cy="40" r="4" fill="#2D5A27" />
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Product Distribution -->
+                        <div class="bg-white rounded-lg p-6 shadow-subtle border border-border-light">
+                            <h3 class="text-lg font-semibold text-text-primary mb-6">Product Distribution</h3>
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-4 h-4 bg-primary rounded-full"></div>
+                                        <span class="text-text-primary">Organic Vegetables</span>
+                                    </div>
+                                    <div class="text-right">
+                                        <span class="text-text-primary font-semibold">45%</span>
+                                        <div class="w-24 h-2 bg-surface rounded-full mt-1">
+                                            <div class="w-11 h-2 bg-primary rounded-full"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-4 h-4 bg-secondary rounded-full"></div>
+                                        <span class="text-text-primary">Free-Range Poultry</span>
+                                    </div>
+                                    <div class="text-right">
+                                        <span class="text-text-primary font-semibold">30%</span>
+                                        <div class="w-24 h-2 bg-surface rounded-full mt-1">
+                                            <div class="w-7 h-2 bg-secondary rounded-full"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-4 h-4 bg-accent rounded-full"></div>
+                                        <span class="text-text-primary">Grass-Fed Beef</span>
+                                    </div>
+                                    <div class="text-right">
+                                        <span class="text-text-primary font-semibold">15%</span>
+                                        <div class="w-24 h-2 bg-surface rounded-full mt-1">
+                                            <div class="w-4 h-2 bg-accent rounded-full"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-4 h-4 bg-warning rounded-full"></div>
+                                        <span class="text-text-primary">Dairy Products</span>
+                                    </div>
+                                    <div class="text-right">
+                                        <span class="text-text-primary font-semibold">10%</span>
+                                        <div class="w-24 h-2 bg-surface rounded-full mt-1">
+                                            <div class="w-2 h-2 bg-warning rounded-full"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="bg-white rounded-lg p-6 shadow-subtle border border-border-light">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-lg font-semibold text-text-primary">Recent Activity</h3>
+                            <a href="javascript:void(0)"
+                                class="text-primary hover:text-primary-700 text-sm font-medium transition-smooth">View
+                                All</a>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="flex items-center space-x-4 p-4 bg-success-50 rounded-lg">
+                                <div class="w-10 h-10 bg-success rounded-full flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="text-text-primary font-medium">Batch #TOM2025-0892 verified</p>
+                                    <p class="text-text-secondary text-sm">Organic tomatoes passed quality inspection at
+                                        Green Valley Processing</p>
+                                    <p class="text-text-secondary text-xs mt-1">2 minutes ago</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-4 p-4 bg-primary-50 rounded-lg">
+                                <div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                        <path
+                                            d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
+                                        <path
+                                            d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3z" />
+                                    </svg>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="text-text-primary font-medium">New shipment in transit</p>
+                                    <p class="text-text-secondary text-sm">Batch #EGG2025-1247 departed from Sunshine
+                                        Farm, ETA 4 hours</p>
+                                    <p class="text-text-secondary text-xs mt-1">15 minutes ago</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-4 p-4 bg-secondary-50 rounded-lg">
+                                <div class="w-10 h-10 bg-secondary rounded-full flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="text-text-primary font-medium">New stakeholder joined</p>
+                                    <p class="text-text-secondary text-sm">Mountain View Distributors completed
+                                        verification process</p>
+                                    <p class="text-text-secondary text-xs mt-1">1 hour ago</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Supply Chain Map Section -->
+                <div id="supply-chain-section" class="dashboard-section hidden p-6">
+                    <div class="bg-white rounded-lg p-6 shadow-subtle border border-border-light">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-lg font-semibold text-text-primary">Interactive Supply Chain Map</h3>
+                            <div class="flex items-center space-x-4">
+                                <select
+                                    class="text-sm border border-border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500">
+                                    <option>All Products</option>
+                                    <option>Organic Vegetables</option>
+                                    <option>Free-Range Poultry</option>
+                                    <option>Grass-Fed Beef</option>
+                                </select>
+                                <button class="btn-primary text-sm">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                    </svg>
+                                    Refresh
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Map Container -->
+                        <div class="h-96 bg-surface rounded-lg relative overflow-hidden">
+                            <!-- Map Background -->
+                            <div class="absolute inset-0 bg-gradient-to-br from-primary-50 to-accent-50">
+                                <!-- Supply Chain Nodes -->
+                                <div class="absolute top-8 left-8">
+                                    <div class="flex items-center space-x-2 bg-white rounded-lg p-3 shadow-subtle">
+                                        <div class="w-3 h-3 bg-primary rounded-full animate-pulse"></div>
+                                        <span class="text-sm font-medium">Sunrise Organic Farm</span>
+                                    </div>
+                                </div>
+
+                                <div class="absolute top-20 left-1/3">
+                                    <div class="flex items-center space-x-2 bg-white rounded-lg p-3 shadow-subtle">
+                                        <div class="w-3 h-3 bg-secondary rounded-full animate-pulse"></div>
+                                        <span class="text-sm font-medium">Green Valley Processing</span>
+                                    </div>
+                                </div>
+
+                                <div class="absolute top-32 left-2/3">
+                                    <div class="flex items-center space-x-2 bg-white rounded-lg p-3 shadow-subtle">
+                                        <div class="w-3 h-3 bg-accent rounded-full animate-pulse"></div>
+                                        <span class="text-sm font-medium">Regional Distribution</span>
+                                    </div>
+                                </div>
+
+                                <div class="absolute bottom-8 right-8">
+                                    <div class="flex items-center space-x-2 bg-white rounded-lg p-3 shadow-subtle">
+                                        <div class="w-3 h-3 bg-success rounded-full animate-pulse"></div>
+                                        <span class="text-sm font-medium">Fresh Market Retail</span>
+                                    </div>
+                                </div>
+
+                                <!-- Connection Lines -->
+                                <svg class="absolute inset-0 w-full h-full pointer-events-none">
+                                    <defs>
+                                        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5"
+                                            orient="auto">
+                                            <polygon points="0 0, 10 3.5, 0 7" fill="#2D5A27" />
+                                        </marker>
+                                    </defs>
+                                    <path d="M120 60 Q200 80 280 100" stroke="#2D5A27" stroke-width="2" fill="none"
+                                        marker-end="url(#arrowhead)" stroke-dasharray="5,5">
+                                        <animate attributeName="stroke-dashoffset" values="0;-10" dur="1s"
+                                            repeatCount="indefinite" />
+                                    </path>
+                                    <path d="M320 120 Q400 140 480 160" stroke="#1E3A8A" stroke-width="2" fill="none"
+                                        marker-end="url(#arrowhead)" stroke-dasharray="5,5">
+                                        <animate attributeName="stroke-dashoffset" values="0;-10" dur="1s"
+                                            repeatCount="indefinite" />
+                                    </path>
+                                    <path d="M520 180 Q600 220 680 260" stroke="#0F766E" stroke-width="2" fill="none"
+                                        marker-end="url(#arrowhead)" stroke-dasharray="5,5">
+                                        <animate attributeName="stroke-dashoffset" values="0;-10" dur="1s"
+                                            repeatCount="indefinite" />
+                                    </path>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Map Legend -->
+                        <div class="mt-6 flex flex-wrap items-center justify-center space-x-6">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-3 h-3 bg-primary rounded-full"></div>
+                                <span class="text-sm text-text-secondary">Farms</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <div class="w-3 h-3 bg-secondary rounded-full"></div>
+                                <span class="text-sm text-text-secondary">Processing</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <div class="w-3 h-3 bg-accent rounded-full"></div>
+                                <span class="text-sm text-text-secondary">Distribution</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <div class="w-3 h-3 bg-success rounded-full"></div>
+                                <span class="text-sm text-text-secondary">Retail</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Products & Batches Section -->
+                <div id="products-section" class="dashboard-section hidden p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-xl font-bold text-text-primary">Products & Batches</h2>
+                        <div class="flex items-center space-x-4">
+                            <div class="relative">
+                                <input type="text" placeholder="Search products..."
+                                    class="input-field pl-10 pr-4 py-2 w-64" />
+                                <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-text-secondary"
+                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                            </div>
+                            <select
+                                class="border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500">
+                                <option>All Categories</option>
+                                <option>Vegetables</option>
+                                <option>Fruits</option>
+                                <option>Meat & Poultry</option>
+                                <option>Dairy</option>
+                            </select>
+                            <button class="btn-primary text-sm">Add New Product</button>
+                        </div>
+                    </div>
+
+                    <!-- Products Grid -->
+                    <div class="grid lg:grid-cols-3 gap-6">
+                        <!-- Product Card 1 -->
+                        <div class="bg-white rounded-lg p-6 shadow-subtle border border-border-light">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center space-x-3">
+                                    <img src="https://images.unsplash.com/photo-1592924357228-91a4daadcfea?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                                        alt="Organic Tomatoes" class="w-12 h-12 rounded-lg object-cover" loading="lazy"
+                                        onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;" />
+                                    <div>
+                                        <h4 class="font-semibold text-text-primary">Organic Tomatoes</h4>
+                                        <p class="text-sm text-text-secondary">Batch #TOM2025-0892</p>
+                                    </div>
+                                </div>
+                                <span
+                                    class="bg-success-100 text-success px-2 py-1 rounded-full text-xs font-medium">Verified</span>
+                            </div>
+                            <div class="space-y-2 mb-4">
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-text-secondary">Harvest Date:</span>
+                                    <span class="text-text-primary">Sept 13, 2025</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-text-secondary">Quantity:</span>
+                                    <span class="text-text-primary">2,500 lbs</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-text-secondary">Current Location:</span>
+                                    <span class="text-text-primary">Green Valley Processing</span>
+                                </div>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button class="btn-primary text-xs flex-1">Track Journey</button>
+                                <button class="btn-secondary text-xs flex-1">View Details</button>
+                            </div>
+                        </div>
+
+                        <!-- Product Card 2 -->
+                        <div class="bg-white rounded-lg p-6 shadow-subtle border border-border-light">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center space-x-3">
+                                    <img src="https://images.unsplash.com/photo-1569288052389-dac9b01ac4b5?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                                        alt="Free-Range Eggs" class="w-12 h-12 rounded-lg object-cover" loading="lazy"
+                                        onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;" />
+                                    <div>
+                                        <h4 class="font-semibold text-text-primary">Free-Range Eggs</h4>
+                                        <p class="text-sm text-text-secondary">Batch #EGG2025-1247</p>
+                                    </div>
+                                </div>
+                                <span class="bg-warning-100 text-warning px-2 py-1 rounded-full text-xs font-medium">In
+                                    Transit</span>
+                            </div>
+                            <div class="space-y-2 mb-4">
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-text-secondary">Collection Date:</span>
+                                    <span class="text-text-primary">Sept 15, 2025</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-text-secondary">Quantity:</span>
+                                    <span class="text-text-primary">1,200 dozen</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-text-secondary">ETA:</span>
+                                    <span class="text-text-primary">4 hours</span>
+                                </div>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button class="btn-primary text-xs flex-1">Track Journey</button>
+                                <button class="btn-secondary text-xs flex-1">View Details</button>
+                            </div>
+                        </div>
+
+                        <!-- Product Card 3 -->
+                        <div class="bg-white rounded-lg p-6 shadow-subtle border border-border-light">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center space-x-3">
+                                    <img src="https://images.unsplash.com/photo-1588347818017-4f1c4b5b5f8e?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                                        alt="Grass-Fed Beef" class="w-12 h-12 rounded-lg object-cover" loading="lazy"
+                                        onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;" />
+                                    <div>
+                                        <h4 class="font-semibold text-text-primary">Grass-Fed Beef</h4>
+                                        <p class="text-sm text-text-secondary">Batch #BEEF2025-0334</p>
+                                    </div>
+                                </div>
+                                <span
+                                    class="bg-success-100 text-success px-2 py-1 rounded-full text-xs font-medium">Quality
+                                    Check</span>
+                            </div>
+                            <div class="space-y-2 mb-4">
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-text-secondary">Processing Date:</span>
+                                    <span class="text-text-primary">Sept 14, 2025</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-text-secondary">Quantity:</span>
+                                    <span class="text-text-primary">850 lbs</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-text-secondary">Current Location:</span>
+                                    <span class="text-text-primary">Premium Meats</span>
+                                </div>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button class="btn-primary text-xs flex-1">Track Journey</button>
+                                <button class="btn-secondary text-xs flex-1">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analytics Section -->
+                <div id="analytics-section" class="dashboard-section hidden p-6">
+                    <h2 class="text-xl font-bold text-text-primary mb-6">Analytics & Insights</h2>
+
+                    <div class="grid lg:grid-cols-2 gap-6 mb-8">
+                        <!-- Performance Metrics -->
+                        <div class="bg-white rounded-lg p-6 shadow-subtle border border-border-light">
+                            <h3 class="text-lg font-semibold text-text-primary mb-4">Performance Metrics</h3>
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-text-secondary">Average Transit Time</span>
+                                    <span class="text-text-primary font-semibold">2.3 days</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-text-secondary">Supply Chain Efficiency</span>
+                                    <span class="text-success font-semibold">94.2%</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-text-secondary">Quality Score</span>
+                                    <span class="text-success font-semibold">98.7%</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-text-secondary">Customer Satisfaction</span>
+                                    <span class="text-success font-semibold">96.1%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Trend Analysis -->
+                        <div class="bg-white rounded-lg p-6 shadow-subtle border border-border-light">
+                            <h3 class="text-lg font-semibold text-text-primary mb-4">Trend Analysis</h3>
+                            <div class="h-48 bg-surface rounded-lg flex items-center justify-center">
+                                <svg class="w-full h-full" viewBox="0 0 300 150">
+                                    <!-- Trend Lines -->
+                                    <path d="M20 120 L60 100 L100 80 L140 70 L180 60 L220 50 L260 40 L280 35"
+                                        stroke="#059669" stroke-width="2" fill="none" />
+                                    <path d="M20 130 L60 125 L100 115 L140 110 L180 105 L220 95 L260 85 L280 80"
+                                        stroke="#2D5A27" stroke-width="2" fill="none" />
+                                    <path d="M20 140 L60 135 L100 130 L140 125 L180 120 L220 115 L260 110 L280 105"
+                                        stroke="#1E3A8A" stroke-width="2" fill="none" />
+                                </svg>
+                            </div>
+                            <div class="flex items-center justify-center space-x-6 mt-4">
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-3 h-3 bg-success rounded-full"></div>
+                                    <span class="text-sm text-text-secondary">Quality</span>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-3 h-3 bg-primary rounded-full"></div>
+                                    <span class="text-sm text-text-secondary">Efficiency</span>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-3 h-3 bg-secondary rounded-full"></div>
+                                    <span class="text-sm text-text-secondary">Satisfaction</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Predictive Analytics -->
+                    <div class="bg-white rounded-lg p-6 shadow-subtle border border-border-light">
+                        <h3 class="text-lg font-semibold text-text-primary mb-4">Predictive Analytics</h3>
+                        <div class="grid md:grid-cols-3 gap-6">
+                            <div class="text-center">
+                                <div
+                                    class="w-16 h-16 bg-primary-100 rounded-full mx-auto mb-3 flex items-center justify-center">
+                                    <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                                    </svg>
+                                </div>
+                                <h4 class="font-semibold text-text-primary mb-2">Demand Forecast</h4>
+                                <p class="text-text-secondary text-sm">Organic vegetables demand expected to increase by
+                                    15% next month</p>
+                            </div>
+                            <div class="text-center">
+                                <div
+                                    class="w-16 h-16 bg-warning-100 rounded-full mx-auto mb-3 flex items-center justify-center">
+                                    <svg class="w-8 h-8 text-warning" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                                    </svg>
+                                </div>
+                                <h4 class="font-semibold text-text-primary mb-2">Risk Alert</h4>
+                                <p class="text-text-secondary text-sm">Weather conditions may affect harvest schedule in
+                                    3 days</p>
+                            </div>
+                            <div class="text-center">
+                                <div
+                                    class="w-16 h-16 bg-success-100 rounded-full mx-auto mb-3 flex items-center justify-center">
+                                    <svg class="w-8 h-8 text-success" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <h4 class="font-semibold text-text-primary mb-2">Optimization</h4>
+                                <p class="text-text-secondary text-sm">Route optimization could reduce delivery time by
+                                    20%</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Compliance Section -->
+                <div id="compliance-section" class="dashboard-section hidden p-6">
+                    <h2 class="text-xl font-bold text-text-primary mb-6">Compliance & Certifications</h2>
+
+                    <div class="grid lg:grid-cols-2 gap-6 mb-8">
+                        <!-- Compliance Status -->
+                        <div class="bg-white rounded-lg p-6 shadow-subtle border border-border-light">
+                            <h3 class="text-lg font-semibold text-text-primary mb-4">Compliance Status</h3>
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between p-3 bg-success-50 rounded-lg">
+                                    <div class="flex items-center space-x-3">
+                                        <svg class="w-5 h-5 text-success" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd"
+                                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                        <span class="font-medium text-text-primary">USDA Organic</span>
+                                    </div>
+                                    <span class="text-success text-sm font-medium">Compliant</span>
+                                </div>
+                                <div class="flex items-center justify-between p-3 bg-success-50 rounded-lg">
+                                    <div class="flex items-center space-x-3">
+                                        <svg class="w-5 h-5 text-success" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd"
+                                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                        <span class="font-medium text-text-primary">HACCP</span>
+                                    </div>
+                                    <span class="text-success text-sm font-medium">Compliant</span>
+                                </div>
+                                <div class="flex items-center justify-between p-3 bg-warning-50 rounded-lg">
+                                    <div class="flex items-center space-x-3">
+                                        <svg class="w-5 h-5 text-warning" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd"
+                                                d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                        <span class="font-medium text-text-primary">Fair Trade</span>
+                                    </div>
+                                    <span class="text-warning text-sm font-medium">Renewal Due</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Audit Trail -->
+                        <div class="bg-white rounded-lg p-6 shadow-subtle border border-border-light">
+                            <h3 class="text-lg font-semibold text-text-primary mb-4">Recent Audits</h3>
+                            <div class="space-y-4">
+                                <div class="border-l-4 border-success pl-4">
+                                    <h4 class="font-medium text-text-primary">USDA Organic Inspection</h4>
+                                    <p class="text-text-secondary text-sm">Passed with 98.5% compliance score</p>
+                                    <p class="text-text-secondary text-xs">Sept 10, 2025</p>
+                                </div>
+                                <div class="border-l-4 border-primary pl-4">
+                                    <h4 class="font-medium text-text-primary">HACCP Review</h4>
+                                    <p class="text-text-secondary text-sm">All critical control points verified</p>
+                                    <p class="text-text-secondary text-xs">Sept 5, 2025</p>
+                                </div>
+                                <div class="border-l-4 border-secondary pl-4">
+                                    <h4 class="font-medium text-text-primary">Third-Party Quality Audit</h4>
+                                    <p class="text-text-secondary text-sm">Excellent rating across all categories</p>
+                                    <p class="text-text-secondary text-xs">Aug 28, 2025</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Certification Documents -->
+                    <div class="bg-white rounded-lg p-6 shadow-subtle border border-border-light">
+                        <h3 class="text-lg font-semibold text-text-primary mb-4">Certification Documents</h3>
+                        <div class="grid md:grid-cols-3 gap-4">
+                            <div class="border border-border rounded-lg p-4 hover:shadow-float transition-smooth">
+                                <div class="flex items-center space-x-3 mb-3">
+                                    <svg class="w-8 h-8 text-success" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    </svg>
+                                    <div>
+                                        <h4 class="font-medium text-text-primary">USDA Organic Certificate</h4>
+                                        <p class="text-text-secondary text-xs">Valid until Dec 2025</p>
+                                    </div>
+                                </div>
+                                <button class="btn-primary text-xs w-full">Download</button>
+                            </div>
+                            <div class="border border-border rounded-lg p-4 hover:shadow-float transition-smooth">
+                                <div class="flex items-center space-x-3 mb-3">
+                                    <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    </svg>
+                                    <div>
+                                        <h4 class="font-medium text-text-primary">HACCP Plan</h4>
+                                        <p class="text-text-secondary text-xs">Updated Sept 2025</p>
+                                    </div>
+                                </div>
+                                <button class="btn-primary text-xs w-full">Download</button>
+                            </div>
+                            <div class="border border-border rounded-lg p-4 hover:shadow-float transition-smooth">
+                                <div class="flex items-center space-x-3 mb-3">
+                                    <svg class="w-8 h-8 text-secondary" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    </svg>
+                                    <div>
+                                        <h4 class="font-medium text-text-primary">Quality Assurance Report</h4>
+                                        <p class="text-text-secondary text-xs">Generated Sept 2025</p>
+                                    </div>
+                                </div>
+                                <button class="btn-primary text-xs w-full">Download</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alerts Section -->
+                <div id="alerts-section" class="dashboard-section hidden p-6">
+                    <h2 class="text-xl font-bold text-text-primary mb-6">Alerts & Notifications</h2>
+
+                    <div class="space-y-4">
+                        <!-- Critical Alert -->
+                        <div class="bg-error-50 border border-error-200 rounded-lg p-4">
+                            <div class="flex items-start space-x-3">
+                                <svg class="w-6 h-6 text-error mt-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                <div class="flex-1">
+                                    <h4 class="font-semibold text-error">Temperature Deviation Alert</h4>
+                                    <p class="text-error-600 text-sm">Cold chain temperature exceeded threshold for
+                                        Batch #EGG2025-1247</p>
+                                    <p class="text-error-500 text-xs mt-1">15 minutes ago • Requires immediate action
+                                    </p>
+                                    <div class="mt-3 flex space-x-2">
+                                        <button class="btn-primary text-xs">Investigate</button>
+                                        <button
+                                            class="text-error hover:text-error-700 text-xs font-medium">Dismiss</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Warning Alert -->
+                        <div class="bg-warning-50 border border-warning-200 rounded-lg p-4">
+                            <div class="flex items-start space-x-3">
+                                <svg class="w-6 h-6 text-warning mt-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                <div class="flex-1">
+                                    <h4 class="font-semibold text-warning">Certification Renewal Due</h4>
+                                    <p class="text-warning-600 text-sm">Fair Trade certification expires in 30 days</p>
+                                    <p class="text-warning-500 text-xs mt-1">2 hours ago • Action required</p>
+                                    <div class="mt-3 flex space-x-2">
+                                        <button class="btn-secondary text-xs">Schedule Renewal</button>
+                                        <button class="text-warning hover:text-warning-700 text-xs font-medium">Remind
+                                            Later</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Info Alert -->
+                        <div class="bg-primary-50 border border-primary-200 rounded-lg p-4">
+                            <div class="flex items-start space-x-3">
+                                <svg class="w-6 h-6 text-primary mt-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                <div class="flex-1">
+                                    <h4 class="font-semibold text-primary">New Stakeholder Request</h4>
+                                    <p class="text-primary-600 text-sm">Mountain View Distributors requested access to
+                                        your supply chain data</p>
+                                    <p class="text-primary-500 text-xs mt-1">1 day ago • Review required</p>
+                                    <div class="mt-3 flex space-x-2">
+                                        <button class="btn-primary text-xs">Review Request</button>
+                                        <button class="text-primary hover:text-primary-700 text-xs font-medium">View
+                                            Profile</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Collaboration Section -->
+                <div id="collaboration-section" class="dashboard-section hidden p-6">
+                    <h2 class="text-xl font-bold text-text-primary mb-6">Collaboration Hub</h2>
+
+                    <div class="grid lg:grid-cols-2 gap-6">
+                        <!-- Active Conversations -->
+                        <div class="bg-white rounded-lg p-6 shadow-subtle border border-border-light">
+                            <h3 class="text-lg font-semibold text-text-primary mb-4">Active Conversations</h3>
+                            <div class="space-y-4">
+                                <div
+                                    class="flex items-center space-x-3 p-3 bg-surface rounded-lg hover:shadow-subtle transition-smooth cursor-pointer">
+                                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                                        alt="User" class="w-10 h-10 rounded-full object-cover" loading="lazy"
+                                        onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;" />
+                                    <div class="flex-1">
+                                        <h4 class="font-medium text-text-primary">Green Valley Processing</h4>
+                                        <p class="text-text-secondary text-sm">Quality check completed for batch
+                                            #TOM2025-0892</p>
+                                        <p class="text-text-secondary text-xs">2 minutes ago</p>
+                                    </div>
+                                    <span class="w-3 h-3 bg-primary rounded-full"></span>
+                                </div>
+                                <div
+                                    class="flex items-center space-x-3 p-3 bg-surface rounded-lg hover:shadow-subtle transition-smooth cursor-pointer">
+                                    <img src="https://images.unsplash.com/photo-1494790108755-2616c9c0e6c0?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                                        alt="User" class="w-10 h-10 rounded-full object-cover" loading="lazy"
+                                        onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;" />
+                                    <div class="flex-1">
+                                        <h4 class="font-medium text-text-primary">Regional Distribution</h4>
+                                        <p class="text-text-secondary text-sm">Requesting delivery schedule update</p>
+                                        <p class="text-text-secondary text-xs">1 hour ago</p>
+                                    </div>
+                                </div>
+                                <div
+                                    class="flex items-center space-x-3 p-3 bg-surface rounded-lg hover:shadow-subtle transition-smooth cursor-pointer">
+                                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                                        alt="User" class="w-10 h-10 rounded-full object-cover" loading="lazy"
+                                        onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;" />
+                                    <div class="flex-1">
+                                        <h4 class="font-medium text-text-primary">Fresh Market Retail</h4>
+                                        <p class="text-text-secondary text-sm">Customer inquiry about organic
+                                            certification</p>
+                                        <p class="text-text-secondary text-xs">3 hours ago</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Shared Documents -->
+                        <div class="bg-white rounded-lg p-6 shadow-subtle border border-border-light">
+                            <h3 class="text-lg font-semibold text-text-primary mb-4">Shared Documents</h3>
+                            <div class="space-y-3">
+                                <div
+                                    class="flex items-center justify-between p-3 border border-border rounded-lg hover:shadow-subtle transition-smooth">
+                                    <div class="flex items-center space-x-3">
+                                        <svg class="w-8 h-8 text-error" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                        </svg>
+                                        <div>
+                                            <h4 class="font-medium text-text-primary">Quality Report Q3 2025</h4>
+                                            <p class="text-text-secondary text-xs">Shared by Green Valley Processing</p>
+                                        </div>
+                                    </div>
+                                    <button
+                                        class="text-primary hover:text-primary-700 text-sm font-medium">Download</button>
+                                </div>
+                                <div
+                                    class="flex items-center justify-between p-3 border border-border rounded-lg hover:shadow-subtle transition-smooth">
+                                    <div class="flex items-center space-x-3">
+                                        <svg class="w-8 h-8 text-success" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                        </svg>
+                                        <div>
+                                            <h4 class="font-medium text-text-primary">Delivery Schedule Sept</h4>
+                                            <p class="text-text-secondary text-xs">Shared by Regional Distribution</p>
+                                        </div>
+                                    </div>
+                                    <button
+                                        class="text-primary hover:text-primary-700 text-sm font-medium">View</button>
+                                </div>
+                                <div
+                                    class="flex items-center justify-between p-3 border border-border rounded-lg hover:shadow-subtle transition-smooth">
+                                    <div class="flex items-center space-x-3">
+                                        <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                        </svg>
+                                        <div>
+                                            <h4 class="font-medium text-text-primary">Organic Certification</h4>
+                                            <p class="text-text-secondary text-xs">Updated by Sunrise Organic Farm</p>
+                                        </div>
+                                    </div>
+                                    <button
+                                        class="text-primary hover:text-primary-700 text-sm font-medium">View</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Notification Dropdown -->
+    <div id="notifications-dropdown"
+        class="hidden fixed top-16 right-4 w-80 bg-white rounded-lg shadow-elevated border border-border-light z-50">
+        <div class="p-4 border-b border-border-light">
+            <h3 class="font-semibold text-text-primary">Notifications</h3>
+        </div>
+        <div class="max-h-96 overflow-y-auto">
+            <div class="p-4 border-b border-border-light hover:bg-surface transition-smooth">
+                <div class="flex items-start space-x-3">
+                    <div class="w-2 h-2 bg-error rounded-full mt-2"></div>
+                    <div>
+                        <p class="text-sm font-medium text-text-primary">Temperature Alert</p>
+                        <p class="text-xs text-text-secondary">Cold chain deviation detected</p>
+                        <p class="text-xs text-text-secondary">15 minutes ago</p>
+                    </div>
+                </div>
+            </div>
+            <div class="p-4 border-b border-border-light hover:bg-surface transition-smooth">
+                <div class="flex items-start space-x-3">
+                    <div class="w-2 h-2 bg-warning rounded-full mt-2"></div>
+                    <div>
+                        <p class="text-sm font-medium text-text-primary">Certification Renewal</p>
+                        <p class="text-xs text-text-secondary">Fair Trade expires in 30 days</p>
+                        <p class="text-xs text-text-secondary">2 hours ago</p>
+                    </div>
+                </div>
+            </div>
+            <div class="p-4 hover:bg-surface transition-smooth">
+                <div class="flex items-start space-x-3">
+                    <div class="w-2 h-2 bg-primary rounded-full mt-2"></div>
+                    <div>
+                        <p class="text-sm font-medium text-text-primary">New Stakeholder</p>
+                        <p class="text-xs text-text-secondary">Access request pending review</p>
+                        <p class="text-xs text-text-secondary">1 day ago</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="p-4 border-t border-border-light">
+            <button class="text-primary hover:text-primary-700 text-sm font-medium w-full text-center">View All
+                Notifications</button>
+        </div>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        }
+
+        // User menu toggle
+        function toggleUserMenu() {
+            const userMenu = document.getElementById('user-menu');
+            userMenu.classList.toggle('hidden');
+        }
+
+        // Notifications toggle
+        function toggleNotifications() {
+            const notificationsDropdown = document.getElementById('notifications-dropdown');
+            notificationsDropdown.classList.toggle('hidden');
+        }
+
+        // Dashboard section navigation
+        function showDashboardSection(sectionName) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.dashboard-section');
+            sections.forEach(section => section.classList.add('hidden'));
+
+            // Show selected section
+            document.getElementById(sectionName + '-section').classList.remove('hidden');
+
+            // Update navigation active state
+            const navItems = document.querySelectorAll('.dashboard-nav-item');
+            navItems.forEach(item => {
+                item.classList.remove('active', 'bg-primary', 'text-white');
+                item.classList.add('text-text-secondary', 'hover:bg-surface');
+            });
+
+            // Set active nav item
+            event.target.closest('.dashboard-nav-item').classList.add('active', 'bg-primary', 'text-white');
+            event.target.closest('.dashboard-nav-item').classList.remove('text-text-secondary', 'hover:bg-surface');
+
+            // Update page title
+            const titles = {
+                'overview': 'Dashboard Overview',
+                'supply-chain': 'Supply Chain Map',
+                'products': 'Products & Batches',
+                'analytics': 'Analytics & Insights',
+                'compliance': 'Compliance & Certifications',
+                'alerts': 'Alerts & Notifications',
+                'collaboration': 'Collaboration Hub'
+            };
+
+            document.querySelector('main h1').textContent = titles[sectionName] || 'Dashboard';
+        }
+
+        // Role switching
+        function switchRole(role) {
+            // This would typically update the dashboard content based on role
+            console.log('Switching to role:', role);
+
+            // Update user role display
+            const roleNames = {
+                'farmer': 'Farm Manager',
+                'distributor': 'Distribution Manager',
+                'retailer': 'Retail Manager',
+                'regulator': 'Compliance Officer'
+            };
+
+            document.querySelector('.text-xs.text-text-secondary').textContent = roleNames[role] || 'Farm Manager';
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function (event) {
+            const userMenu = document.getElementById('user-menu');
+            const notificationsDropdown = document.getElementById('notifications-dropdown');
+
+            if (!event.target.closest('.relative') && !userMenu.classList.contains('hidden')) {
+                userMenu.classList.add('hidden');
+            }
+
+            if (!event.target.closest('button') && !notificationsDropdown.classList.contains('hidden')) {
+                notificationsDropdown.classList.add('hidden');
+            }
+        });
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function () {
+            // Set default active navigation
+            const overviewNav = document.querySelector('.dashboard-nav-item');
+            overviewNav.classList.add('active', 'bg-primary', 'text-white');
+            overviewNav.classList.remove('text-text-secondary');
+        });
+        document.addEventListener('DOMContentLoaded', function () {
+            const helpButton = document.getElementById('helpButton');
+            const helpOptions = document.getElementById('helpOptions');
+
+            helpButton.addEventListener('click', function () {
+                helpOptions.classList.toggle('active');
+            });
+
+            // Close the options when clicking outside
+            document.addEventListener('click', function (event) {
+                if (!event.target.closest('.help-container')) {
+                    helpOptions.classList.remove('active');
+                }
+            });
+        });
+    </script>
+
+    <style>
+        .dashboard-nav-item {
+            @apply text-text-secondary hover:bg-surface hover:text-text-primary transition-smooth;
+        }
+
+        .dashboard-nav-item.active {
+            @apply bg-primary text-white;
+        }
+
+        .dashboard-nav-item.active:hover {
+            @apply bg-primary-700;
+        }
+    </style>
+</body>
+
+</html>

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KrishiPath Transparency - Agricultural Supply Chain</title>
+    <link rel="stylesheet" href="css/main.css" />
+    <meta name="description"
+        content="KrishiPath - Track your produce from farm to table with blockchain-powered supply chain transparency" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #2E7D32, #4CAF50);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: white;
+        }
+
+        .redirect-container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #FFF;
+        }
+
+        .tagline {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .manual-link, .wallet button {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .manual-link:hover, .wallet button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .wallet p, .status {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js"></script>
+</head>
+
+<body>
+    <div class="redirect-container">
+        <div class="logo">🌾 KrishiPath 🌾</div>
+        <div class="tagline">Transparency from Farm to Table</div>
+        <div class="loading-spinner"></div>
+
+        <div class="wallet">
+            <button id="connectWallet">Connect to your wallet</button>
+            <p id="walletAddress"></p>
+        </div>
+
+        <a href="pages/homepage.html" class="manual-link">Continue to Homepage</a>
+        <div class="redirect-message">Redirecting to homepage...</div>
+        <p class="status" id="status"></p>
+    </div>
+
+    <script>
+        let web3;
+        let account;
+        let contract;
+
+        const contractAddress = "0x86363dB9FE2dE0E1C0Bd816eC49Fb32FB342d0F2";
+        const contractAbi = [
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_name",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_batchId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_price",
+				"type": "uint256"
+			}
+		],
+		"name": "addProduce",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_batchId",
+				"type": "uint256"
+			}
+		],
+		"name": "buyProduce",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "batchId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "enum AgriSupplyChain.State",
+				"name": "state",
+				"type": "uint8"
+			}
+		],
+		"name": "ProduceUpdated",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_batchId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "enum AgriSupplyChain.State",
+				"name": "_state",
+				"type": "uint8"
+			}
+		],
+		"name": "updateState",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_batchId",
+				"type": "uint256"
+			}
+		],
+		"name": "getProduce",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "batchId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "farmer",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "price",
+						"type": "uint256"
+					},
+					{
+						"internalType": "enum AgriSupplyChain.State",
+						"name": "state",
+						"type": "uint8"
+					}
+				],
+				"internalType": "struct AgriSupplyChain.Produce",
+				"name": "",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "produceCount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "produces",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "batchId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "farmer",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "price",
+				"type": "uint256"
+			},
+			{
+				"internalType": "enum AgriSupplyChain.State",
+				"name": "state",
+				"type": "uint8"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+];
+
+        const connectButton = document.getElementById("connectWallet");
+        const walletAddress = document.getElementById("walletAddress");
+
+        connectButton.addEventListener("click", async () => {
+            if (window.ethereum) {
+                try {
+                    // Request wallet accounts
+                    const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+                    account = accounts[0];
+
+                    // Show connected wallet
+                    walletAddress.innerText = `Connected Wallet: ${account}`;
+                    connectButton.innerText = "Wallet Connected ✅";
+                    connectButton.disabled = true;
+
+                    // Initialize contract if needed
+                    web3 = new Web3(window.ethereum);
+                    contract = new web3.eth.Contract(contractAbi, contractAddress);
+
+                    // Redirect to homepage after successful connection
+                    setTimeout(() => {
+                        window.location.href = 'pages/stakeholder_registration_hub.html';
+                    }, 1000); // redirect after 1 second
+
+                    // Listen for account changes
+                    window.ethereum.on('accountsChanged', (accounts) => {
+                        account = accounts[0];
+                        walletAddress.innerText = `Connected Wallet: ${account}`;
+                    });
+                } catch (err) {
+                    console.error(err);
+                    alert("Wallet connection failed!");
+                }
+            } else {
+                alert("MetaMask not detected. Please install MetaMask.");
+            }
+        });
+    </script>
+</body>
+</html>

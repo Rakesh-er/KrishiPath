@@ -1,0 +1,1841 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Journey Viewer - KrishiPath Transparency</title>
+<<<<<<< HEAD
+    <meta name="description" content="Track your food's complete journey from farm to table with securely-verified transparency. Scan QR codes or search product IDs for immutable supply chain data." />
+=======
+    <meta name="description"
+        content="Track your food's complete journey from farm to table with securely-verified transparency. Scan QR codes or search product IDs for immutable supply chain data." />
+>>>>>>> e70fa53 (Thsi_Is_The_Final_Project)
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script type="module"
+        src="https://static.rocket.new/rocket-web.js?_cfg=https%3A%2F%2Fagrichain5007back.builtwithrocket.new&_be=https%3A%2F%2Fapplication.rocket.new&_v=0.1.8"></script>
+    <style>
+        :root {
+            --radius-lg: 1rem;
+            --radius-md: 0.75rem;
+            --radius-sm: 0.5rem;
+            --shadow-subtle: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --shadow-elevated: 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-elevated);
+        }
+
+        .gradient-border {
+            position: relative;
+            background: white;
+            border-radius: var(--radius-lg);
+        }
+
+        .gradient-border::before {
+            content: "";
+            position: absolute;
+            top: -1px;
+            left: -1px;
+            right: -1px;
+            bottom: -1px;
+            background: linear-gradient(45deg, #3B82F6, #10B981, #EF4444);
+            border-radius: var(--radius-lg);
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        .step-connector {
+            position: relative;
+        }
+
+        .step-connector::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 24px;
+            height: 24px;
+            width: 2px;
+            background: linear-gradient(to bottom, #3B82F6, #10B981);
+            opacity: 0.5;
+        }
+
+        .timeline-item:last-child .step-connector::after {
+            display: none;
+        }
+
+        .animate-pulse-slow {
+            animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* support */
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h2 {
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+        }
+
+        /* Floating Help Button Styles */
+        .help-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+
+        .main-help-button {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff8a00, #e52e71);
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .main-help-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .main-help-button i {
+            font-size: 28px;
+        }
+
+        .help-options {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+
+        .help-options.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .help-option {
+            display: flex;
+            align-items: center;
+            background: white;
+            color: #333;
+            text-decoration: none;
+            padding: 12px 20px;
+            margin-bottom: 15px;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            width: 200px;
+        }
+
+        .help-option:hover {
+            transform: translateX(-5px);
+            background: #f8f8f8;
+        }
+
+        .help-option i {
+            margin-right: 10px;
+            font-size: 20px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tutorial i {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .chatbot i {
+            background: #2196F3;
+            color: white;
+        }
+        
+        /* Language Selector Styles */
+        .language-selector {
+            position: relative;
+            margin-left: 1rem;
+        }
+        
+        .language-button {
+            display: flex;
+            align-items: center;
+            background: transparent;
+            border: 1px solid #e5e7eb;
+            border-radius: 50px;
+            padding: 0.4rem 0.8rem;
+            color: #4b5563;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .language-button:hover {
+            background-color: #f3f4f6;
+            color: #374151;
+        }
+        
+        .language-button i {
+            margin-right: 0.4rem;
+            font-size: 1rem;
+        }
+        
+        .language-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 0.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            width: 180px;
+            z-index: 10;
+            display: none;
+        }
+        
+        .language-dropdown.active {
+            display: block;
+        }
+        
+        .language-option {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .language-option:hover {
+            background-color: #f3f4f6;
+        }
+        
+        .language-option.active {
+            background-color: #e5e7eb;
+            font-weight: 500;
+        }
+        
+        .language-flag {
+            width: 20px;
+            height: 15px;
+            margin-right: 0.75rem;
+            border-radius: 2px;
+            object-fit: cover;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            p {
+                font-size: 1rem;
+            }
+
+            .main-help-button {
+                width: 60px;
+                height: 60px;
+            }
+
+            .help-container {
+                bottom: 20px;
+                right: 20px;
+            }
+            
+            .language-selector {
+                margin: 0.5rem 1rem;
+            }
+            
+            .language-dropdown {
+                left: 0;
+                right: auto;
+            }
+        }
+    </style>
+</head>
+<!-- Floating Help Button -->
+<div class="help-container">
+    <div class="help-options" id="helpOptions">
+        <a href="https://youtu.be/PIxT5nxzVgE?si=ShP9OGQTJ4i6EvZc" class="help-option tutorial">
+            <i class="fas fa-play-circle"></i>
+            Watch Tutorial
+        </a>
+        <a href="chatbot.html" class="help-option chatbot">
+            <i class="fas fa-comments"></i>
+            Chatbot
+        </a>
+    </div>
+    <button class="main-help-button" id="helpButton">
+        <i class="fas fa-question"></i>
+    </button>
+</div>
+
+<body class="bg-background text-text-primary">
+    <!-- Navigation Header -->
+    <header class="glass-effect shadow-subtle sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                         <svg class="h-8 w-8 text-primary" viewBox="0 0 32 32" fill="currentColor">
+                           <path d="M16 2L8 6v10c0 6.627 3.373 10 8 10s8-3.373 8-10V6l-8-4z" />
+                           <image href="/assets/logo.png" x="0" y="0" width="32" height="32" />
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <h1 class="text-xl font-bold text-primary">KrishiPath</h1>
+                        <p class="text-xs text-text-secondary">Transparency</p>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-6">
+                        <a href="homepage.html"
+                            class="text-text-secondary hover:text-primary px-3 py-2 rounded-md text-sm transition-smooth font-medium">Home</a>
+                        <a href="product_journey_viewer.html"
+                            class="text-primary font-semibold px-3 py-2 rounded-md text-sm bg-primary-50 rounded-full">Product
+                            Tracker</a>
+                        <a href="transparency_dashboard.html"
+                            class="text-text-secondary hover:text-primary px-3 py-2 rounded-md text-sm transition-smooth font-medium">Dashboard</a>
+                        <a href="case_studies_success_stories.html"
+                            class="text-text-secondary hover:text-primary px-3 py-2 rounded-md text-sm transition-smooth font-medium">Case
+                            Studies</a>
+                        <a href="pricing_plans.html"
+                            class="text-text-secondary hover:text-primary px-3 py-2 rounded-md text-sm transition-smooth font-medium">Pricing</a>
+                        <a href="stakeholder_registration_hub.html"
+                            class="btn-primary text-sm font-medium rounded-full px-4 py-2 shadow-md hover:shadow-lg transition-all">Get
+                            Started</a>
+                            
+                        <!-- Language Selector -->
+                        <div class="language-selector">
+                            <button class="language-button" id="languageButton">
+                                <i class="fas fa-globe"></i>
+                                <span id="currentLanguage">English</span>
+                            </button>
+                            <div class="language-dropdown" id="languageDropdown">
+                                <div class="language-option active" data-lang="en">
+                                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MCAzMCI+PHBhdGggZmlsbD0iIzAxMjE2OSIgZD0iTTAgMGg2MHYzMEgweiIvPjxwYXRoIGZpbGw9IiNjODEwMmIiZD0iTTAgMGw2MCAzME0wIDMwTDYwIDAiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSI2Ii8+PHBhdGggZmlsbD0iI2M4MTAyYiIgZD0iTTAgMGw2MCAzME0wIDMwTDYwIDAiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSI0Ii8+PHBhdGggZmlsbD0iI2M4MTAyYiIgZD0iTTMwIDBhMzAgMzAgMCAxIDAgMCAzMEEzMCAzMCAwIDAgMCAzMCAweiIvPjxwYXRoIGZpbGw9IiMwMTIxNjkiIGQ9Ik0yNCAxMmE2IDYgMCAxIDAgMCA2IDYgNiAwIDAgMCAwLTZ6Ii8+PC9zdmc+" class="language-flag" alt="English">
+                                    English
+                                </div>
+                                <div class="language-option" data-lang="hi">
+                                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MCAzMCI+PHBhdGggZmlsbD0iI2ZmODMzMyIgZD0iTTAgMGg2MHYxMEgweiIvPjxwYXRoIGZpbGw9IiMwMDg3NTAiIGQ9Ik0wIDIwaDYwdjEwSDB6Ii8+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTAgMTBoNjB2MTBIMHoiLz48Y2lyY2xlIGN4PSIzMCIgY3k9IjE1IiByPSI0IiBmaWxsPSIjMDA4NzUwIi8+PC9zdmc+" class="language-flag" alt="Hindi">
+                                    हिंदी
+                                </div>
+                                <div class="language-option" data-lang="or">
+                                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MCAzMCI+PHBhdGggZmlsbD0iI2ZmODMzMyIgZD0iTTAgMGg2MHYxMEgweiIvPjxwYXRoIGZpbGw9IiMwMDg3NTAiIGQ9Ik0wIDIwaDYwdjEwSDB6Ii8+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTAgMTBoNjB2MTBIMHoiLz48Y2lyY2xlIGN4PSIzMCIgY3k9IjE1IiByPSI0IiBmaWxsPSIjZmY4MzMzIi8+PC9zdmc+" class="language-flag" alt="Odia">
+                                    ଓଡ଼ିଆ
+                                </div>
+                                <div class="language-option" data-lang="te">
+                                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MCAzMCI+PHBhdGggZmlsbD0iI2ZmODMzMyIgZD0iTTAgMGg2MHYxMEgweiIvPjxwYXRoIGZpbGw9IiMwMDg3NTAiIGQ9Ik0wIDIwaDYwdjEwSDB6Ii8+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTAgMTBoNjB2MTBIMHoiLz48Y2lyY2xlIGN4PSIzMCIgY3k9IjE1IiByPSI0IiBmaWxsPSIjZmY4MzMzIi8+PC9zdmc+" class="language-flag" alt="Telugu">
+                                    తెలుగు
+                                </div>
+                                <div class="language-option" data-lang="ta">
+                                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MCAzMCI+PHBhdGggZmlsbD0iI2ZmODMzMyIgZD0iTTAgMGg2MHYxMEgweiIvPjxwYXRoIGZpbGw9IiMwMDg3NTAiIGQ9Ik0wIDIwaDYwdjEwSDB6Ii8+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTAgMTBoNjB2MTBIMHoiLz48Y2lyY2xlIGN4PSIzMCIgY3k9IjE1IiByPSI0IiBmaWxsPSIjZmY4MzMzIi8+PC9zdmc+" class="language-flag" alt="Tamil">
+                                    தமிழ்
+                                </div>
+                                <div class="language-option" data-lang="bn">
+                                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MCAzMCI+PHBhdGggZmlsbD0iI2ZmODMzMyIgZD0iTTAgMGg2MHYxMEgweiIvPjxwYXRoIGZpbGw9IiMwMDg3NTAiIGQ9Ik0wIDIwaDYwdjEwSDB6Ii8+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTAgMTBoNjBvMTBIMHoiLz48Y2lyY2xlIGN4PSIzMCIgY3k9IjE1IiByPSI0IiBmaWxsPSIjMDA4NzUwIi8+PC9zdmc+" class="language-flag" alt="Bengali">
+                                    বাংলা
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <!-- Language Selector for Mobile -->
+                    <div class="language-selector mr-4">
+                        <button class="language-button" id="mobileLanguageButton">
+                            <i class="fas fa-globe"></i>
+                        </button>
+                        <div class="language-dropdown" id="mobileLanguageDropdown">
+                            <div class="language-option active" data-lang="en">
+                                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MCAzMCI+PHBhdGggZmlsbD0iIzAxMjE2OSIgZD0iTTAgMGg2MHYzMEgweiIvPjxwYXRoIGZpbGw9IiNjODEwMmIiZD0iTTAgMGw2MCAzME0wIDMwTDYwIDAiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSI2Ii8+PHBhdGggZmlsbD0iI2M4MTAyYiIgZD0iTTAgMGw2MCAzME0wIDMwTDYwIDAiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSI0Ii8+PHBhdGggZmlsbD0iI2M4MTAyYiIgZD0iTTMwIDBhMzAgMzAgMCAxIDAgMCAzMEEzMCAzMCAwIDAgMCAzMCAweiIvPjxwYXRoIGZpbGw=" class="language-flag" alt="English">
+                                English
+                            </div>
+                            <div class="language-option" data-lang="hi">
+                                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MCAzMCI+PHBhdGggZmlsbD0iI2ZmODMzMyIgZD0iTTAgMGg2MHYxMEgweiIvPjxwYXRoIGZpbGw9IiMwMDg3NTAiIGQ9Ik0wIDIwaDYwdjEwSDB6Ii8+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTAgMTBoNjB2MTBIMHoiLz48Y2lyY2xlIGN4PSIzMCIgY3k9IjE1IiByPSI0IiBmaWxsPSIjMDA4NzUwIi8+PC9zdmc+" class="language-flag" alt="Hindi">
+                                हिंदी
+                            </div>
+                            <div class="language-option" data-lang="or">
+                                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MCAzMCI+PHBhdGggZmlsbD0iI2ZmODMzMyIgZD0iTTAgMGg2MHYxMEgweiIvPjxwYXRoIGZpbGw9IiMwMDg3NTAiIGQ9Ik0wIDIwaDYwdjEwSDB6Ii8+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTAgMTBoNjB2MTBIMHoiLz48Y2lyY2xlIGN4PSIzMCIgY3k9IjE1IiByPSI0IiBmaWxsPSIjZmY4MzMzIi8+PC9zdmc+" class="language-flag" alt="Odia">
+                                ଓଡ଼ିଆ
+                            </div>
+                            <div class="language-option" data-lang="te">
+                                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MCAzMCI+PHBhdGggZmlsbD0iI2ZmODMzMyIgZD0iTTAgMGg6MHYxMEgweiIvPjxwYXRoIGZpbGw9IiMwMDg3NTAiIGQ9Ik0wIDIwaDo0djEwSDB6Ii8+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTAgMTBoNjB2MTBIMHoiLz48Y2lyY2xlIGN4PSIzMCIgY3k9IjE1IiByPSI0IiBmaWxsPSIjZmY4MzMzIi8+PC9zdmc+" class="language-flag" alt="Telugu">
+                                తెలుగు
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="button"
+                        class="text-text-secondary hover:text-primary focus:outline-none focus:text-primary"
+                        onclick="toggleMobileMenu()">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Navigation Menu -->
+            <div id="mobile-menu" class="md:hidden hidden">
+                <div
+                    class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-border-light rounded-b-lg shadow-lg">
+                    <a href="homepage.html"
+                        class="text-text-secondary hover:text-primary block px-3 py-2 rounded-md text-base transition-smooth">Home</a>
+                    <a href="product_journey_viewer.html"
+                        class="text-primary font-semibold block px-3 py-2 rounded-md text-base bg-primary-50">Product
+                        Tracker</a>
+                    <a href="transparency_dashboard.html"
+                        class="text-text-secondary hover:text-primary block px-3 py-2 rounded-md text-base transition-smooth">Dashboard</a>
+                    <a href="case_studies_success_stories.html"
+                        class="text-text-secondary hover:text-primary block px-3 py-2 rounded-md text-base transition-smooth">Case
+                        Studies</a>
+                    <a href="pricing_plans.html"
+                        class="text-text-secondary hover:text-primary block px-3 py-2 rounded-md text-base transition-smooth">Pricing</a>
+                    <a href="stakeholder_registration_hub.html"
+                        class="btn-primary block text-center mt-4 rounded-full py-2 font-medium">Get Started</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section with Search -->
+    <section class="bg-gradient-to-br from-primary-50 via-white to-accent-50 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-8 fade-in">
+                <h1 class="text-4xl lg:text-5xl font-bold text-text-primary mb-4" data-translate="main-title">
+                    Track Your Food's <span
+                        class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Complete
+                        Journey</span>
+                </h1>
+<<<<<<< HEAD
+                <p class="text-xl text-text-secondary max-w-3xl mx-auto">
+=======
+                <p class="text-xl text-text-secondary max-w-3xl mx-auto" data-translate="main-subtitle">
+>>>>>>> e70fa53 (Thsi_Is_The_Final_Project)
+                    Discover the complete story behind your food with securely-verified transparency from farm to table
+                </p>
+            </div>
+
+            <!-- Search Interface -->
+            <div class="max-w-4xl mx-auto fade-in">
+                <div class="gradient-border p-1 rounded-2xl shadow-elevated">
+                    <div class="bg-white rounded-2xl p-6">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <!-- QR Code Scanner -->
+                            <div class="text-center">
+                                <div
+                                    class="bg-surface rounded-xl p-6 mb-4 card-hover border border-border-light hover:border-primary-200 transition-all">
+                                    <div
+                                        class="w-24 h-24 mx-auto mb-4 bg-gradient-to-br from-primary-100 to-primary-200 rounded-2xl flex items-center justify-center shadow-inner">
+                                        <svg class="w-12 h-12 text-primary" fill="currentColor" viewBox="0 0 24 24">
+                                            <path
+                                                d="M3 3h6v6H3V3zm2 2v2h2V5H5zM3 15h6v6H3v-6zm2 2v2h2v-2H5zM15 3h6v6h-6V3zm2 2v2h2V5h-2zM13 7h2v2h-2V7zM15 9h2v2h-2V9zM13 11h2v2h-2v-2zM15 13h2v2h-2v-2zM13 15h2v2h-2v-2zM15 17h2v2h-2v-2zM17 15h2v2h-2v-2zM19 17h2v2h-2v-2zM17 19h2v2h-2v-2zM19 13h2v2h-2v-2zM21 15h2v2h-2v-2z" />
+                                        </svg>
+                                    </div>
+                                    <h3 class="text-lg font-semibold text-text-primary mb-2" data-translate="qr-title">Scan QR Code</h3>
+                                    <p class="text-text-secondary mb-4" data-translate="qr-description">Use your camera to scan the QR code on your
+                                        product</p>
+                                    <button onclick="startQRScanner()"
+                                        class="btn-primary w-full rounded-full py-3 font-medium flex items-center justify-center shadow-md hover:shadow-lg transition-all">
+                                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        </svg>
+                                        <span data-translate="scan-button">Start Camera</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Manual Search -->
+                            <div>
+                                <div
+                                    class="bg-surface rounded-xl p-6 card-hover border border-border-light hover:border-primary-200 transition-all">
+                                    <h3 class="text-lg font-semibold text-text-primary mb-4" data-translate="manual-title">Search by Product ID</h3>
+                                    <div class="space-y-4">
+                                        <div>
+                                            <label for="product-id"
+                                                class="block text-sm font-medium text-text-primary mb-2" data-translate="product-id-label">Product ID or
+                                                Batch Number</label>
+                                            <input type="text" id="product-id"
+                                                placeholder="e.g., TOM2025-001, BEEF2025-0334" data-translate="product-id-placeholder"
+                                                class="input-field rounded-full px-4 py-3 border-border-light focus:ring-2 focus:ring-primary focus:border-transparent" />
+                                        </div>
+                                        <button onclick="searchProduct()"
+                                            class="btn-secondary w-full rounded-full py-3 font-medium flex items-center justify-center shadow-md hover:shadow-lg transition-all">
+                                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                            </svg>
+                                            <span data-translate="search-button">Search Product</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quick Examples -->
+                        <div class="mt-6 pt-6 border-t border-border-light">
+                            <p class="text-sm text-text-secondary mb-3" data-translate="sample-products">Try these sample products:</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button onclick="loadSampleProduct('TOM2025-001')"
+                                    class="px-4 py-2 bg-primary-100 text-primary rounded-full text-sm font-medium hover:bg-primary-200 transition-all flex items-center">
+                                    <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l1.5 1.5a2 2 0 11-2.828-2.828l3-3z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    <span data-translate="sample-tomatoes">Organic Tomatoes</span>
+                                </button>
+                                <button onclick="loadSampleProduct('BEEF2025-0334')"
+                                    class="px-4 py-2 bg-secondary-100 text-secondary rounded-full text-sm font-medium hover:bg-secondary-200 transition-all flex items-center">
+                                    <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l1.5 1.5a2 2 0 11-2.828-2.828l3-3z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    <span data-translate="sample-beef">Grass-Fed Beef</span>
+                                </button>
+                                <button onclick="loadSampleProduct('APP2025-0892')"
+                                    class="px-4 py-2 bg-accent-100 text-accent rounded-full text-sm font-medium hover:bg-accent-200 transition-all flex items-center">
+                                    <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l1.5 1.5a2 2 0 11-2.828-2.828l3-3z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    <span data-translate="sample-apples">Organic Apples</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content Area -->
+    <section class="py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-4 gap-8">
+                <!-- Sidebar Filters -->
+                <div class="lg:col-span-1">
+                    <div class="glass-effect rounded-xl p-6 shadow-subtle sticky top-24 border border-border-light">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-text-primary" data-translate="filter-title">Filter Journey</h3>
+                            <button onclick="resetFilters()"
+                                class="text-sm text-text-secondary hover:text-primary transition-smooth flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                </svg>
+                                <span data-translate="filter-reset">Reset</span>
+                            </button>
+                        </div>
+
+                        <!-- Data Type Filters -->
+                        <div class="mb-6">
+                            <h4 class="text-sm font-medium text-text-primary mb-3" data-translate="data-types">Data Types</h4>
+                            <div class="space-y-2">
+                                <label
+                                    class="flex items-center p-2 rounded-lg hover:bg-primary-50 transition-smooth cursor-pointer">
+                                    <input type="checkbox" checked
+                                        class="rounded border-border text-primary focus:ring-primary-500 h-4 w-4"
+                                        onchange="toggleFilter('origin')" />
+                                    <span class="ml-3 text-sm text-text-secondary" data-translate="filter-origin">Origin & Farming</span>
+                                </label>
+                                <label
+                                    class="flex items-center p-2 rounded-lg hover:bg-primary-50 transition-smooth cursor-pointer">
+                                    <input type="checkbox" checked
+                                        class="rounded border-border text-primary focus:ring-primary-500 h-4 w-4"
+                                        onchange="toggleFilter('processing')" />
+                                    <span class="ml-3 text-sm text-text-secondary" data-translate="filter-processing">Processing</span>
+                                </label>
+                                <label
+                                    class="flex items-center p-2 rounded-lg hover:bg-primary-50 transition-smooth cursor-pointer">
+                                    <input type="checkbox" checked
+                                        class="rounded border-border text-primary focus:ring-primary-500 h-4 w-4"
+                                        onchange="toggleFilter('testing')" />
+                                    <span class="ml-3 text-sm text-text-secondary" data-translate="filter-testing">Quality Testing</span>
+                                </label>
+                                <label
+                                    class="flex items-center p-2 rounded-lg hover:bg-primary-50 transition-smooth cursor-pointer">
+                                    <input type="checkbox" checked
+                                        class="rounded border-border text-primary focus:ring-primary-500 h-4 w-4"
+                                        onchange="toggleFilter('logistics')" />
+                                    <span class="ml-3 text-sm text-text-secondary" data-translate="filter-logistics">Logistics</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Verification Status -->
+                        <div class="mb-6">
+                            <h4 class="text-sm font-medium text-text-primary mb-3" data-translate="verification-status">Verification Status</h4>
+                            <div class="space-y-2">
+<<<<<<< HEAD
+                                <label class="flex items-center">
+                                    <input type="checkbox" checked class="rounded border-border text-success focus:ring-success-500" onchange="toggleVerification('verified')" />
+                                    <span class="ml-2 text-sm text-success">Securely-Verified</span>
+=======
+                                <label
+                                    class="flex items-center p-2 rounded-lg hover:bg-success-50 transition-smooth cursor-pointer">
+                                    <input type="checkbox" checked
+                                        class="rounded border-border text-success focus:ring-success-500 h-4 w-4"
+                                        onchange="toggleVerification('verified')" />
+                                    <span class="ml-3 text-sm text-success font-medium" data-translate="verified">Securely-Verified</span>
+>>>>>>> e70fa53 (Thsi_Is_The_Final_Project)
+                                </label>
+                                <label
+                                    class="flex items-center p-2 rounded-lg hover:bg-warning-50 transition-smooth cursor-pointer">
+                                    <input type="checkbox"
+                                        class="rounded border-border text-warning focus:ring-warning-500 h-4 w-4"
+                                        onchange="toggleVerification('pending')" />
+                                    <span class="ml-3 text-sm text-warning font-medium" data-translate="pending">Pending Verification</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Certifications -->
+                        <div>
+                            <h4 class="text-sm font-medium text-text-primary mb-3" data-translate="certifications">Certifications</h4>
+                            <div class="space-y-2">
+                                <label
+                                    class="flex items-center p-2 rounded-lg hover:bg-primary-50 transition-smooth cursor-pointer">
+                                    <input type="checkbox"
+                                        class="rounded border-border text-primary focus:ring-primary-500 h-4 w-4"
+                                        onchange="toggleCertification('organic')" />
+                                    <span class="ml-3 text-sm text-text-secondary" data-translate="organic">Organic</span>
+                                </label>
+                                <label
+                                    class="flex items-center p-2 rounded-lg hover:bg-primary-50 transition-smooth cursor-pointer">
+                                    <input type="checkbox"
+                                        class="rounded border-border text-primary focus:ring-primary-500 h-4 w-4"
+                                        onchange="toggleCertification('fair-trade')" />
+                                    <span class="ml-3 text-sm text-text-secondary" data-translate="fair-trade">Fair Trade</span>
+                                </label>
+                                <label
+                                    class="flex items-center p-2 rounded-lg hover:bg-primary-50 transition-smooth cursor-pointer">
+                                    <input type="checkbox"
+                                        class="rounded border-border text-primary focus:ring-primary-500 h-4 w-4"
+                                        onchange="toggleCertification('non-gmo')" />
+                                    <span class="ml-3 text-sm text-text-secondary" data-translate="non-gmo">Non-GMO</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Journey Display -->
+                <div class="lg:col-span-3">
+                    <!-- Product Header -->
+                    <div id="product-header"
+                        class="glass-effect rounded-xl p-6 shadow-subtle mb-6 hidden border border-border-light fade-in">
+                        <div class="flex flex-col md:flex-row gap-6">
+                            <div class="md:w-1/3">
+                                <div class="overflow-hidden rounded-xl shadow-md">
+                                    <img id="product-image"
+                                        src="https://images.pexels.com/photos/1327838/pexels-photo-1327838.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                                        alt="Product"
+                                        class="w-full h-48 object-cover transform hover:scale-105 transition-transform duration-500"
+                                        loading="lazy"
+                                        onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;" />
+                                </div>
+                            </div>
+                            <div class="md:w-2/3">
+                                <div class="flex items-start justify-between mb-4">
+                                    <div>
+                                        <h2 id="product-name" class="text-2xl font-bold text-text-primary mb-2">Organic
+                                            Tomatoes</h2>
+                                        <p id="product-batch"
+                                            class="text-text-secondary font-mono bg-surface rounded-full px-3 py-1 text-sm inline-block">
+                                            Batch: TOM2025-001</p>
+                                    </div>
+                                    <div class="flex space-x-2">
+                                        <button onclick="shareProduct()"
+                                            class="p-2 text-text-secondary hover:text-primary transition-smooth rounded-full hover:bg-primary-50"
+                                            title="Share">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
+                                            </svg>
+                                        </button>
+                                        <button onclick="downloadReport()"
+                                            class="p-2 text-text-secondary hover:text-primary transition-smooth rounded-full hover:bg-primary-50"
+                                            title="Download Report">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Trust Indicators -->
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                                    <div class="text-center bg-success-50 rounded-xl p-3 shadow-sm">
+                                        <div
+                                            class="w-10 h-10 bg-success rounded-lg mx-auto mb-2 flex items-center justify-center">
+                                            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd"
+                                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        </div>
+                                        <p class="text-xs text-success font-semibold" data-translate="verified">Verified</p>
+                                    </div>
+                                    <div class="text-center bg-primary-50 rounded-xl p-3 shadow-sm">
+                                        <div
+                                            class="w-10 h-10 bg-primary rounded-lg mx-auto mb-2 flex items-center justify-center">
+                                            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                <path
+                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                            </svg>
+                                        </div>
+                                        <p class="text-xs text-primary font-semibold" data-translate="organic">Organic</p>
+                                    </div>
+                                    <div class="text-center bg-accent-50 rounded-xl p-3 shadow-sm">
+                                        <div
+                                            class="w-10 h-10 bg-accent rounded-lg mx-auto mb-2 flex items-center justify-center">
+                                            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd"
+                                                    d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        </div>
+                                        <p class="text-xs text-accent font-semibold" data-translate="traceable">Traceable</p>
+                                    </div>
+                                    <div class="text-center bg-secondary-50 rounded-xl p-3 shadow-sm">
+                                        <div
+                                            class="w-10 h-10 bg-secondary rounded-lg mx-auto mb-2 flex items-center justify-center">
+                                            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd"
+                                                    d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        </div>
+                                        <p class="text-xs text-secondary font-semibold" data-translate="secure">Secure</p>
+                                    </div>
+                                </div>
+
+                                <!-- Quick Stats -->
+                                <div class="grid grid-cols-3 gap-4 text-center">
+                                    <div class="bg-surface rounded-xl p-3 shadow-sm">
+                                        <p class="text-2xl font-bold text-primary">3</p>
+                                        <p class="text-xs text-text-secondary" data-translate="days-farm-store">Days Farm to Store</p>
+                                    </div>
+                                    <div class="bg-surface rounded-xl p-3 shadow-sm">
+                                        <p class="text-2xl font-bold text-secondary">5</p>
+                                        <p class="text-xs text-text-secondary" data-translate="supply-chain-steps">Supply Chain Steps</p>
+                                    </div>
+                                    <div class="bg-surface rounded-xl p-3 shadow-sm">
+                                        <p class="text-2xl font-bold text-accent">100%</p>
+                                        <p class="text-xs text-text-secondary" data-translate="verified-data">Verified Data</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Journey Timeline -->
+                    <div id="journey-timeline" class="hidden">
+                        <!-- Map View Toggle -->
+                        <div class="glass-effect rounded-xl p-4 shadow-subtle mb-6 border border-border-light fade-in">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-lg font-semibold text-text-primary" data-translate="supply-chain-journey">Supply Chain Journey</h3>
+                                <div class="flex space-x-2 bg-surface rounded-full p-1">
+                                    <button onclick="toggleView('timeline')" id="timeline-btn"
+                                        class="px-4 py-2 bg-primary text-white rounded-full text-sm font-medium transition-all shadow-sm" data-translate="timeline">Timeline</button>
+                                    <button onclick="toggleView('map')" id="map-btn"
+                                        class="px-4 py-2 bg-transparent text-text-secondary rounded-full text-sm font-medium hover:text-primary transition-all" data-translate="map-view">Map
+                                        View</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Timeline View -->
+                        <div id="timeline-view" class="space-y-6">
+                            <!-- Farm Origin -->
+                            <div
+                                class="glass-effect rounded-xl p-6 shadow-subtle border border-border-light timeline-item card-hover fade-in">
+                                <div class="flex items-start space-x-4">
+                                    <div class="flex-shrink-0 step-connector">
+                                        <div
+                                            class="w-12 h-12 bg-gradient-to-br from-primary to-primary-600 rounded-full flex items-center justify-center shadow-md">
+                                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd"
+                                                    d="M4 2a2 2 0 00-2 2v11a3 3 0 106 0V4a2 2 0 00-2-2H4zm1 14a1 1 0 100-2 1 1 0 000 2zm5-1.757l4.9-4.9a2 2 0 000-2.828L13.485 5.1a2 2 0 00-2.828 0L10 5.757v8.486zM16 18H9.071l6-6H16a2 2 0 012 2v2a2 2 0 01-2 2z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <h4 class="text-lg font-semibold text-text-primary" data-translate="farm-origin">Farm Origin</h4>
+                                            <span
+                                                class="bg-success-100 text-success text-xs font-medium px-2 py-1 rounded-full" data-translate="verified">Verified</span>
+                                        </div>
+                                        <p class="text-text-secondary mb-4" data-translate="farm-description">Tomatoes harvested from organic farm with
+                                            sustainable practices</p>
+                                        <div class="grid md:grid-cols-2 gap-4 mb-4">
+                                            <div class="bg-surface rounded-lg p-4">
+                                                <p class="text-sm font-medium text-text-primary mb-1" data-translate="farm-details">Farm Details</p>
+                                                <p class="text-sm text-text-secondary">Green Valley Organics, California
+                                                </p>
+                                            </div>
+                                            <div class="bg-surface rounded-lg p-4">
+                                                <p class="text-sm font-medium text-text-primary mb-1" data-translate="harvest-date">Harvest Date</p>
+                                                <p class="text-sm text-text-secondary">June 15, 2025</p>
+                                            </div>
+                                        </div>
+<<<<<<< HEAD
+
+                                        <!-- Securely- Verification -->
+                                        <div class="bg-success-50 border border-success-200 rounded-lg p-3">
+                                            <div class="flex items-center space-x-2 mb-2">
+                                                <svg class="w-4 h-4 text-success" fill="currentColor" viewBox="0 0 20 20">
+<<<<<<< HEAD
+                                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 
+=======
+                                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+=======
+                                        <div class="flex items-center space-x-3">
+                                            <button onclick="showDetails('farm')"
+                                                class="text-sm text-primary hover:underline font-medium flex items-center">
+                                                <span data-translate="view-details">View Details</span>
+                                                <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd"
+                                                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                                        clip-rule="evenodd" />
+>>>>>>> e70fa53 (Thsi_Is_The_Final_Project)
+                                                </svg>
+                                            </button>
+                                            <button onclick="verifyData('farm')"
+                                                class="text-sm text-text-secondary hover:text-primary font-medium flex items-center">
+                                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                                </svg>
+                                                <span data-translate="verify">Verify</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Processing -->
+                            <div
+                                class="glass-effect rounded-xl p-6 shadow-subtle border border-border-light timeline-item card-hover fade-in">
+                                <div class="flex items-start space-x-4">
+                                    <div class="flex-shrink-0 step-connector">
+                                        <div
+                                            class="w-12 h-12 bg-gradient-to-br from-secondary to-secondary-600 rounded-full flex items-center justify-center shadow-md">
+                                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                <path
+                                                    d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <h4 class="text-lg font-semibold text-text-primary" data-translate="processing">Processing & Packaging
+                                            </h4>
+                                            <span
+                                                class="bg-success-100 text-success text-xs font-medium px-2 py-1 rounded-full" data-translate="verified">Verified</span>
+                                        </div>
+                                        <p class="text-text-secondary mb-4" data-translate="processing-description">Tomatoes sorted, washed, and packaged
+                                            according to organic standards</p>
+                                        <div class="grid md:grid-cols-2 gap-4 mb-4">
+                                            <div class="bg-surface rounded-lg p-4">
+                                                <p class="text-sm font-medium text-text-primary mb-1" data-translate="processing-facility">Processing
+                                                    Facility</p>
+                                                <p class="text-sm text-text-secondary">FreshPack Co., Salinas, CA</p>
+                                            </div>
+                                            <div class="bg-surface rounded-lg p-4">
+                                                <p class="text-sm font-medium text-text-primary mb-1" data-translate="processing-date">Processing Date
+                                                </p>
+                                                <p class="text-sm text-text-secondary">June 16, 2025</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-3">
+                                            <button onclick="showDetails('processing')"
+                                                class="text-sm text-primary hover:underline font-medium flex items-center">
+                                                <span data-translate="view-details">View Details</span>
+                                                <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd"
+                                                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                                        clip-rule="evenodd" />
+                                                </svg>
+                                            </button>
+                                            <button onclick="verifyData('processing')"
+                                                class="text-sm text-text-secondary hover:text-primary font-medium flex items-center">
+                                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                                </svg>
+                                                <span data-translate="verify">Verify</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Quality Testing -->
+                            <div
+                                class="glass-effect rounded-xl p-6 shadow-subtle border border-border-light timeline-item card-hover fade-in">
+                                <div class="flex items-start space-x-4">
+                                    <div class="flex-shrink-0 step-connector">
+                                        <div
+                                            class="w-12 h-12 bg-gradient-to-br from-accent to-accent-600 rounded-full flex items-center justify-center shadow-md">
+                                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd"
+                                                    d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <h4 class="text-lg font-semibold text-text-primary" data-translate="quality-testing">Quality Testing</h4>
+                                            <span
+                                                class="bg-success-100 text-success text-xs font-medium px-2 py-1 rounded-full" data-translate="verified">Verified</span>
+                                        </div>
+                                        <p class="text-text-secondary mb-4" data-translate="testing-description">Comprehensive testing for pesticides,
+                                            freshness, and nutritional content</p>
+                                        <div class="grid md:grid-cols-2 gap-4 mb-4">
+                                            <div class="bg-surface rounded-lg p-4">
+                                                <p class="text-sm font-medium text-text-primary mb-1" data-translate="testing-lab">Testing Lab</p>
+                                                <p class="text-sm text-text-secondary">AgriQuality Labs, San Francisco
+                                                </p>
+                                            </div>
+                                            <div class="bg-surface rounded-lg p-4">
+                                                <p class="text-sm font-medium text-text-primary mb-1" data-translate="test-results">Test Results</p>
+                                                <p class="text-sm text-text-secondary">Passed all quality standards</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-3">
+                                            <button onclick="showDetails('testing')"
+                                                class="text-sm text-primary hover:underline font-medium flex items-center">
+                                                <span data-translate="view-details">View Details</span>
+                                                <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd"
+                                                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                                        clip-rule="evenodd" />
+                                                </svg>
+                                            </button>
+                                            <button onclick="verifyData('testing')"
+                                                class="text-sm text-text-secondary hover:text-primary font-medium flex items-center">
+                                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                                </svg>
+                                                <span data-translate="verify">Verify</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Logistics -->
+                            <div
+                                class="glass-effect rounded-xl p-6 shadow-subtle border border-border-light timeline-item card-hover fade-in">
+                                <div class="flex items-start space-x-4">
+                                    <div class="flex-shrink-0">
+                                        <div
+                                            class="w-12 h-12 bg-gradient-to-br from-warning to-warning-600 rounded-full flex items-center justify-center shadow-md">
+                                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                <path
+                                                    d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
+                                                <path
+                                                    d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1v-1h4.05a2.5 2.5 0 014.9 0H20a1 1 0 001-1v-4a1 1 0 00-.293-.707l-4-4A1 1 0 0016 4H3z" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <h4 class="text-lg font-semibold text-text-primary" data-translate="transportation">Transportation</h4>
+                                            <span
+                                                class="bg-success-100 text-success text-xs font-medium px-2 py-1 rounded-full" data-translate="verified">Verified</span>
+                                        </div>
+                                        <p class="text-text-secondary mb-4" data-translate="logistics-description">Refrigerated transport with temperature
+                                            monitoring throughout the journey</p>
+                                        <div class="grid md:grid-cols-2 gap-4 mb-4">
+                                            <div class="bg-surface rounded-lg p-4">
+                                                <p class="text-sm font-medium text-text-primary mb-1" data-translate="logistics-provider">Logistics Provider
+                                                </p>
+                                                <p class="text-sm text-text-secondary">CoolTrans Logistics</p>
+                                            </div>
+                                            <div class="bg-surface rounded-lg p-4">
+                                                <p class="text-sm font-medium text-text-primary mb-1" data-translate="temperature-range">Temperature Range
+                                                </p>
+                                                <p class="text-sm text-text-secondary">4.2°C - 5.8°C (Optimal)</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-3">
+                                            <button onclick="showDetails('logistics')"
+                                                class="text-sm text-primary hover:underline font-medium flex items-center">
+                                                <span data-translate="view-details">View Details</span>
+                                                <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd"
+                                                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                                        clip-rule="evenodd" />
+                                                </svg>
+                                            </button>
+                                            <button onclick="verifyData('logistics')"
+                                                class="text-sm text-text-secondary hover:text-primary font-medium flex items-center">
+                                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                                </svg>
+                                                <span data-translate="verify">Verify</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Map View (Hidden by default) -->
+                        <div id="map-view"
+                            class="hidden glass-effect rounded-xl p-6 shadow-subtle border border-border-light fade-in">
+                            <div class="h-96 bg-surface rounded-xl overflow-hidden relative">
+                                <!-- Map placeholder with journey path -->
+                                <div
+                                    class="absolute inset-0 bg-gradient-to-br from-primary-50 to-accent-50 flex items-center justify-center">
+                                    <div class="text-center">
+                                        <svg class="w-16 h-16 mx-auto text-text-secondary mb-4" fill="none"
+                                            stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                                        </svg>
+                                        <p class="text-text-secondary font-medium" data-translate="map-description">Interactive map showing the journey
+                                            from farm to store</p>
+                                        <p class="text-sm text-text-secondary mt-2" data-translate="map-note">(Map integration would show actual
+                                            locations and route)</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div id="empty-state" class="text-center py-16 fade-in">
+                        <div class="max-w-md mx-auto">
+                            <div
+                                class="w-24 h-24 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                                <svg class="w-12 h-12 text-primary" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold text-text-primary mb-2" data-translate="empty-title">Track Your Product's Journey</h3>
+                            <p class="text-text-secondary mb-6" data-translate="empty-description">Scan a QR code or enter a product ID to see the complete
+                                supply chain history with verified transparency data.</p>
+                            <div class="animate-pulse-slow">
+                                <svg class="w-16 h-16 mx-auto text-primary" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-surface border-t border-border-light py-12 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold text-text-primary mb-4">KrishiPath</h3>
+                    <p class="text-text-secondary text-sm" data-translate="footer-description">Transforming agricultural supply chains with
+                        blockchain-powered transparency and trust.</p>
+                </div>
+                <div>
+                    <h4 class="text-sm font-semibold text-text-primary uppercase tracking-wider mb-4" data-translate="resources">Resources</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#"
+                                class="text-text-secondary hover:text-primary text-sm transition-smooth">Documentation</a>
+                        </li>
+                        <li><a href="#" class="text-text-secondary hover:text-primary text-sm transition-smooth">API
+                                Reference</a></li>
+                        <li><a href="#"
+                                class="text-text-secondary hover:text-primary text-sm transition-smooth">Guides</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-sm font-semibold text-text-primary uppercase tracking-wider mb-4" data-translate="company">Company</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-text-secondary hover:text-primary text-sm transition-smooth">About
+                                Us</a></li>
+                        <li><a href="#"
+                                class="text-text-secondary hover:text-primary text-sm transition-smooth">Blog</a></li>
+                        <li><a href="#"
+                                class="text-text-secondary hover:text-primary text-sm transition-smooth">Careers</a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-sm font-semibold text-text-primary uppercase tracking-wider mb-4" data-translate="connect">Connect</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#"
+                                class="text-text-secondary hover:text-primary text-sm transition-smooth">GitHub</a></li>
+                        <li><a href="#"
+                                class="text-text-secondary hover:text-primary text-sm transition-smooth">Twitter</a>
+                        </li>
+                        <li><a href="#"
+                                class="text-text-secondary hover:text-primary text-sm transition-smooth">LinkedIn</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-12 pt-8 border-t border-border-light text-center">
+                <p class="text-text-secondary text-sm">© 2025 KrishiPath. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- QR Scanner Modal -->
+    <div id="qr-scanner-modal"
+        class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-xl p-6 max-w-md w-full mx-4">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-text-primary" data-translate="scan-qr"> Scan QR Code</h3>
+                <button onclick="closeQRScanner()" class="text-text-secondary hover:text-primary">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="bg-surface rounded-xl h-64 flex items-center justify-center mb-4">
+                <div class="text-center">
+                    <img src="/assets/qr-code.jpg" alt="QR will generate after login or sign Up"
+                        style="padding: 7px; padding-left: 2px;">
+                </div>
+            </div>
+            <br><br>
+            <button onclick="simulateQRScan()" class="btn-primary w-full rounded-full py-3 font-medium" data-translate="simulate-scan">Simulate Scan
+                (Demo)</button>
+
+        </div>
+
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Toggle mobile menu
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        }
+
+        // Start QR Scanner
+        function startQRScanner() {
+            document.getElementById('qr-scanner-modal').classList.remove('hidden');
+        }
+
+        // Close QR Scanner
+        function closeQRScanner() {
+            document.getElementById('qr-scanner-modal').classList.add('hidden');
+        }
+
+        // Simulate QR Scan (for demo)
+        function simulateQRScan() {
+            closeQRScanner();
+            loadSampleProduct('TOM2025-001');
+        }
+
+        // Search product by ID
+        function searchProduct() {
+            const productId = document.getElementById('product-id').value.trim();
+            if (productId) {
+                loadProductData(productId);
+            } else {
+                alert('Please enter a product ID');
+            }
+        }
+
+        // Load sample product
+        function loadSampleProduct(productId) {
+            document.getElementById('product-id').value = productId;
+            loadProductData(productId);
+        }
+
+        // Load product data
+        function loadProductData(productId) {
+            // Hide empty state
+            document.getElementById('empty-state').classList.add('hidden');
+
+            // Show product header and timeline
+            document.getElementById('product-header').classList.remove('hidden');
+            document.getElementById('journey-timeline').classList.remove('hidden');
+
+            // Update product details based on ID
+            if (productId === 'TOM2025-001') {
+                document.getElementById('product-name').textContent = 'Organic Tomatoes';
+                document.getElementById('product-batch').textContent = `Batch: ${productId}`;
+                document.getElementById('product-image').src = 'https://images.pexels.com/photos/1327838/pexels-photo-1327838.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2';
+            } else if (productId === 'BEEF2025-0334') {
+                document.getElementById('product-name').textContent = 'Grass-Fed Beef';
+                document.getElementById('product-batch').textContent = `Batch: ${productId}`;
+                document.getElementById('product-image').src = 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?q=80&w=2832&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
+            } else if (productId === 'APP2025-0892') {
+                document.getElementById('product-name').textContent = 'Organic Apples';
+                document.getElementById('product-batch').textContent = `Batch: ${productId}`;
+                document.getElementById('product-image').src = 'https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
+            }
+
+            // Add fade-in animation to elements
+            const fadeElements = document.querySelectorAll('.fade-in');
+            fadeElements.forEach(el => {
+                el.style.animation = 'none';
+                setTimeout(() => {
+                    el.style.animation = 'fadeIn 0.5s ease-in';
+                }, 10);
+            });
+        }
+
+        // Toggle between timeline and map view
+        function toggleView(viewType) {
+            const timelineBtn = document.getElementById('timeline-btn');
+            const mapBtn = document.getElementById('map-btn');
+            const timelineView = document.getElementById('timeline-view');
+            const mapView = document.getElementById('map-view');
+
+            if (viewType === 'timeline') {
+                timelineBtn.classList.add('bg-primary', 'text-white');
+                timelineBtn.classList.remove('bg-transparent', 'text-text-secondary');
+                mapBtn.classList.add('bg-transparent', 'text-text-secondary');
+                mapBtn.classList.remove('bg-primary', 'text-white');
+                timelineView.classList.remove('hidden');
+                mapView.classList.add('hidden');
+            } else {
+                mapBtn.classList.add('bg-primary', 'text-white');
+                mapBtn.classList.remove('bg-transparent', 'text-text-secondary');
+                timelineBtn.classList.add('bg-transparent', 'text-text-secondary');
+                timelineBtn.classList.remove('bg-primary', 'text-white');
+                mapView.classList.remove('hidden');
+                timelineView.classList.add('hidden');
+            }
+        }
+
+        // Filter functions
+        function toggleFilter(filterType) {
+            console.log(`Toggled filter: ${filterType}`);
+            // Actual implementation would filter the timeline
+        }
+
+        function toggleVerification(status) {
+            console.log(`Toggled verification: ${status}`);
+            // Actual implementation would filter by verification status
+        }
+
+        function toggleCertification(certification) {
+            console.log(`Toggled certification: ${certification}`);
+            // Actual implementation would filter by certification
+        }
+
+        function resetFilters() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = true;
+            });
+            console.log('Filters reset');
+            // Actual implementation would reset all filters
+        }
+
+        // Detail and verification functions
+        function showDetails(step) {
+            console.log(`Showing details for: ${step}`);
+            // Actual implementation would show detailed information
+        }
+
+        function verifyData(step) {
+            console.log(`Verifying data for: ${step}`);
+            // Actual implementation would verify the data
+        }
+
+        function shareProduct() {
+            console.log('Sharing product');
+            // Actual implementation would share the product
+        }
+
+        function downloadReport() {
+            console.log('Downloading report');
+            // Actual implementation would download a report
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const helpButton = document.getElementById('helpButton');
+            const helpOptions = document.getElementById('helpOptions');
+
+            helpButton.addEventListener('click', function () {
+                helpOptions.classList.toggle('active');
+            });
+
+            // Close the options when clicking outside
+            document.addEventListener('click', function (event) {
+                if (!event.target.closest('.help-container')) {
+                    helpOptions.classList.remove('active');
+                }
+            });
+
+            // Language selector functionality
+            const languageButton = document.getElementById('languageButton');
+            const mobileLanguageButton = document.getElementById('mobileLanguageButton');
+            const languageDropdown = document.getElementById('languageDropdown');
+            const mobileLanguageDropdown = document.getElementById('mobileLanguageDropdown');
+            const currentLanguage = document.getElementById('currentLanguage');
+
+            // Toggle language dropdown
+            if (languageButton) {
+                languageButton.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    languageDropdown.classList.toggle('active');
+                });
+            }
+
+            if (mobileLanguageButton) {
+                mobileLanguageButton.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    mobileLanguageDropdown.classList.toggle('active');
+                });
+            }
+
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', function() {
+                languageDropdown.classList.remove('active');
+                mobileLanguageDropdown.classList.remove('active');
+            });
+
+            // Prevent dropdown from closing when clicking inside it
+            if (languageDropdown) {
+                languageDropdown.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+            }
+
+            if (mobileLanguageDropdown) {
+                mobileLanguageDropdown.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+            }
+
+            // Language selection
+            const languageOptions = document.querySelectorAll('.language-option');
+            languageOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const lang = this.getAttribute('data-lang');
+                    
+                    // Update active class
+                    languageOptions.forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Update current language text
+                    if (currentLanguage) {
+                        currentLanguage.textContent = this.textContent.trim();
+                    }
+                    
+                    // Change language
+                    changeLanguage(lang);
+                    
+                    // Close dropdowns
+                    languageDropdown.classList.remove('active');
+                    mobileLanguageDropdown.classList.remove('active');
+                });
+            });
+        });
+
+        // Language translations
+        const translations = {
+            en: {
+                // Main section
+                'main-title': 'Track Your Food\'s Complete Journey',
+                'main-subtitle': 'Discover the complete story behind your food with securely-verified transparency from farm to table',
+                
+                // Search section
+                'qr-title': 'Scan QR Code',
+                'qr-description': 'Use your camera to scan the QR code on your product',
+                'manual-title': 'Search by Product ID',
+                'product-id-label': 'Product ID or Batch Number',
+                'product-id-placeholder': 'e.g., TOM2025-001, BEEF2025-0334',
+                'scan-button': 'Start Camera',
+                'search-button': 'Search Product',
+                'sample-products': 'Try these sample products:',
+                'sample-tomatoes': 'Organic Tomatoes',
+                'sample-beef': 'Grass-Fed Beef',
+                'sample-apples': 'Organic Apples',
+                
+                // Filters
+                'filter-title': 'Filter Journey',
+                'filter-reset': 'Reset',
+                'data-types': 'Data Types',
+                'filter-origin': 'Origin & Farming',
+                'filter-processing': 'Processing',
+                'filter-testing': 'Quality Testing',
+                'filter-logistics': 'Logistics',
+                'verification-status': 'Verification Status',
+                'verified': 'Securely-Verified',
+                'pending': 'Pending Verification',
+                'certifications': 'Certifications',
+                'organic': 'Organic',
+                'fair-trade': 'Fair Trade',
+                'non-gmo': 'Non-GMO',
+                
+                // Product details
+                'days-farm-store': 'Days Farm to Store',
+                'supply-chain-steps': 'Supply Chain Steps',
+                'verified-data': 'Verified Data',
+                'traceable': 'Traceable',
+                'secure': 'Secure',
+                
+                // Journey timeline
+                'supply-chain-journey': 'Supply Chain Journey',
+                'timeline': 'Timeline',
+                'map-view': 'Map View',
+                'farm-origin': 'Farm Origin',
+                'farm-description': 'Tomatoes harvested from organic farm with sustainable practices',
+                'farm-details': 'Farm Details',
+                'harvest-date': 'Harvest Date',
+                'processing': 'Processing & Packaging',
+                'processing-description': 'Tomatoes sorted, washed, and packaged according to organic standards',
+                'processing-facility': 'Processing Facility',
+                'processing-date': 'Processing Date',
+                'quality-testing': 'Quality Testing',
+                'testing-description': 'Comprehensive testing for pesticides, freshness, and nutritional content',
+                'testing-lab': 'Testing Lab',
+                'test-results': 'Test Results',
+                'transportation': 'Transportation',
+                'logistics-description': 'Refrigerated transport with temperature monitoring throughout the journey',
+                'logistics-provider': 'Logistics Provider',
+                'temperature-range': 'Temperature Range',
+                'view-details': 'View Details',
+                'verify': 'Verify',
+                
+                // Map view
+                'map-description': 'Interactive map showing the journey from farm to store',
+                'map-note': '(Map integration would show actual locations and route)',
+                
+                // Empty state
+                'empty-title': 'Track Your Product\'s Journey',
+                'empty-description': 'Scan a QR code or enter a product ID to see the complete supply chain history with verified transparency data.',
+                
+                // QR Scanner
+                'scan-qr': 'Scan QR Code',
+                'simulate-scan': 'Simulate Scan (Demo)',
+                
+                // Footer
+                'footer-description': 'Transforming agricultural supply chains with blockchain-powered transparency and trust.',
+                'resources': 'Resources',
+                'company': 'Company',
+                'connect': 'Connect'
+            },
+            hi: {
+                // Main section
+                'main-title': 'अपने भोजन की पूरी यात्रा ट्रैक करें',
+                'main-subtitle': 'खेत से टेबल तक सुरक्षित रूप से सत्यापित पारदर्शिता के साथ अपने भोजन की पूरी कहानी खोजें',
+                
+                // Search section
+                'qr-title': 'QR कोड स्कैन करें',
+                'qr-description': 'अपने उत्पाद पर QR कोड स्कैन करने के लिए अपने कैमरे का उपयोग करें',
+                'manual-title': 'उत्पाद ID से खोजें',
+                'product-id-label': 'उत्पाद ID या बैच नंबर',
+                'product-id-placeholder': 'जैसे, TOM2025-001, BEEF2025-0334',
+                'scan-button': 'कैमरा शुरू करें',
+                'search-button': 'उत्पाद खोजें',
+                'sample-products': 'इन नमूना उत्पादों को आज़माएं:',
+                'sample-tomatoes': 'ऑर्गेनिक टमाटर',
+                'sample-beef': 'ग्रास-फेड बीफ',
+                'sample-apples': 'ऑर्गेनिक सेब',
+                
+                // Filters
+                'filter-title': 'यात्रा फ़िल्टर करें',
+                'filter-reset': 'रीसेट',
+                'data-types': 'डेटा प्रकार',
+                'filter-origin': 'मूल और खेती',
+                'filter-processing': 'प्रसंस्करण',
+                'filter-testing': 'गुणवत्ता परीक्षण',
+                'filter-logistics': 'लॉजिस्टिक्स',
+                'verification-status': 'सत्यापन स्थिति',
+                'verified': 'सुरक्षित रूप से सत्यापित',
+                'pending': 'लंबित सत्यापन',
+                'certifications': 'प्रमाणपत्र',
+                'organic': 'जैविक',
+                'fair-trade': 'फेयर ट्रेड',
+                'non-gmo': 'नॉन-जीएमओ',
+                
+                // Product details
+                'days-farm-store': 'खेत से दुकान तक के दिन',
+                'supply-chain-steps': 'आपूर्ति श्रृंखला के चरण',
+                'verified-data': 'सत्यापित डेटा',
+                'traceable': 'ट्रेस करने योग्य',
+                'secure': 'सुरक्षित',
+                
+                // Journey timeline
+                'supply-chain-journey': 'आपूर्ति श्रृंखला यात्रा',
+                'timeline': 'टाइमलाइन',
+                'map-view': 'मानचित्र दृश्य',
+                'farm-origin': 'खेत की उत्पत्ति',
+                'farm-description': 'टमाटर जैविक खेत से टिकाऊ प्रथाओं के साथ काटे गए',
+                'farm-details': 'खेत का विवरण',
+                'harvest-date': 'फसल की तारीख',
+                'processing': 'प्रसंस्करण और पैकेजिंग',
+                'processing-description': 'टमाटर को जैविक मानकों के अनुसार छांटा, धोया और पैक किया गया',
+                'processing-facility': 'प्रसंस्करण सुविधा',
+                'processing-date': 'प्रसंस्करण तिथि',
+                'quality-testing': 'गुणवत्ता परीक्षण',
+                'testing-description': 'कीटनाशकों, ताजगी और पोषण संबंधी सामग्री के लिए व्यापक परीक्षण',
+                'testing-lab': 'परीक्षण प्रयोगशाला',
+                'test-results': 'परीक्षण परिणाम',
+                'transportation': 'परिवहन',
+                'logistics-description': 'पूरी यात्रा में तापमान निगरानी के साथ प्रशीतित परिवहन',
+                'logistics-provider': 'लॉजिस्टिक्स प्रदाता',
+                'temperature-range': 'तापमान सीमा',
+                'view-details': 'विवरण देखें',
+                'verify': 'सत्यापित करें',
+                
+                // Map view
+                'map-description': 'खेत से स्टोर तक की यात्रा दिखाने वाला इंटरएक्टिव मानचित्र',
+                'map-note': '(मानचित्र एकीकरण वास्तविक स्थानों और मार्ग को दिखाएगा)',
+                
+                // Empty state
+                'empty-title': 'अपने उत्पाद की यात्रा ट्रैक करें',
+                'empty-description': 'सत्यापित पारदर्शिता डेटा के साथ पूरी आपूर्ति श्रृंखला का इतिहास देखने के लिए QR कोड स्कैन करें या उत्पाद ID दर्ज करें।',
+                
+                // QR Scanner
+                'scan-qr': 'QR कोड स्कैन करें',
+                'simulate-scan': 'सिम्युलेट स्कैन (डेमो)',
+                
+                // Footer
+                'footer-description': 'ब्लॉकचेन-संचालित पारदर्शिता और विश्वास के साथ कृषि आपूर्ति श्रृंखलाओं को बदलना।',
+                'resources': 'संसाधन',
+                'company': 'कंपनी',
+                'connect': 'जुड़ें'
+            },
+            or: {
+                // Main section
+                'main-title': 'ଆପଣଙ୍କ ଖାଦ୍ୟର ସମ୍ପୂର୍ଣ୍ଣ ଯାତ୍ରା ଟ୍ରାକ୍ କରନ୍ତୁ',
+                'main-subtitle': 'ଫାର୍ମରୁ ଟେବୁଲ୍ ପର୍ଯ୍ୟନ୍ତ ସୁରକ୍ଷିତ ଭାବରେ ଯାଞ୍ଚିତ ସ୍ୱଚ୍ଛତା ସହିତ ଆପଣଙ୍କ ଖାଦ୍ୟର ପୂର୍ଣ୍ଣ ଗଳ୍ପ ଆବିଷ୍କାର କରନ୍ତୁ',
+                
+                // Search section
+                'qr-title': 'QR କୋଡ୍ ସ୍କାନ୍ କରନ୍ତୁ',
+                'qr-description': 'ଆପଣଙ୍କ ଉତ୍ପାଦରେ QR କୋଡ୍ ସ୍କାନ୍ କରିବାକୁ ଆପଣଙ୍କ କ୍ୟାମେରା ବ୍ୟବହାର କରନ୍ତୁ',
+                'manual-title': 'ଉତ୍ପାଦ ID ଦ୍ୱାରା ସନ୍ଧାନ କରନ୍ତୁ',
+                'product-id-label': 'ଉତ୍ପାଦ ID କିମ୍ବା ବ୍ୟାଚ୍ ନମ୍ବର',
+                'product-id-placeholder': 'ଯେପରିକି, TOM2025-001, BEEF2025-0334',
+                'scan-button': 'କ୍ୟାମେରା ଆରମ୍ଭ କରନ୍ତୁ',
+                'search-button': 'ଉତ୍ପାଦ ଖୋଜନ୍ତୁ',
+                'sample-products': 'ଏହି ନମୁନା ଉତ୍ପାଦଗୁଡିକ ଚେଷ୍ଟା କରନ୍ତୁ:',
+                'sample-tomatoes': 'ଜୈବିକ ଟମାଟୋ',
+                'sample-beef': 'ଘାସ-ଖୁଆଯାଇଥିବା ଗୋମାଂସ',
+                'sample-apples': 'ଜୈବିକ ଆପେଲ୍',
+                
+                // Filters
+                'filter-title': 'ଯାତ୍ରା ଫିଲ୍ଟର୍ କରନ୍ତୁ',
+                'filter-reset': 'ରିସେଟ୍ କରନ୍ତୁ',
+                'data-types': 'ତଥ୍ୟ ପ୍ରକାରଗୁଡିକ',
+                'filter-origin': 'ଉତ୍ପତ୍ତି ଏବଂ କୃଷି',
+                'filter-processing': 'ପ୍ରକ୍ରିୟାକରଣ',
+                'filter-testing': 'ଗୁଣବତ୍ତା ପରୀକ୍ଷା',
+                'filter-logistics': 'ଲଜିଷ୍ଟିକ୍ସ',
+                'verification-status': 'ଯାଞ୍ଚ ସ୍ଥିତି',
+                'verified': 'ସୁରକ୍ଷିତ ଭାବରେ ଯାଞ୍ଚିତ',
+                'pending': 'ବିଚାରାଧୀନ ଯାଞ୍ଚ',
+                'certifications': 'ସାର୍ଟିଫିକେସନ୍',
+                'organic': 'ଜୈବିକ',
+                'fair-trade': 'ନ୍ୟାୟୋଚିତ ବାଣିଜ୍ୟ',
+                'non-gmo': 'ଜି.ଏମ.ଓ ମୁକ୍ତ',
+                
+                // Product details
+                'days-farm-store': 'ଫାର୍ମରୁ ଷ୍ଟୋର୍ ପର୍ଯ୍ୟନ୍ତ ଦିନ',
+                'supply-chain-steps': 'ସରବରାହ ଶୃଙ୍ଖଳା ପଦକ୍ଷେପଗୁଡିକ',
+                'verified-data': 'ଯାଞ୍ଚିତ ତଥ୍ୟ',
+                'traceable': 'ଟ୍ରେସ୍ ଯୋଗ୍ୟ',
+                'secure': 'ସୁରକ୍ଷିତ',
+                
+                // Journey timeline
+                'supply-chain-journey': 'ସରବରାହ ଶୃଙ୍ଖଳା ଯାତ୍ରା',
+                'timeline': 'ସମୟରେଖା',
+                'map-view': 'ମାନଚିତ୍ର ଦୃଶ୍ୟ',
+                'farm-origin': 'ଫାର୍ମ ଉତ୍ପତ୍ତି',
+                'farm-description': 'ଟମାଟୋ ଜୈବିକ ଫାର୍ମରୁ ଟିକାଉ ଅଭ୍ୟାସ ସହିତ ଅମଳ କରାଯାଇଥିଲା',
+                'farm-details': 'ଫାର୍ମ ବିବରଣୀ',
+                'harvest-date': 'ଅମଳ ତାରିଖ',
+                'processing': 'ପ୍ରକ୍ରିୟାକରଣ ଏବଂ ପ୍ୟାକେଜିଂ',
+                'processing-description': 'ଟମାଟୋ ଜୈବିକ ମାନକ ଅନୁଯାୟୀ କ୍ରମାନ୍ୱୟ, ଧୋଇ ଏବଂ ପ୍ୟାକ୍ କରାଯାଇଥିଲା',
+                'processing-facility': 'ପ୍ରକ୍ରିୟାକରଣ ସୁବିଧା',
+                'processing-date': 'ପ୍ରକ୍ରିୟାକରଣ ତାରିଖ',
+                'quality-testing': 'ଗୁଣବତ୍ତା ପରୀକ୍ଷା',
+                'testing-description': 'କୀଟନାଶକ, ସତେଜତା ଏବଂ ପୁଷ୍ଟିକର ବିଷୟବସ୍ତୁ ପାଇଁ ସମ୍ପୂର୍ଣ୍ଣ ପରୀକ୍ଷା',
+                'testing-lab': 'ପରୀକ୍ଷଣ ଲାବୋରେଟୋରୀ',
+                'test-results': 'ପରୀକ୍ଷଣ ଫଳାଫଳ',
+                'transportation': 'ପରିବହନ',
+                'logistics-description': 'ସମଗ୍ର ଯାତ୍ରାରେ ତାପମାତ୍ରା ମନିଟରିଂ ସହିତ ରେଫ୍ରିଜରେଟେଡ୍ ପରିବହନ',
+                'logistics-provider': 'ଲଜିଷ୍ଟିକ୍ସ ପ୍ରୋଭାଇଡର୍',
+                'temperature-range': 'ତାପମାତ୍ରା ପରିସର',
+                'view-details': 'ବିବରଣୀ ଦେଖନ୍ତୁ',
+                'verify': 'ଯାଞ୍ଚ କରନ୍ତୁ',
+                
+                // Map view
+                'map-description': 'ଫାର୍ମରୁ ଷ୍ଟୋର୍ ପର୍ଯ୍ୟନ୍ତ ଯାତ୍ରା ଦର୍ଶାଉଥିବା ଇଣ୍ଟରାକ୍ଟିଭ୍ ମାନଚିତ୍ର',
+                'map-note': '(ମାନଚିତ୍ର ସଂଯୋଗ ପ୍ରକୃତ ଅବସ୍ଥାନ ଏବଂ ମାର୍ଗ ଦର୍ଶାଇବ)',
+                
+                // Empty state
+                'empty-title': 'ଆପଣଙ୍କ ଉତ୍ପାଦର ଯାତ୍ରା ଟ୍ରାକ୍ କରନ୍ତୁ',
+                'empty-description': 'ଯାଞ୍ଚିତ ସ୍ୱଚ୍ଛତା ତଥ୍ୟ ସହିତ ସମ୍ପୂର୍ଣ୍ଣ ସରବରାହ ଶୃଙ୍ଖଳା ଇତିହାସ ଦେଖିବାକୁ QR କୋଡ୍ ସ୍କାନ୍ କରନ୍ତୁ କିମ୍ବା ଏକ ଉତ୍ପାଦ ID ପ୍ରବେଶ କରନ୍ତୁ।',
+                
+                // QR Scanner
+                'scan-qr': 'QR କୋଡ୍ ସ୍କାନ୍ କରନ୍ତୁ',
+                'simulate-scan': 'ଅନୁକରଣ ସ୍କାନ୍ (ଡେମୋ)',
+                
+                // Footer
+                'footer-description': 'ବ୍ଲକ୍‌ଚେନ୍-ଚାଳିତ ସ୍ୱଚ୍ଛତା ଏବଂ ବିଶ୍ୱାସ ସହିତ କୃଷି ସରବରାହ ଶୃଙ୍ଖଳାକୁ ରୂପାନ୍ତରିତ କରିବା।',
+                'resources': 'ସମ୍ବଳ',
+                'company': 'କମ୍ପାନୀ',
+                'connect': 'ସଂଯୋଗ କରନ୍ତୁ'
+            },
+            te: {
+                // Main section
+                'main-title': 'మీ ఆహారం యొక్క పూర్తి ప్రయాణాన్ని ట్రాక్ చేయండి',
+                'main-subtitle': 'ఫారమ్ నుండి టేబుల్ వరకు సురక్షితంగా ధృవీకరించబడిన పారదర్శకతతో మీ ఆహారం వెనుక ఉన్న పూర్తి కథను కనుగొనండి',
+                
+                // Search section
+                'qr-title': 'QR కోడ్‌ను స్కాన్ చేయండి',
+                'qr-description': 'మీ ఉత్పత్తిపై QR కోడ్‌ను స్కాన్ చేయడానికి మీ కెమెరాను ఉపయోగించండి',
+                'manual-title': 'ఉత్పత్తి ID ద్వారా శోధించండి',
+                'product-id-label': 'ఉత్పత్తి ID లేదా బ్యాచ్ నంబర్',
+                'product-id-placeholder': 'ఉదా., TOM2025-001, BEEF2025-0334',
+                'scan-button': 'కెమెరా ప్రారంభించండి',
+                'search-button': 'ఉత్పత్తిని శోధించండి',
+                'sample-products': 'ఈ నమూనా ఉత్పత్తులను ప్రయత్నించండి:',
+                'sample-tomatoes': 'ఆర్గానిక్ టమాటాలు',
+                'sample-beef': 'గ్రాస్-ఫెడ్ బీఫ్',
+                'sample-apples': 'ఆర్గానిక్ ఆపిల్‌లు',
+                
+                // Filters
+                'filter-title': 'ప్రయాణాన్ని ఫిల్టర్ చేయండి',
+                'filter-reset': 'రీసెట్ చేయండి',
+                'data-types': 'డేటా రకాలు',
+                'filter-origin': 'మూలం మరియు వ్యవసాయం',
+                'filter-processing': 'ప్రాసెసింగ్',
+                'filter-testing': 'నాణ్యత పరీక్ష',
+                'filter-logistics': 'లాజిస్టిక్స్',
+                'verification-status': 'ధృవీకరణ స్థితి',
+                'verified': 'సురక్షితంగా ధృవీకరించబడినది',
+                'pending': 'పెండింగ్ ధృవీకరణ',
+                'certifications': 'ధృవీకరణలు',
+                'organic': 'ఆర్గానిక్',
+                'fair-trade': 'ఫెయిర్ ట్రేడ్',
+                'non-gmo': 'నాన్-జీఎంఓ',
+                
+                // Product details
+                'days-farm-store': 'ఫారమ్ నుండి స్టోర్‌కు రోజులు',
+                'supply-chain-steps': 'సరఫరా గొలుసు దశలు',
+                'verified-data': 'ధృవీకరించబడిన డేటా',
+                'traceable': 'ట్రేస్ చేయదగిన',
+                'secure': 'సురక్షితం',
+                
+                // Journey timeline
+                'supply-chain-journey': 'సరఫరా గొలుసు ప్రయాణం',
+                'timeline': 'టైమ్‌లైన్',
+                'map-view': 'మ్యాప్ వ్యూ',
+                'farm-origin': 'ఫారమ్ మూలం',
+                'farm-description': 'టమాటాలు ఆర్గానిక్ ఫారమ్ నుండి స్థిరమైన పద్ధతులతో పండించబడ్డాయి',
+                'farm-details': 'ఫారమ్ వివరాలు',
+                'harvest-date': 'పంట సమయం',
+                'processing': 'ప్రాసెసింగ్ & ప్యాకేజింగ్',
+                'processing-description': 'టమాటాలు ఆర్గానిక్ ప్రమాణాల ప్రకారం వేరు చేయబడ్డాయి, కడగబడ్డాయి మరియు ప్యాక్ చేయబడ్డాయి',
+                'processing-facility': 'ప్రాసెసింగ్ సౌకర్యం',
+                'processing-date': 'ప్రాసెసింగ్ తేదీ',
+                'quality-testing': 'నాణ్యత పరీక్ష',
+                'testing-description': 'కీటకనాశకాలు, తాజాదనం మరియు పోషక అంశాల కోసం సమగ్ర పరీక్ష',
+                'testing-lab': 'టెస్టింగ్ ల్యాబ్',
+                'test-results': 'పరీక్ష ఫలితాలు',
+                'transportation': 'రవాణా',
+                'logistics-description': 'మొత్తం ప్రయాణంలో ఉష్ణోగ్రత పర్యవేక్షణతో రెఫ్రిజరేటెడ్ రవాణా',
+                'logistics-provider': 'లాజిస్టిక్స్ ప్రొవైడర్',
+                'temperature-range': 'ఉష్ణోగ్రత పరిధి',
+                'view-details': 'వివరాలు చూడండి',
+                'verify': 'ధృవీకరించండి',
+                
+                // Map view
+                'map-description': 'ఫారమ్ నుండి స్టోర్‌కు ప్రయాణాన్ని చూపించే ఇంటరాక్టివ్ మ్యాప్',
+                'map-note': '(మ్యాప్ ఇంటిగ్రేషన్ వాస్తవ స్థానాలు మరియు మార్గాన్ని చూపుతుంది)',
+                
+                // Empty state
+                'empty-title': 'మీ ఉత్పత్తి యొక్క ప్రయాణాన్ని ట్రాక్ చేయండి',
+                'empty-description': 'ధృవీకరించబడిన పారదర్శకత డేటాతో పూర్తి సరఫరా గొలుసు చరిత్రను చూడటానికి QR కోడ్‌ను స్కాన్ చేయండి లేదా ఉత్పత్తి ID ను నమోదు చేయండి.',
+                
+                // QR Scanner
+                'scan-qr': 'QR కోడ్‌ను స్కాన్ చేయండి',
+                'simulate-scan': 'సిమ్యులేట్ స్కాన్ (డెమో)',
+                
+                // Footer
+                'footer-description': 'బ్లాక్‌చైన్-ఆధారిత పారదర్శకత మరియు విశ్వాసంతో వ్యవసాయ సరఫరా గొలుసులను రూపాంతరం చేయడం.',
+                'resources': 'వనరులు',
+                'company': 'కంపెనీ',
+                'connect': 'కనెక్ట్ చేయండి'
+            }
+        };
+
+        // Function to change language
+        function changeLanguage(lang) {
+            const elements = document.querySelectorAll('[data-translate]');
+            elements.forEach(element => {
+                const key = element.getAttribute('data-translate');
+                if (translations[lang] && translations[lang][key]) {
+                    if (element.placeholder) {
+                        element.placeholder = translations[lang][key];
+                    } else {
+                        element.textContent = translations[lang][key];
+                    }
+                }
+            });
+            
+            // Update HTML lang attribute
+            document.documentElement.lang = lang;
+            
+            // Store language preference
+            localStorage.setItem('preferredLanguage', lang);
+        }
+
+        // Check for saved language preference
+        const savedLanguage = localStorage.getItem('preferredLanguage');
+        if (savedLanguage) {
+            changeLanguage(savedLanguage);
+            
+            // Update active language in dropdown
+            document.querySelectorAll('.language-option').forEach(option => {
+                option.classList.remove('active');
+                if (option.getAttribute('data-lang') === savedLanguage) {
+                    option.classList.add('active');
+                    const currentLanguage = document.getElementById('currentLanguage');
+                    if (currentLanguage) {
+                        currentLanguage.textContent = option.textContent.trim();
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+<<<<<<< HEAD
+</html>
+>>>>>>> edbb550 (Your commit message)
+=======
+
+</html>
+>>>>>>> e70fa53 (Thsi_Is_The_Final_Project)

@@ -1,0 +1,73 @@
+{
+    "common": {
+        "loading": "Loading...",
+        "save": "Save",
+        "cancel": "Cancel",
+        "edit": "Edit",
+        "delete": "Delete",
+        "search": "Search",
+        "filter": "Filter",
+        "submit": "Submit",
+        "back": "Back",
+        "next": "Next",
+        "previous": "Previous"
+    },
+    "auth": {
+        "login": "Login",
+        "register": "Register",
+        "email": "Email",
+        "password": "Password",
+        "name": "Name",
+        "role": "Role",
+        "address": "Address",
+        "phone": "Phone",
+        "walletAddress": "Wallet Address",
+        "loginSuccess": "Login successful",
+        "registerSuccess": "Registration successful",
+        "logout": "Logout"
+    },
+    "roles": {
+        "farmer": "Farmer",
+        "transporter": "Transporter",
+        "retailer": "Retailer",
+        "consumer": "Consumer",
+        "government": "Government"
+    },
+    "dashboard": {
+        "welcome": "Welcome",
+        "rewardPoints": "Reward Points",
+        "totalBatches": "Total Batches",
+        "activeBatches": "Active Batches",
+        "completedTransactions": "Completed Transactions",
+        "recentActivity": "Recent Activity"
+    },
+    "produce": {
+        "addProduce": "Add Produce",
+        "produceName": "Produce Name",
+        "quantity": "Quantity",
+        "unit": "Unit",
+        "harvestDate": "Harvest Date",
+        "location": "Location",
+        "quality": "Quality",
+        "grade": "Grade",
+        "pricePerUnit": "Price per Unit",
+        "batchId": "Batch ID",
+        "status": "Status",
+        "qrCode": "QR Code",
+        "timeline": "Timeline",
+        "trackProduce": "Track Produce"
+    },
+    "status": {
+        "harvested": "Harvested",
+        "in_transit": "In Transit",
+        "at_retailer": "At Retailer",
+        "sold": "Sold",
+        "expired": "Expired"
+    },
+    "notifications": {
+        "produceAdded": "New produce batch added successfully",
+        "statusUpdated": "Batch status updated",
+        "paymentReleased": "Payment released to farmer",
+        "anomalyDetected": "Quality anomaly detected"
+    }
+}

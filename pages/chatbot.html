@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KrishiPath - Farmer Assistant ChatBot</title>
+<style>
+    * {margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;}
+    body {background: linear-gradient(135deg,#f5f7fa 0%,#c3cfe2 100%); min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:20px;}
+    .header {text-align:center; margin-bottom:20px; width:100%;}
+    .header h1 {color:#2c3e50; margin-bottom:10px; font-size:2.5rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.1);}
+    .header p {color:#7f8c8d; font-size:1.2rem; max-width:800px; margin:0 auto;}
+    .language-selector {position:fixed; top:20px; right:20px; z-index:1000;}
+    .language-btn {background:#3498db; color:white; border:none; padding:12px 20px; border-radius:50px; cursor:pointer; font-weight:bold; box-shadow:0 4px 8px rgba(0,0,0,0.2); display:flex; align-items:center; gap:8px; transition:all 0.3s ease;}
+    .language-btn:hover {background:#2980b9; transform:translateY(-2px);}
+    .language-dropdown {position:absolute; top:100%; right:0; background:white; border-radius:10px; box-shadow:0 5px 15px rgba(0,0,0,0.2); width:250px; margin-top:10px; padding:10px; display:none; max-height:400px; overflow-y:auto;}
+    .language-dropdown.show {display:block;}
+    .language-search {width:100%; padding:10px; border:1px solid #ddd; border-radius:5px; margin-bottom:10px;}
+    .language-list {list-style:none;}
+    .language-item {padding:10px; cursor:pointer; border-radius:5px; display:flex; align-items:center; gap:10px; transition:background 0.2s;}
+    .language-item:hover {background:#f1f1f1;}
+    .language-flag {width:24px; height:24px; border-radius:50%; object-fit:cover;}
+    .chat-container {width:100%; max-width:800px; background:white; border-radius:15px; box-shadow:0 10px 25px rgba(0,0,0,0.1); overflow:hidden; display:flex; flex-direction:column; height:600px;}
+    .chat-header {background:#27ae60; color:white; padding:20px; text-align:center; font-size:1.5rem; font-weight:bold; position:relative;}
+    .status-indicator {position:absolute; right:20px; top:50%; transform:translateY(-50%); width:12px; height:12px; background:#2ecc71; border-radius:50%; box-shadow:0 0 10px rgba(46,204,113,0.5);}
+    .chat-messages {flex:1; padding:20px; overflow-y:auto; display:flex; flex-direction:column; gap:15px; scroll-behavior:smooth;}
+    .message {max-width:75%; padding:12px 16px; border-radius:15px; line-height:1.5; animation:fadeIn 0.3s ease-in;}
+    .bot-message {background:linear-gradient(135deg,#f1f2f6,#e8eaf0); align-self:flex-start; border-bottom-left-radius:5px; border-left:4px solid #27ae60;}
+    .user-message {background:linear-gradient(135deg,#3498db,#2980b9); color:white; align-self:flex-end; border-bottom-right-radius:5px;}
+    .typing-indicator {background:#f1f2f6; align-self:flex-start; border-bottom-left-radius:5px; padding:12px 16px; border-radius:15px; font-style:italic; color:#666; border-left:4px solid #f39c12;}
+    .chat-input {display:flex; padding:15px; background:#f9f9f9; border-top:1px solid #eee;}
+    .chat-input input {flex:1; padding:12px 20px; border:2px solid #e0e0e0; border-radius:25px; outline:none; font-size:1rem; transition:border-color 0.3s;}
+    .chat-input input:focus {border-color:#3498db;}
+    .chat-input button {background:linear-gradient(135deg,#27ae60,#2ecc71); color:white; border:none; border-radius:25px; padding:12px 25px; margin-left:10px; cursor:pointer; transition:all 0.3s; font-weight:bold;}
+    .chat-input button:hover {transform:translateY(-1px); box-shadow:0 4px 12px rgba(39,174,96,0.3);}
+    .chat-input button:disabled {background:#95a5a6; cursor:not-allowed; transform:none; box-shadow:none;}
+    .quick-replies {display:flex; flex-wrap:wrap; gap:10px; padding:15px; background:#f9f9f9; border-top:1px solid #eee;}
+    .quick-reply {background:linear-gradient(135deg,#e8f4fc,#d4f1f9); border:1px solid #3498db; border-radius:20px; padding:10px 18px; font-size:0.9rem; cursor:pointer; transition:all 0.3s; font-weight:500;}
+    .quick-reply:hover {background:linear-gradient(135deg,#3498db,#2980b9); color:white; transform:translateY(-1px);}
+    .footer {margin-top:20px; text-align:center; color:#7f8c8d; font-size:0.9rem;}
+    @keyframes fadeIn {from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);}}
+    @keyframes pulse {0%,100%{opacity:1;} 50%{opacity:0.5;}}
+    .typing-dots {display:inline-block;}
+    .typing-dots::after {content:'...'; animation:pulse 1.5s infinite;}
+    .bot-avatar {width:30px; height:30px; background:#27ae60; border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-weight:bold; margin-right:10px; flex-shrink:0;}
+    .message-with-avatar {display:flex; align-items:flex-end; margin-bottom:15px;}
+    .message-content {max-width:75%;}
+</style>
+</head>
+<body>
+<div class="header">
+<h1>🌾 KrishiPath - Farmer Assistant</h1>
+<p>Get expert help with farming techniques, weather information, crop prices, and government schemes in your preferred language</p>
+</div>
+
+<div class="language-selector">
+    <button class="language-btn"><i>🌐</i> Select Language</button>
+    <div class="language-dropdown">
+        <input type="text" class="language-search" placeholder="Search language...">
+        <ul class="language-list"></ul>
+    </div>
+</div>
+
+<div class="chat-container">
+    <div class="chat-header">
+        🌾 KrishiPath - Your Farming Assistant
+        <div class="status-indicator" title="Online"></div>
+    </div>
+    <div class="chat-messages">
+        <div class="message-with-avatar">
+            <div class="bot-avatar">🤖</div>
+            <div class="message bot-message">
+                🙏 Welcome to KrishiPath! I'm your personal farming assistant. I can help you with crop cultivation, weather planning, market prices, government schemes, pest management, and much more. What would you like to know about farming today?
+            </div>
+        </div>
+    </div>
+    <div class="quick-replies">
+        <div class="quick-reply">🌾 Current crop prices</div>
+        <div class="quick-reply">🌤️ Weather forecast tips</div>
+        <div class="quick-reply">🚜 Best farming techniques</div>
+        <div class="quick-reply">🏛️ Government schemes</div>
+        <div class="quick-reply">🐛 Pest control methods</div>
+        <div class="quick-reply">🌱 Soil health tips</div>
+    </div>
+    <div class="chat-input">
+        <input type="text" placeholder="Ask me anything about farming...">
+        <button id="sendBtn">Send</button>
+    </div>
+</div>
+
+<div class="footer">
+<p>© 2024 KrishiPath - Intelligent Farming Assistant | Empowering farmers across India 🇮🇳</p>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Enhanced language support
+    const languages = [
+        { code: 'hi', name: 'Hindi', flag: '🇮🇳', greeting: '🙏 नमस्ते! मैं KrishiPath हूं, आपका व्यक्तिगत कृषि सहायक। मैं आपकी खेती में कैसे मदद कर सकता हूं?' },
+        { code: 'en', name: 'English', flag: '🇬🇧', greeting: '🙏 Hello! I am KrishiPath, your personal farming assistant. How can I help you with your farming today?' },
+        { code: 'or', name: 'Odia', flag: '🇮🇳', greeting: '🙏 ନମସ୍କାର! ମୁଁ KrishiPath, ଆପଣଙ୍କର ବ୍ୟକ୍ତିଗତ କୃଷି ସହାୟକ। ଆଜି ଆପଣଙ୍କ ଚାଷବାସରେ ମୁଁ କିପରି ସାହାଯ୍ୟ କରିପାରିବି?' },
+        { code: 'te', name: 'Telugu', flag: '🇮🇳', greeting: '🙏 నమస్కారం! నేను KrishiPath, మీ వ్యక్తిగత వ్యవసాయ సహాయకుడు। ఈ రోజు మీ వ్యవసాయంలో నేను ఎలా సహాయం చేయగలను?' },
+        { code: 'bn', name: 'Bengali', flag: '🇮🇳', greeting: '🙏 নমস্কার! আমি KrishiPath, আপনার ব্যক্তিগত কৃষি সহায়ক। আজ আপনার কৃষিকাজে আমি কীভাবে সাহায্য করতে পারি?' },
+        { code: 'gu', name: 'Gujarati', flag: '🇮🇳', greeting: '🙏 નમસ્તે! હું KrishiPath છું, તમારો વ્યક્તિગત ખેતી સહાયક। આજે તમારી ખેતીમાં હું કેવી રીતે મદદ કરી શકું?' },
+        { code: 'pa', name: 'Punjabi', flag: '🇮🇳', greeting: '🙏 ਸਤ ਸ੍ਰੀ ਅਕਾਲ! ਮੈਂ KrishiPath ਹਾਂ, ਤੁਹਾਡਾ ਨਿੱਜੀ ਖੇਤੀ ਸਹਾਇਕ। ਅੱਜ ਤੁਹਾਡੀ ਖੇਤੀ ਵਿੱਚ ਮੈਂ ਕਿਵੇਂ ਮਦਦ ਕਰ ਸਕਦਾ ਹਾਂ?' },
+        { code: 'mr', name: 'Marathi', flag: '🇮🇳', greeting: '🙏 नमस्कार! मी KrishiPath आहे, तुमचा वैयक्तिक शेती सहाय्यक। आज तुमच्या शेतीत मी कशी मदत करू शकतो?' },
+        { code: 'ta', name: 'Tamil', flag: '🇮🇳', greeting: '🙏 வணக்கம்! நான் KrishiPath, உங்கள் தனிப்பட்ட விவசாய உதவியாளர். இன்று உங்கள் விவசாயத்தில் நான் எப்படி உதவ முடியும்?' },
+        { code: 'kn', name: 'Kannada', flag: '🇮🇳', greeting: '🙏 ನಮಸ್ಕಾರ! ನಾನು KrishiPath, ನಿಮ್ಮ ವೈಯಕ್ತಿಕ ಕೃಷಿ ಸಹಾಯಕ. ಇಂದು ನಿಮ್ಮ ಕೃಷಿಯಲ್ಲಿ ನಾನು ಹೇಗೆ ಸಹಾಯ ಮಾಡಬಹುದು?' }
+    ];
+
+    let currentLanguage = "English";
+    const languageBtn = document.querySelector('.language-btn');
+    const languageDropdown = document.querySelector('.language-dropdown');
+    const languageSearch = document.querySelector('.language-search');
+    const languageList = document.querySelector('.language-list');
+    const chatMessages = document.querySelector('.chat-messages');
+    const chatInput = document.querySelector('.chat-input input');
+    const sendButton = document.getElementById('sendBtn');
+    const quickReplies = document.querySelectorAll('.quick-reply');
+
+    // Comprehensive farming knowledge database
+    const farmingDatabase = {
+        "crop prices": {
+            "English": "📊 **Current Market Prices** (Approx.):\n• Rice: ₹20-25/kg\n• Wheat: ₹18-22/kg\n• Sugarcane: ₹280-320/quintal\n• Cotton: ₹5200-5800/quintal\n• Soybean: ₹3800-4200/quintal\n\n💡 **Tip**: Check your local mandi or use eNAM portal for real-time prices!",
+            "Hindi": "📊 **वर्तमान बाजार दरें** (लगभग):\n• चावल: ₹20-25/किग्रा\n• गेहूं: ₹18-22/किग्रा\n• गन्ना: ₹280-320/क्विंटल\n• कपास: ₹5200-5800/क्विंटल\n• सोयाबीन: ₹3800-4200/क्विंटल\n\n💡 **सुझाव**: वास्तविक दरों के लिए अपनी स्थानीय मंडी या eNAM पोर्टल देखें!"
+        },
+        "weather": {
+            "English": "🌤️ **Weather Planning Tips**:\n• Check IMD forecasts daily\n• Plan irrigation based on 7-day forecast\n• Avoid spraying during predicted rainfall\n• Use weather-based crop advisories\n• Consider climate-resilient varieties\n\n📱 **Apps**: Meghdoot, Damini, Kisan Suvidha",
+            "Hindi": "🌤️ **मौसम नियोजन सुझाव**:\n• IMD पूर्वानुमान रोज देखें\n• 7-दिन के पूर्वानुमान के आधार पर सिंचाई करें\n• बारिश की भविष्यवाणी के दौरान छिड़काव न करें\n• मौसम आधारित फसल सलाह का उपयोग करें\n\n📱 **ऐप्स**: मेघदूत, दामिनी, किसान सुविधा"
+        },
+        "farming techniques": {
+            "English": "🚜 **Modern Farming Techniques**:\n\n**1. Water Management:**\n• Drip irrigation (saves 50% water)\n• Sprinkler systems\n• Rainwater harvesting\n\n**2. Soil Health:**\n• Crop rotation\n• Green manuring\n• Soil testing every 2 years\n\n**3. Sustainable Practices:**\n• Integrated Pest Management (IPM)\n• Organic fertilizers\n• Precision farming with GPS",
+            "Hindi": "🚜 **आधुनिक खेती की तकनीकें**:\n\n**1. जल प्रबंधन:**\n• ड्रिप सिंचाई (50% पानी बचाती है)\n• स्प्रिंकलर सिस्टम\n• वर्षा जल संचयन\n\n**2. मिट्टी की सेहत:**\n• फसल चक्र\n• हरी खाद\n• 2 साल में मिट्टी की जांच\n\n**3. टिकाऊ प्रथाएं:**\n• एकीकृत कीट प्रबंधन\n• जैविक खाद\n• GPS के साथ सटीक खेती"
+        },
+        "government schemes": {
+            "English": "🏛️ **Major Government Schemes**:\n\n**Financial Support:**\n• PM-KISAN: ₹6000/year direct transfer\n• Kisan Credit Card (KCC): Easy loans\n• Interest subvention on crop loans\n\n**Infrastructure:**\n• Pradhan Mantri Krishi Sinchai Yojana\n• Agriculture Infrastructure Fund\n• Cold storage subsidies\n\n**Insurance & Support:**\n• PM Fasal Bima Yojana\n• Soil Health Card (free testing)\n• eNAM for better price discovery",
+            "Hindi": "🏛️ **प्रमुख सरकारी योजनाएं**:\n\n**वित्तीय सहायता:**\n• पीएम-किसान: ₹6000/वर्ष सीधा हस्तांतरण\n• किसान क्रेडिट कार्ड: आसान ऋण\n• फसली ऋण पर ब्याज सब्सिडी\n\n**अवसंरचना:**\n• प्रधानमंत्री कृषि सिंचाई योजना\n• कृषि अवसंरचना कोष\n• कोल्ड स्टोरेज सब्सिडी\n\n**बीमा और सहायता:**\n• पीएम फसल बीमा योजना\n• मिट्टी स्वास्थ्य कार्ड"
+        },
+        "pest control": {
+            "English": "🐛 **Integrated Pest Management**:\n\n**Prevention:**\n• Use certified seeds\n• Proper crop rotation\n• Field sanitation\n• Biological controls (neem, predators)\n\n**Early Detection:**\n• Regular field monitoring\n• Pheromone traps\n• Weather-based pest alerts\n\n**Treatment:**\n• Use recommended pesticides only\n• Follow label instructions\n• Rotate chemical groups\n• Target-specific spraying",
+            "Hindi": "🐛 **एकीकृत कीट प्रबंधन**:\n\n**रोकथाम:**\n• प्रमाणित बीज का उपयोग\n• उचित फसल चक्र\n• खेत की सफाई\n• जैविक नियंत्रण (नीम, शिकारी कीट)\n\n**जल्दी पहचान:**\n• नियमित खेत निरीक्षण\n• फेरोमोन जाल\n• मौसम आधारित कीट चेतावनी\n\n**उपचार:**\n• केवल सिफारिशी कीटनाशक का उपयोग\n• लेबल निर्देशों का पालन"
+        },
+        "soil health": {
+            "English": "🌱 **Soil Health Management**:\n\n**Testing:**\n• Get soil tested every 2 years\n• Check pH, NPK, organic carbon\n• Use Soil Health Card recommendations\n\n**Improvement:**\n• Add organic matter (compost, FYM)\n• Practice green manuring\n• Use bio-fertilizers\n• Avoid excessive chemical fertilizers\n\n**Conservation:**\n• Minimum tillage\n• Cover cropping\n• Contour farming on slopes\n• Avoid waterlogging",
+            "Hindi": "🌱 **मिट्टी स्वास्थ्य प्रबंधन**:\n\n**जांच:**\n• हर 2 साल में मिट्टी की जांच कराएं\n• pH, NPK, कार्बनिक तत्व की जांच\n• मिट्टी स्वास्थ्य कार्ड की सिफारिशें अपनाएं\n\n**सुधार:**\n• जैविक पदार्थ मिलाएं (कंपोस्ट, गोबर की खाद)\n• हरी खाद का अभ्यास\n• जैव उर्वरकों का उपयोग\n• अत्यधिक रासायनिक उर्वरक से बचें"
+        }
+    };
+
+    // Advanced response matching
+    function findBestResponse(message, language) {
+        const msg = message.toLowerCase();
+        const words = msg.split(/\s+/);
+        
+        // Direct keyword matching
+        for (const [category, responses] of Object.entries(farmingDatabase)) {
+            const categoryWords = category.split(' ');
+            if (categoryWords.some(word => msg.includes(word)) || 
+                categoryWords.some(word => words.some(msgWord => msgWord.includes(word.substring(0, 4))))) {
+                return responses[language] || responses["English"];
+            }
+        }
+
+        // Contextual matching
+        const contexts = {
+            price: ["price", "rate", "cost", "market", "sell", "buy", "mandi"],
+            weather: ["weather", "rain", "temperature", "climate", "forecast", "season"],
+            technique: ["technique", "method", "practice", "technology", "modern", "equipment"],
+            scheme: ["scheme", "subsidy", "government", "loan", "support", "benefit"],
+            pest: ["pest", "insect", "disease", "spray", "control", "damage", "attack"],
+            soil: ["soil", "fertility", "organic", "compost", "ph", "nutrients", "testing"]
+        };
+
+        for (const [context, keywords] of Object.entries(contexts)) {
+            if (keywords.some(keyword => words.some(word => word.includes(keyword)))) {
+                const category = context === 'price' ? 'crop prices' : 
+                               context === 'technique' ? 'farming techniques' :
+                               context === 'scheme' ? 'government schemes' :
+                               context === 'pest' ? 'pest control' :
+                               context === 'soil' ? 'soil health' : context;
+                if (farmingDatabase[category]) {
+                    return farmingDatabase[category][language] || farmingDatabase[category]["English"];
+                }
+            }
+        }
+
+        // Specific crop information
+        const crops = ["rice", "wheat", "cotton", "sugarcane", "soybean", "maize", "potato", "tomato", "onion"];
+        const mentionedCrops = crops.filter(crop => msg.includes(crop));
+        
+        if (mentionedCrops.length > 0) {
+            const cropInfo = {
+                "English": `🌾 **${mentionedCrops[0].toUpperCase()} Farming Tips**:\n\n• Choose disease-resistant varieties\n• Follow recommended spacing\n• Monitor for pests regularly\n• Apply fertilizers as per soil test\n• Ensure proper irrigation\n\n💡 Need specific information about ${mentionedCrops[0]}? Ask about planting, harvesting, or pest management!`,
+                "Hindi": `🌾 **${mentionedCrops[0].toUpperCase()} की खेती के सुझाव**:\n\n• रोग प्रतिरोधी किस्मों का चयन करें\n• सिफारिशी दूरी का पालन करें\n• नियमित रूप से कीटों की निगरानी करें\n• मिट्टी परीक्षण के अनुसार खाद डालें\n\n💡 ${mentionedCrops[0]} के बारे में विशिष्ट जानकारी चाहिए? बुवाई, कटाई या कीट प्रबंधन के बारे में पूछें!`
+            };
+            return cropInfo[language] || cropInfo["English"];
+        }
+
+        // Default helpful responses
+        const defaultResponses = {
+            "English": "🌾 I'm here to help with all your farming needs! You can ask me about:\n\n• 📊 Crop prices and market information\n• 🌤️ Weather planning and seasonal tips\n• 🚜 Modern farming techniques and equipment\n• 🏛️ Government schemes and subsidies\n• 🐛 Pest and disease management\n• 🌱 Soil health and nutrition\n• 💧 Irrigation and water management\n• 🌾 Specific crop cultivation guides\n\nWhat would you like to know more about?",
+            "Hindi": "🌾 मैं आपकी सभी खेती की जरूरतों में मदद के लिए यहां हूं! आप मुझसे पूछ सकते हैं:\n\n• 📊 फसल की कीमतें और बाजार की जानकारी\n• 🌤️ मौसम योजना और मौसमी सुझाव\n• 🚜 आधुनिक खेती की तकनीकें\n• 🏛️ सरकारी योजनाएं और सब्सिडी\n• 🐛 कीट और रोग प्रबंधन\n• 🌱 मिट्टी स्वास्थ्य और पोषण\n• 💧 सिंचाई और जल प्रबंधन\n\nआप किस बारे में और जानना चाहेंगे?"
+        };
+
+        return defaultResponses[language] || defaultResponses["English"];
+    }
+
+    function populateLanguageList(filter = '') {
+        languageList.innerHTML = '';
+        languages
+          .filter(lang => lang.name.toLowerCase().includes(filter.toLowerCase()) || lang.code.toLowerCase().includes(filter.toLowerCase()))
+          .forEach(lang => {
+              const li = document.createElement('li');
+              li.className = 'language-item';
+              li.innerHTML = `<span class="language-flag">${lang.flag}</span> <span>${lang.name}</span>`;
+              li.addEventListener('click', () => selectLanguage(lang));
+              languageList.appendChild(li);
+          });
+    }
+
+    function selectLanguage(lang) {
+        languageBtn.innerHTML = `<i>${lang.flag}</i> ${lang.name}`;
+        languageDropdown.classList.remove('show');
+        currentLanguage = lang.name;
+        
+        // Clear previous messages and add new greeting
+        chatMessages.innerHTML = '';
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'message-with-avatar';
+        messageDiv.innerHTML = `
+            <div class="bot-avatar">🤖</div>
+            <div class="message bot-message">${lang.greeting}</div>
+        `;
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function addMessage(text, sender) {
+        const messageDiv = document.createElement('div');
+        
+        if (sender === 'bot') {
+            messageDiv.className = 'message-with-avatar';
+            messageDiv.innerHTML = `
+                <div class="bot-avatar">🤖</div>
+                <div class="message bot-message">${text}</div>
+            `;
+        } else {
+            messageDiv.className = 'message user-message';
+            messageDiv.textContent = text;
+        }
+        
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function showTypingIndicator() {
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'message-with-avatar';
+        typingDiv.id = 'typing';
+        typingDiv.innerHTML = `
+            <div class="bot-avatar">🤖</div>
+            <div class="typing-indicator">
+                <span class="typing-dots">KrishiPath is thinking</span>
+            </div>
+        `;
+        chatMessages.appendChild(typingDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function hideTypingIndicator() {
+        const typing = document.getElementById('typing');
+        if (typing) typing.remove();
+    }
+
+    async function sendMessage() {
+        const text = chatInput.value.trim();
+        if (!text) return;
+        
+        addMessage(text, 'user');
+        chatInput.value = '';
+        sendButton.disabled = true;
+        showTypingIndicator();
+
+        // Simulate thinking time for realistic experience
+        setTimeout(() => {
+            hideTypingIndicator();
+            const response = findBestResponse(text, currentLanguage);
+            addMessage(response, 'bot');
+            sendButton.disabled = false;
+        }, 1000 + Math.random() * 1500); // Random delay between 1-2.5 seconds
+    }
+
+    // Event listeners
+    quickReplies.forEach(reply => {
+        reply.addEventListener('click', () => {
+            const cleanText = reply.textContent.replace(/[🌾🌤️🚜🏛️🐛🌱]/g, '').trim();
+            chatInput.value = cleanText;
+            sendMessage();
+        });
+    });
+
+    languageBtn.addEventListener('click', () => {
+        languageDropdown.classList.toggle('show');
+        if (languageDropdown.classList.contains('show')) {
+            languageSearch.focus();
+        }
+    });
+
+    languageSearch.addEventListener('input', function () {
+        populateLanguageList(this.value);
+    });
+
+    sendButton.addEventListener('click', sendMessage);
+    
+    chatInput.addEventListener('keypress', e => { 
+        if (e.key === 'Enter' && !sendButton.disabled) {
+            sendMessage(); 
+        }
+    });
+
+    // Close language dropdown when clicking outside
+    document.addEventListener('click', e => {
+        if (!languageBtn.contains(e.target) && !languageDropdown.contains(e.target)) {
+            languageDropdown.classList.remove('show');
+        }
+    });
+
+    // Auto-resize input based on content
+    chatInput.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = Math.min(this.scrollHeight, 100) + 'px';
+    });
+
+    // Initialize
+    populateLanguageList();
+    
+    // Add some sample conversation starters
+    const conversationStarters = [
+        "What are the best crops to grow this season?",
+        "How can I improve my soil fertility naturally?",
+        "Tell me about drip irrigation benefits",
+        "What government schemes are available for farmers?",
+        "How to control pests without harmful chemicals?"
+    ];
+
+    // Show random farming tip every 30 seconds if chat is idle
+    let idleTimer;
+    function resetIdleTimer() {
+        clearTimeout(idleTimer);
+        idleTimer = setTimeout(() => {
+            const tips = [
+                {
+                    "English": "💡 **Did you know?** Crop rotation can increase yield by 20-25% and reduce pest problems naturally!",
+                    "Hindi": "💡 **क्या आप जानते हैं?** फसल चक्र से उत्पादन 20-25% बढ़ सकता है और कीट समस्याएं प्राकृतिक रूप से कम होती हैं!"
+                },
+                {
+                    "English": "🌱 **Farming Tip:** Test your soil pH regularly. Most crops grow best in slightly acidic to neutral soil (pH 6.0-7.0).",
+                    "Hindi": "🌱 **खेती की सलाह:** अपनी मिट्टी का pH नियमित रूप से जांचें। अधिकांश फसलें हल्की अम्लीय से तटस्थ मिट्टी में अच्छी बढ़ती हैं।"
+                },
+                {
+                    "English": "💧 **Water Wisdom:** Drip irrigation can save up to 50% water compared to flood irrigation while improving crop quality.",
+                    "Hindi": "💧 **पानी की बुद्धि:** ड्रिप सिंचाई से बाढ़ सिंचाई की तुलना में 50% तक पानी बच सकता है और फसल की गुणवत्ता भी बेहतर होती है।"
+                }
+            ];
+            
+            const randomTip = tips[Math.floor(Math.random() * tips.length)];
+            const tipText = randomTip[currentLanguage] || randomTip["English"];
+            addMessage(tipText, 'bot');
+        }, 60000); // 60 seconds
+    }
+
+    // Reset timer on user activity
+    chatInput.addEventListener('focus', resetIdleTimer);
+    sendButton.addEventListener('click', resetIdleTimer);
+    
+    // Start the idle timer
+    resetIdleTimer();
+
+    // Add some CSS animations and effects
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
+        .quick-reply:active {
+            animation: bounce 0.6s;
+        }
+        
+        .chat-input button:active {
+            transform: translateY(1px);
+        }
+        
+        .message {
+            transition: all 0.3s ease;
+        }
+        
+        .message:hover {
+            transform: translateX(2px);
+        }
+        
+        .bot-avatar {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(39, 174, 96, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(39, 174, 96, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(39, 174, 96, 0); }
+        }
+        
+        .status-indicator {
+            animation: pulse 2s infinite;
+        }
+    `;
+    document.head.appendChild(style);
+});
+</script>
+</body>
+</html>

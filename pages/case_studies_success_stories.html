@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Case Studies & Success Stories - KrishiPath Transparency</title>
+<<<<<<< HEAD
+    <meta name="description" content="Real-world AgriChain implementations across agricultural sectors. See measurable ROI, implementation timelines, and stakeholder testimonials from successful transparency projects." />
+=======
+    <meta name="description"
+        content="Real-world AgriChain implementations across agricultural sectors. See measurable ROI, implementation timelines, and stakeholder testimonials from successful transparency projects." />
+>>>>>>> e70fa53 (Thsi_Is_The_Final_Project)
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script type="module"
+        src="https://static.rocket.new/rocket-web.js?_cfg=https%3A%2F%2Fagrichain5007back.builtwithrocket.new&_be=https%3A%2F%2Fapplication.rocket.new&_v=0.1.8"></script>
+    <style>
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h2 {
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+        }
+
+        /* Floating Help Button Styles */
+        .help-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+
+        .main-help-button {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff8a00, #e52e71);
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .main-help-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .main-help-button i {
+            font-size: 28px;
+        }
+
+        .help-options {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+
+        .help-options.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .help-option {
+            display: flex;
+            align-items: center;
+            background: white;
+            color: #333;
+            text-decoration: none;
+            padding: 12px 20px;
+            margin-bottom: 15px;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            width: 200px;
+        }
+
+        .help-option:hover {
+            transform: translateX(-5px);
+            background: #f8f8f8;
+        }
+
+        .help-option i {
+            margin-right: 10px;
+            font-size: 20px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tutorial i {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .chatbot i {
+            background: #2196F3;
+            color: white;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            p {
+                font-size: 1rem;
+            }
+
+            .main-help-button {
+                width: 60px;
+                height: 60px;
+            }
+
+            .help-container {
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-background text-text-primary">
+    <!-- Floating Help Button -->
+    <div class="help-container">
+        <div class="help-options" id="helpOptions">
+            <a href="https://youtu.be/PIxT5nxzVgE?si=ShP9OGQTJ4i6EvZc" class="help-option tutorial">
+                <i class="fas fa-play-circle"></i>
+                Watch Tutorial
+            </a>
+            <a href="./chatbot.html" class="help-option chatbot">
+                <i class="fas fa-comments"></i>
+                Chatbot
+            </a>
+        </div>
+        <button class="main-help-button" id="helpButton">
+            <i class="fas fa-question"></i>
+        </button>
+    </div>
+    <!-- Navigation Header -->
+    <header class="bg-white shadow-subtle sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                         <svg class="h-8 w-8 text-primary" viewBox="0 0 32 32" fill="currentColor">
+                           <path d="M16 2L8 6v10c0 6.627 3.373 10 8 10s8-3.373 8-10V6l-8-4z" />
+                           <image href="/assets/logo.png" x="0" y="0" width="32" height="32" />
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <h1 class="text-xl font-bold text-primary">KrishiPath</h1>
+                        <p class="text-xs text-text-secondary">Transparency</p>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="homepage.html"
+                            class="text-text-secondary hover:text-primary px-3 py-2 rounded-md text-sm transition-smooth">Home</a>
+                        <a href="product_journey_viewer.html"
+                            class="text-text-secondary hover:text-primary px-3 py-2 rounded-md text-sm transition-smooth">Product
+                            Tracker</a>
+                        <a href="transparency_dashboard.html"
+                            class="text-text-secondary hover:text-primary px-3 py-2 rounded-md text-sm transition-smooth">Dashboard</a>
+                        <a href="case_studies_success_stories.html"
+                            class="text-primary font-semibold px-3 py-2 rounded-md text-sm">Case Studies</a>
+                        <a href="pricing_plans.html"
+                            class="text-text-secondary hover:text-primary px-3 py-2 rounded-md text-sm transition-smooth">Pricing</a>
+                        <a href="stakeholder_registration_hub.html" class="btn-primary text-sm">Get Started</a>
+                    </div>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden">
+                    <button type="button"
+                        class="text-text-secondary hover:text-primary focus:outline-none focus:text-primary"
+                        onclick="toggleMobileMenu()">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Navigation Menu -->
+            <div id="mobile-menu" class="md:hidden hidden">
+                <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-border-light">
+                    <a href="homepage.html"
+                        class="text-text-secondary hover:text-primary block px-3 py-2 rounded-md text-base transition-smooth">Home</a>
+                    <a href="product_journey_viewer.html"
+                        class="text-text-secondary hover:text-primary block px-3 py-2 rounded-md text-base transition-smooth">Product
+                        Tracker</a>
+                    <a href="transparency_dashboard.html"
+                        class="text-text-secondary hover:text-primary block px-3 py-2 rounded-md text-base transition-smooth">Dashboard</a>
+                    <a href="case_studies_success_stories.html"
+                        class="text-primary font-semibold block px-3 py-2 rounded-md text-base">Case Studies</a>
+                    <a href="pricing_plans.html"
+                        class="text-text-secondary hover:text-primary block px-3 py-2 rounded-md text-base transition-smooth">Pricing</a>
+                    <a href="stakeholder_registration_hub.html" class="btn-primary block text-center mt-4">Get
+                        Started</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative bg-gradient-to-br from-primary-50 to-accent-50 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
+            <div class="text-center">
+                <h1 class="text-4xl lg:text-6xl font-bold text-text-primary mb-6">
+                    Real Results from <span class="text-gradient-primary">Real Businesses</span>
+                </h1>
+                <p class="text-xl text-text-secondary mb-8 max-w-3xl mx-auto">
+<<<<<<< HEAD
+                    Discover how KrishiPath Transparency has transformed supply chains across agricultural sectors, delivering measurable ROI and building consumer trust.
+=======
+                    Discover how KrishiPath Transparency has transformed supply chains across agricultural sectors,
+                    delivering measurable ROI and building consumer trust.
+>>>>>>> e70fa53 (Thsi_Is_The_Final_Project)
+                </p>
+
+                <!-- Success Metrics -->
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white rounded-lg p-6 shadow-subtle">
+                        <div class="text-3xl font-bold text-primary mb-2">150+</div>
+                        <p class="text-text-secondary">Success Stories</p>
+                    </div>
+                    <div class="bg-white rounded-lg p-6 shadow-subtle">
+                        <div class="text-3xl font-bold text-secondary mb-2">$2.4M</div>
+                        <p class="text-text-secondary">Average ROI</p>
+                    </div>
+                    <div class="bg-white rounded-lg p-6 shadow-subtle">
+                        <div class="text-3xl font-bold text-accent mb-2">98%</div>
+                        <p class="text-text-secondary">Client Satisfaction</p>
+                    </div>
+                    <div class="bg-white rounded-lg p-6 shadow-subtle">
+                        <div class="text-3xl font-bold text-success mb-2">45</div>
+                        <p class="text-text-secondary">Countries</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filter Section -->
+    <section class="py-8 bg-white border-b border-border-light">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+                <!-- Filter Tabs -->
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="filterCases('all')" id="filter-all"
+                        class="filter-btn active px-4 py-2 rounded-lg font-semibold transition-smooth">All
+                        Stories</button>
+                    <button onclick="filterCases('produce')" id="filter-produce"
+                        class="filter-btn px-4 py-2 rounded-lg font-semibold transition-smooth">Produce</button>
+                    <button onclick="filterCases('livestock')" id="filter-livestock"
+                        class="filter-btn px-4 py-2 rounded-lg font-semibold transition-smooth">Livestock</button>
+                    <button onclick="filterCases('grains')" id="filter-grains"
+                        class="filter-btn px-4 py-2 rounded-lg font-semibold transition-smooth">Grains</button>
+                    <button onclick="filterCases('processed')" id="filter-processed"
+                        class="filter-btn px-4 py-2 rounded-lg font-semibold transition-smooth">Processed Foods</button>
+                </div>
+
+                <!-- Company Size Filter -->
+                <div class="flex items-center space-x-4">
+                    <label class="text-text-secondary font-medium">Company Size:</label>
+                    <select id="size-filter" class="input-field w-auto" onchange="applySizeFilter()">
+                        <option value="all">All Sizes</option>
+                        <option value="small">Small (1-50 employees)</option>
+                        <option value="medium">Medium (51-500 employees)</option>
+                        <option value="large">Large (500+ employees)</option>
+                    </select>
+                </div>
+
+                <!-- Search -->
+                <div class="relative">
+                    <input type="text" id="search-input" placeholder="Search case studies..."
+                        class="input-field pl-10 w-full lg:w-64" oninput="searchCases()" />
+                    <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-text-secondary"
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Case Study -->
+    <section class="py-16 bg-surface">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl lg:text-4xl font-bold text-text-primary mb-4">Featured Success Story</h2>
+                <p class="text-xl text-text-secondary max-w-3xl mx-auto">How Sunrise Organic Farms increased premium
+                    sales by 40% through complete supply chain transparency</p>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-elevated overflow-hidden">
+                <div class="grid lg:grid-cols-2 gap-0">
+                    <!-- Video/Image Section -->
+                    <div class="relative">
+                        <img src="https://images.pexels.com/photos/1459339/pexels-photo-1459339.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                            alt="Sunrise Organic Farms" class="w-full h-64 lg:h-full object-cover" loading="lazy"
+                            onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;" />
+                        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                            <button
+                                class="w-16 h-16 bg-white rounded-full flex items-center justify-center hover:bg-gray-100 transition-smooth"
+                                onclick="playVideo('featured-video')">
+                                <svg class="w-6 h-6 text-primary ml-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M8 5v10l8-5-8-5z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Content Section -->
+                    <div class="p-8 lg:p-12">
+                        <div class="flex items-center space-x-2 mb-4">
+                            <span
+                                class="bg-primary-100 text-primary px-3 py-1 rounded-full text-sm font-medium">Produce</span>
+                            <span class="bg-success-100 text-success px-3 py-1 rounded-full text-sm font-medium">Premium
+                                Positioning</span>
+                        </div>
+
+                        <h3 class="text-2xl font-bold text-text-primary mb-4">Sunrise Organic Farms</h3>
+<<<<<<< HEAD
+                        <p class="text-text-secondary mb-6">A 500-acre organic farm in India transformed their direct-to-consumer sales by implementing complete supply chain transparency, resulting in premium pricing and increased customer loyalty with trust.</p>
+=======
+                        <p class="text-text-secondary mb-6">A 500-acre organic farm in India transformed their
+                            direct-to-consumer sales by implementing complete supply chain transparency, resulting in
+                            premium pricing and increased customer loyalty with trust.</p>
+>>>>>>> e70fa53 (Thsi_Is_The_Final_Project)
+
+                        <!-- Key Metrics -->
+                        <div class="grid grid-cols-2 gap-4 mb-6">
+                            <div class="text-center p-4 bg-primary-50 rounded-lg">
+                                <div class="text-2xl font-bold text-primary">+40%</div>
+                                <p class="text-sm text-text-secondary">Premium Sales</p>
+                            </div>
+                            <div class="text-center p-4 bg-success-50 rounded-lg">
+                                <div class="text-2xl font-bold text-success">85%</div>
+                                <p class="text-sm text-text-secondary">Customer Retention</p>
+                            </div>
+                            <div class="text-center p-4 bg-secondary-50 rounded-lg">
+                                <div class="text-2xl font-bold text-secondary">3 weeks</div>
+                                <p class="text-sm text-text-secondary">Implementation</p>
+                            </div>
+                            <div class="text-center p-4 bg-accent-50 rounded-lg">
+<<<<<<< HEAD
+                                <div class="text-2xl font-bold text-accent">    180K</div>
+=======
+                                <div class="text-2xl font-bold text-accent"> 180K</div>
+>>>>>>> e70fa53 (Thsi_Is_The_Final_Project)
+                                <p class="text-sm text-text-secondary">Annual ROI</p>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <button class="btn-primary flex-1" onclick="openCaseStudy('sunrise-farms')">Read Full Case
+                                Study</button>
+                            <a href="javascript:void(0)" class="btn-secondary flex-1 text-center"
+                                onclick="downloadPDF('sunrise-farms')">Download PDF</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Case Studies Grid -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl lg:text-4xl font-bold text-text-primary mb-4">More Success Stories</h2>
+                <p class="text-xl text-text-secondary max-w-3xl mx-auto">Explore how businesses across different sectors
+                    have achieved transparency goals</p>
+            </div>
+
+            <!-- Case Studies Grid -->
+            <div id="case-studies-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Case Study 1 - Livestock -->
+                <div class="case-study-card bg-surface rounded-lg shadow-subtle overflow-hidden hover:shadow-float transition-smooth"
+                    data-category="livestock" data-size="medium">
+                    <img src="https://images.pixabay.com/photos/2016/12/04/21/58/rabbit-1882699_1280.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                        alt="Heritage Ranch Livestock" class="w-full h-48 object-cover" loading="lazy"
+                        onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;" />
+                    <div class="p-6">
+                        <div class="flex items-center space-x-2 mb-3">
+                            <span
+                                class="bg-secondary-100 text-secondary px-2 py-1 rounded-full text-xs font-medium">Livestock</span>
+                            <span
+                                class="bg-warning-100 text-warning px-2 py-1 rounded-full text-xs font-medium">Compliance</span>
+                        </div>
+                        <h3 class="text-xl font-semibold text-text-primary mb-2">Heritage Ranch</h3>
+                        <p class="text-text-secondary mb-4">Grass-fed beef operation achieved 100% regulatory compliance
+                            and reduced audit time by 75% through automated documentation.</p>
+
+                        <div class="grid grid-cols-2 gap-3 mb-4">
+                            <div class="text-center p-2 bg-white rounded">
+                                <div class="text-lg font-bold text-secondary">-75%</div>
+                                <p class="text-xs text-text-secondary">Audit Time</p>
+                            </div>
+                            <div class="text-center p-2 bg-white rounded">
+                                <div class="text-lg font-bold text-success">100%</div>
+                                <p class="text-xs text-text-secondary">Compliance</p>
+                            </div>
+                        </div>
+
+                        <div class="flex space-x-2">
+                            <button class="btn-primary flex-1 text-sm" onclick="openCaseStudy('heritage-ranch')">Read
+                                More</button>
+                            <button class="btn-secondary text-sm px-3"
+                                onclick="downloadPDF('heritage-ranch')">PDF</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Case Study 2 - Grains -->
+                <div class="case-study-card bg-surface rounded-lg shadow-subtle overflow-hidden hover:shadow-float transition-smooth"
+                    data-category="grains" data-size="large">
+                    <img src="https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                        alt="Golden Harvest Grains" class="w-full h-48 object-cover" loading="lazy"
+                        onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;" />
+                    <div class="p-6">
+                        <div class="flex items-center space-x-2 mb-3">
+                            <span
+                                class="bg-accent-100 text-accent px-2 py-1 rounded-full text-xs font-medium">Grains</span>
+                            <span
+                                class="bg-primary-100 text-primary px-2 py-1 rounded-full text-xs font-medium">Export</span>
+                        </div>
+                        <h3 class="text-xl font-semibold text-text-primary mb-2">Golden Harvest Co-op</h3>
+<<<<<<< HEAD
+                        <p class="text-text-secondary mb-4">Multi-farm grain cooperative streamlined international exports with documentation, reducing processing time by 60%.</p>
+                        
+=======
+                        <p class="text-text-secondary mb-4">Multi-farm grain cooperative streamlined international
+                            exports with documentation, reducing processing time by 60%.</p>
+
+>>>>>>> e70fa53 (Thsi_Is_The_Final_Project)
+                        <div class="grid grid-cols-2 gap-3 mb-4">
+                            <div class="text-center p-2 bg-white rounded">
+                                <div class="text-lg font-bold text-accent">-60%</div>
+                                <p class="text-xs text-text-secondary">Processing Time</p>
+                            </div>
+                            <div class="text-center p-2 bg-white rounded">
+                                <div class="text-lg font-bold text-primary">2.1M</div>
+                                <p class="text-xs text-text-secondary">Annual Savings</p>
+                            </div>
+                        </div>
+
+                        <div class="flex space-x-2">
+                            <button class="btn-primary flex-1 text-sm" onclick="openCaseStudy('golden-harvest')">Read
+                                More</button>
+                            <button class="btn-secondary text-sm px-3"
+                                onclick="downloadPDF('golden-harvest')">PDF</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Case Study 3 - Processed Foods -->
+                <div class="case-study-card bg-surface rounded-lg shadow-subtle overflow-hidden hover:shadow-float transition-smooth"
+                    data-category="processed" data-size="large">
+                    <img src="https://images.pexels.com/photos/4198019/pexels-photo-4198019.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                        alt="Artisan Foods Processing" class="w-full h-48 object-cover" loading="lazy"
+                        onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;" />
+                    <div class="p-6">
+                        <div class="flex items-center space-x-2 mb-3">
+                            <span
+                                class="bg-warning-100 text-warning px-2 py-1 rounded-full text-xs font-medium">Processed</span>
+                            <span
+                                class="bg-success-100 text-success px-2 py-1 rounded-full text-xs font-medium">Consumer
+                                Trust</span>
+                        </div>
+                        <h3 class="text-xl font-semibold text-text-primary mb-2">Artisan Foods Co.</h3>
+                        <p class="text-text-secondary mb-4">Specialty food manufacturer increased consumer trust scores
+                            by 45% through ingredient transparency and origin verification.</p>
+
+                        <div class="grid grid-cols-2 gap-3 mb-4">
+                            <div class="text-center p-2 bg-white rounded">
+                                <div class="text-lg font-bold text-success">+45%</div>
+                                <p class="text-xs text-text-secondary">Trust Score</p>
+                            </div>
+                            <div class="text-center p-2 bg-white rounded">
+                                <div class="text-lg font-bold text-warning">+28%</div>
+                                <p class="text-xs text-text-secondary">Sales Growth</p>
+                            </div>
+                        </div>
+
+                        <div class="flex space-x-2">
+                            <button class="btn-primary flex-1 text-sm" onclick="openCaseStudy('artisan-foods')">Read
+                                More</button>
+                            <button class="btn-secondary text-sm px-3"
+                                onclick="downloadPDF('artisan-foods')">PDF</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Case Study 4 - Produce -->
+                <div class="case-study-card bg-surface rounded-lg shadow-subtle overflow-hidden hover:shadow-float transition-smooth"
+                    data-category="produce" data-size="small">
+                    <img src="https://images.pixabay.com/photos/2016/08/11/08/04/vegetables-1584999_1280.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                        alt="Fresh Valley Produce" class="w-full h-48 object-cover" loading="lazy"
+                        onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;" />
+                    <div class="p-6">
+                        <div class="flex items-center space-x-2 mb-3">
+                            <span
+                                class="bg-primary-100 text-primary px-2 py-1 rounded-full text-xs font-medium">Produce</span>
+                            <span class="bg-error-100 text-error px-2 py-1 rounded-full text-xs font-medium">Recall
+                                Prevention</span>
+                        </div>
+                        <h3 class="text-xl font-semibold text-text-primary mb-2">Fresh Valley Farms</h3>
+                        <p class="text-text-secondary mb-4">Small organic farm prevented costly recalls through
+                            proactive quality monitoring and instant traceability systems.</p>
+
+                        <div class="grid grid-cols-2 gap-3 mb-4">
+                            <div class="text-center p-2 bg-white rounded">
+                                <div class="text-lg font-bold text-error">0</div>
+                                <p class="text-xs text-text-secondary">Recalls</p>
+                            </div>
+                            <div class="text-center p-2 bg-white rounded">
+                                <div class="text-lg font-bold text-primary">85K</div>
+                                <p class="text-xs text-text-secondary">Cost Savings</p>
+                            </div>
+                        </div>
+
+                        <div class="flex space-x-2">
+                            <button class="btn-primary flex-1 text-sm" onclick="openCaseStudy('fresh-valley')">Read
+                                More</button>
+                            <button class="btn-secondary text-sm px-3"
+                                onclick="downloadPDF('fresh-valley')">PDF</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Case Study 5 - Livestock -->
+                <div class="case-study-card bg-surface rounded-lg shadow-subtle overflow-hidden hover:shadow-float transition-smooth"
+                    data-category="livestock" data-size="small">
+                    <img src="https://images.unsplash.com/photo-1500595046743-cd271d694d30?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                        alt="Mountain View Dairy" class="w-full h-48 object-cover" loading="lazy"
+                        onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;" />
+                    <div class="p-6">
+                        <div class="flex items-center space-x-2 mb-3">
+                            <span
+                                class="bg-secondary-100 text-secondary px-2 py-1 rounded-full text-xs font-medium">Livestock</span>
+                            <span
+                                class="bg-accent-100 text-accent px-2 py-1 rounded-full text-xs font-medium">Sustainability</span>
+                        </div>
+                        <h3 class="text-xl font-semibold text-text-primary mb-2">Mountain View Dairy</h3>
+                        <p class="text-text-secondary mb-4">Family dairy farm achieved carbon-neutral certification
+                            through transparent environmental impact tracking.</p>
+
+                        <div class="grid grid-cols-2 gap-3 mb-4">
+                            <div class="text-center p-2 bg-white rounded">
+                                <div class="text-lg font-bold text-accent">Carbon</div>
+                                <p class="text-xs text-text-secondary">Neutral</p>
+                            </div>
+                            <div class="text-center p-2 bg-white rounded">
+                                <div class="text-lg font-bold text-secondary">35%</div>
+                                <p class="text-xs text-text-secondary">Premium</p>
+                            </div>
+                        </div>
+
+                        <div class="flex space-x-2">
+                            <button class="btn-primary flex-1 text-sm" onclick="openCaseStudy('mountain-dairy')">Read
+                                More</button>
+                            <button class="btn-secondary text-sm px-3"
+                                onclick="downloadPDF('mountain-dairy')">PDF</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Case Study 6 - Produce -->
+                <div class="case-study-card bg-surface rounded-lg shadow-subtle overflow-hidden hover:shadow-float transition-smooth"
+                    data-category="produce" data-size="medium">
+                    <img src="https://images.pexels.com/photos/1327838/pexels-photo-1327838.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                        alt="Tropical Fruits Export" class="w-full h-48 object-cover" loading="lazy"
+                        onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;" />
+                    <div class="p-6">
+                        <div class="flex items-center space-x-2 mb-3">
+                            <span
+                                class="bg-primary-100 text-primary px-2 py-1 rounded-full text-xs font-medium">Produce</span>
+                            <span
+                                class="bg-secondary-100 text-secondary px-2 py-1 rounded-full text-xs font-medium">Global
+                                Trade</span>
+                        </div>
+                        <h3 class="text-xl font-semibold text-text-primary mb-2">Tropical Exports Ltd.</h3>
+                        <p class="text-text-secondary mb-4">International fruit exporter reduced customs delays by 80%
+                            through automated compliance documentation.</p>
+
+                        <div class="grid grid-cols-2 gap-3 mb-4">
+                            <div class="text-center p-2 bg-white rounded">
+                                <div class="text-lg font-bold text-secondary">-80%</div>
+                                <p class="text-xs text-text-secondary">Delays</p>
+                            </div>
+                            <div class="text-center p-2 bg-white rounded">
+                                <div class="text-lg font-bold text-primary">1.2M</div>
+                                <p class="text-xs text-text-secondary">Savings</p>
+                            </div>
+                        </div>
+
+                        <div class="flex space-x-2">
+                            <button class="btn-primary flex-1 text-sm" onclick="openCaseStudy('tropical-exports')">Read
+                                More</button>
+                            <button class="btn-secondary text-sm px-3"
+                                onclick="downloadPDF('tropical-exports')">PDF</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Load More Button -->
+            <div class="text-center mt-12">
+                <button class="btn-secondary px-8 py-3" onclick="loadMoreCases()">Load More Case Studies</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-16 bg-surface">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl lg:text-4xl font-bold text-text-primary mb-4">What Our Clients Say</h2>
+                <p class="text-xl text-text-secondary max-w-3xl mx-auto">Authentic testimonials from stakeholders who've
+                    transformed their operations</p>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="bg-white rounded-lg p-6 shadow-subtle">
+                    <div class="flex items-center mb-4">
+                        <img src="https://images.pixabay.com/photos/2016/11/21/12/42/beard-1845166_1280.jpg"
+                            alt="John Martinez" class="w-12 h-12 rounded-full object-cover mr-4" loading="lazy"
+                            onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;" />
+                        <div>
+                            <h4 class="font-semibold text-text-primary">Mr. Bibek</h4>
+                            <p class="text-sm text-text-secondary">Owner, Sunrise Organic Farms</p>
+                        </div>
+                    </div>
+                    <div class="flex mb-3">
+                        <svg class="w-5 h-5 text-warning" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                        <svg class="w-5 h-5 text-warning" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                        <svg class="w-5 h-5 text-warning" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                        <svg class="w-5 h-5 text-warning" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                        <svg class="w-5 h-5 text-warning" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                    </div>
+<<<<<<< HEAD
+                    <p class="text-text-secondary italic">"KrishiPath transformed our business. Our customers now trust our organic claims completely, and we're getting premium prices we never thought possible. The implementation was seamless."</p>
+=======
+                    <p class="text-text-secondary italic">"KrishiPath transformed our business. Our customers now trust
+                        our organic claims completely, and we're getting premium prices we never thought possible. The
+                        implementation was seamless."</p>
+>>>>>>> e70fa53 (Thsi_Is_The_Final_Project)
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="bg-white rounded-lg p-6 shadow-subtle">
+                    <div class="flex items-center mb-4">
+                        <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                            alt="Sarah Chen" class="w-12 h-12 rounded-full object-cover mr-4" loading="lazy"
+                            onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;" />
+                        <div>
+                            <h4 class="font-semibold text-text-primary">Sarah Chen</h4>
+                            <p class="text-sm text-text-secondary">Supply Chain Director, Golden Harvest</p>
+                        </div>
+                    </div>
+                    <div class="flex mb-3">
+                        <svg class="w-5 h-5 text-warning" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                        <svg class="w-5 h-5 text-warning" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                        <svg class="w-5 h-5 text-warning" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                        <svg class="w-5 h-5 text-warning" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                        <svg class="w-5 h-5 text-warning" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                    </div>
+                    <p class="text-text-secondary italic">"The export documentation automation saved us millions. What
+                        used to take weeks now happens in hours. Our international partners love the transparency."</p>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div class="bg-white rounded-lg p-6 shadow-subtle">
+                    <div class="flex items-center mb-4">
+                        <img src="https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                            alt="Michael Thompson" class="w-12 h-12 rounded-full object-cover mr-4" loading="lazy"
+                            onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;" />
+                        <div>
+                            <h4 class="font-semibold text-text-primary">S Pawan</h4>
+                            <p class="text-sm text-text-secondary">CEO, American Foods Co.</p>
+                        </div>
+                    </div>
+                    <div class="flex mb-3">
+                        <svg class="w-5 h-5 text-warning" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                        <svg class="w-5 h-5 text-warning" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                        <svg class="w-5 h-5 text-warning" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                        <svg class="w-5 h-5 text-warning" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                        <svg class="w-5 h-5 text-warning" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                    </div>
+<<<<<<< HEAD
+                    <p class="text-text-secondary italic">"Consumer trust is everything in our industry. KrishiPaths gave us the credibility we needed to compete with major brands. Sales are up 28% this year."</p>
+=======
+                    <p class="text-text-secondary italic">"Consumer trust is everything in our industry. KrishiPaths
+                        gave us the credibility we needed to compete with major brands. Sales are up 28% this year."</p>
+>>>>>>> e70fa53 (Thsi_Is_The_Final_Project)
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recommendation Engine -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl lg:text-4xl font-bold text-text-primary mb-4">Similar to Your Business</h2>
+                <p class="text-xl text-text-secondary max-w-3xl mx-auto">Based on your interests, here are case studies
+                    most relevant to your situation</p>
+            </div>
+
+            <!-- Business Type Selector -->
+            <div class="bg-surface rounded-lg p-6 mb-8">
+                <h3 class="text-lg font-semibold text-text-primary mb-4">Tell us about your business:</h3>
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-text-secondary mb-2">Industry</label>
+                        <select id="business-industry" class="input-field" onchange="updateRecommendations()">
+                            <option value>Select Industry</option>
+                            <option value="produce">Fresh Produce</option>
+                            <option value="livestock">Livestock & Dairy</option>
+                            <option value="grains">Grains & Cereals</option>
+                            <option value="processed">Processed Foods</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-text-secondary mb-2">Company Size</label>
+                        <select id="business-size" class="input-field" onchange="updateRecommendations()">
+                            <option value>Select Size</option>
+                            <option value="small">Small (1-50 employees)</option>
+                            <option value="medium">Medium (51-500 employees)</option>
+                            <option value="large">Large (500+ employees)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-text-secondary mb-2">Primary Goal</label>
+                        <select id="business-goal" class="input-field" onchange="updateRecommendations()">
+                            <option value>Select Goal</option>
+                            <option value="compliance">Regulatory Compliance</option>
+                            <option value="trust">Consumer Trust</option>
+                            <option value="premium">Premium Positioning</option>
+                            <option value="export">Export Documentation</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recommended Cases -->
+            <div id="recommended-cases" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-surface rounded-lg p-6 text-center">
+                    <svg class="w-16 h-16 text-text-secondary mx-auto mb-4" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                    </svg>
+                    <h3 class="text-lg font-semibold text-text-primary mb-2">Get Personalized Recommendations</h3>
+                    <p class="text-text-secondary">Select your business details above to see case studies most relevant
+                        to your situation</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-16 bg-gradient-to-br from-primary to-accent">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl lg:text-4xl font-bold text-white mb-4">Ready to Write Your Success Story?</h2>
+<<<<<<< HEAD
+            <p class="text-xl text-white/90 mb-8 max-w-3xl mx-auto">Join the growing community of agricultural businesses transforming their operations with KrishiPath transparency</p>
+            
+=======
+            <p class="text-xl text-white/90 mb-8 max-w-3xl mx-auto">Join the growing community of agricultural
+                businesses transforming their operations with KrishiPath transparency</p>
+
+>>>>>>> e70fa53 (Thsi_Is_The_Final_Project)
+            <div class="grid md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white/10 backdrop-blur-sm rounded-lg p-6 text-white">
+                    <div class="w-12 h-12 bg-white/20 rounded-lg mx-auto mb-4 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Free Consultation</h3>
+                    <p class="text-white/80">Discuss your specific needs with our transparency experts</p>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm rounded-lg p-6 text-white">
+                    <div class="w-12 h-12 bg-white/20 rounded-lg mx-auto mb-4 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Pilot Program</h3>
+                    <p class="text-white/80">Start with a small batch to see results before full improvement</p>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm rounded-lg p-6 text-white">
+                    <div class="w-12 h-12 bg-white/20 rounded-lg mx-auto mb-4 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Guaranteed ROI</h3>
+                    <p class="text-white/80">We're confident in our results - see measurable impact within 90 days</p>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="stakeholder_registration_hub.html"
+                    class="bg-white text-primary font-semibold py-3 px-8 rounded-lg hover:bg-gray-100 transition-smooth text-lg">Start
+                    Your Journey</a>
+                <a href="transparency_dashboard.html"
+                    class="bg-white/10 backdrop-blur-sm text-white font-semibold py-3 px-8 rounded-lg hover:bg-white/20 transition-smooth text-lg border border-white/20">View
+                    Live Demo</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid lg:grid-cols-4 gap-8">
+                <!-- Company Info -->
+                <div class="lg:col-span-1">
+                    <div class="flex items-center mb-4">
+                        <svg class="h-8 w-8 text-primary" viewBox="0 0 32 32" fill="currentColor">
+                            <path d="M16 2L8 6v10c0 6.627 3.373 10 8 10s8-3.373 8-10V6l-8-4z" />
+                            <circle cx="16" cy="12" r="3" fill="white" />
+                            <path d="M12 20h8v2h-8z" fill="white" />
+                        </svg>
+                        <div class="ml-3">
+                            <h3 class="text-xl font-bold">KrishiPath</h3>
+                            <p class="text-sm text-gray-400">Transparency</p>
+                        </div>
+                    </div>
+<<<<<<< HEAD
+                    <p class="text-gray-400 mb-4">Building trust in the global food system through KrishiPath transparency with most trusted.</p>
+=======
+                    <p class="text-gray-400 mb-4">Building trust in the global food system through KrishiPath
+                        transparency with most trusted.</p>
+>>>>>>> e70fa53 (Thsi_Is_The_Final_Project)
+                    <div class="flex space-x-4">
+                        <a href="javascript:void(0)" class="text-gray-400 hover:text-white transition-smooth">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M20 10c0-5.523-4.477-10-10-10S0 4.477 0 10c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V10h2.54V7.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V10h2.773l-.443 2.89h-2.33v6.988C16.343 19.128 20 14.991 20 10z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                        <a href="javascript:void(0)" class="text-gray-400 hover:text-white transition-smooth">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M6.29 18.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0020 3.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.073 4.073 0 01.8 7.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 010 16.407a11.616 11.616 0 006.29 1.84" />
+                            </svg>
+                        </a>
+                        <a href="javascript:void(0)" class="text-gray-400 hover:text-white transition-smooth">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M16.338 16.338H13.67V12.16c0-.995-.017-2.277-1.387-2.277-1.39 0-1.601 1.086-1.601 2.207v4.248H8.014v-8.59h2.559v1.174h.037c.356-.675 1.227-1.387 2.526-1.387 2.703 0 3.203 1.778 3.203 4.092v4.711zM5.005 6.575a1.548 1.548 0 11-.003-3.096 1.548 1.548 0 01.003 3.096zm-1.337 9.763H6.34v-8.59H3.667v8.59zM17.668 1H2.328C1.595 1 1 1.581 1 2.298v15.403C1 18.418 1.595 19 2.328 19h15.34c.734 0 1.332-.582 1.332-1.299V2.298C19 1.581 18.402 1 17.668 1z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Platform Links -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Platform</h4>
+                    <ul class="space-y-2">
+                        <li><a href="product_journey_viewer.html"
+                                class="text-gray-400 hover:text-white transition-smooth">Product Tracker</a></li>
+                        <li><a href="transparency_dashboard.html"
+                                class="text-gray-400 hover:text-white transition-smooth">Dashboard</a></li>
+                        <li><a href="stakeholder_registration_hub.html"
+                                class="text-gray-400 hover:text-white transition-smooth">Register</a></li>
+                        <li><a href="pricing_plans.html"
+                                class="text-gray-400 hover:text-white transition-smooth">Pricing</a></li>
+                    </ul>
+                </div>
+
+                <!-- Resources Links -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Resources</h4>
+                    <ul class="space-y-2">
+                        <li><a href="case_studies_success_stories.html"
+                                class="text-gray-400 hover:text-white transition-smooth">Case Studies</a></li>
+                        <li><a href="javascript:void(0)"
+                                class="text-gray-400 hover:text-white transition-smooth">Documentation</a></li>
+                        <li><a href="javascript:void(0)" class="text-gray-400 hover:text-white transition-smooth">API
+                                Reference</a></li>
+                        <li><a href="javascript:void(0)"
+                                class="text-gray-400 hover:text-white transition-smooth">Support</a></li>
+                    </ul>
+                </div>
+
+                <!-- Company Links -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Company</h4>
+                    <ul class="space-y-2">
+                        <li><a href="javascript:void(0)" class="text-gray-400 hover:text-white transition-smooth">About
+                                Us</a></li>
+                        <li><a href="javascript:void(0)"
+                                class="text-gray-400 hover:text-white transition-smooth">Careers</a></li>
+                        <li><a href="javascript:void(0)"
+                                class="text-gray-400 hover:text-white transition-smooth">Privacy Policy</a></li>
+                        <li><a href="javascript:void(0)" class="text-gray-400 hover:text-white transition-smooth">Terms
+                                of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center">
+                <p class="text-gray-400">© 2025 KrishiPath Transparency. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        }
+
+        // Filter functionality
+        function filterCases(category) {
+            const cards = document.querySelectorAll('.case-study-card');
+            const buttons = document.querySelectorAll('.filter-btn');
+
+            // Update button states
+            buttons.forEach(btn => {
+                btn.classList.remove('active', 'bg-primary', 'text-white');
+                btn.classList.add('text-text-secondary', 'bg-gray-100');
+            });
+
+            const activeButton = document.getElementById(`filter-${category}`);
+            activeButton.classList.add('active', 'bg-primary', 'text-white');
+            activeButton.classList.remove('text-text-secondary', 'bg-gray-100');
+
+            // Filter cards
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Size filter
+        function applySizeFilter() {
+            const sizeFilter = document.getElementById('size-filter').value;
+            const cards = document.querySelectorAll('.case-study-card');
+
+            cards.forEach(card => {
+                if (sizeFilter === 'all' || card.dataset.size === sizeFilter) {
+                    if (card.style.display !== 'none') {
+                        card.style.display = 'block';
+                    }
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Search functionality
+        function searchCases() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const cards = document.querySelectorAll('.case-study-card');
+
+            cards.forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                const description = card.querySelector('p').textContent.toLowerCase();
+
+                if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Case study actions
+        function openCaseStudy(caseId) {
+            // In a real application, this would open a detailed case study page
+            alert(`Opening detailed case study for ${caseId}. This would navigate to a full case study page with complete details, metrics, and implementation timeline.`);
+        }
+
+        function downloadPDF(caseId) {
+            // In a real application, this would trigger a PDF download
+            alert(`Downloading PDF case study for ${caseId}. This would provide a detailed technical specification document for enterprise evaluation.`);
+        }
+
+        function playVideo(videoId) {
+            // In a real application, this would open a video modal
+            alert(`Playing video testimonial for ${videoId}. This would show authentic stakeholder interviews and implementation walkthroughs.`);
+        }
+
+        function loadMoreCases() {
+            // In a real application, this would load additional case studies
+            alert('Loading more case studies... This would fetch additional success stories from our database.');
+        }
+
+        // Recommendation engine
+        function updateRecommendations() {
+            const industry = document.getElementById('business-industry').value;
+            const size = document.getElementById('business-size').value;
+            const goal = document.getElementById('business-goal').value;
+
+            const recommendedContainer = document.getElementById('recommended-cases');
+
+            if (!industry && !size && !goal) {
+                recommendedContainer.innerHTML = `
+                    <div class="bg-surface rounded-lg p-6 text-center">
+                        <svg class="w-16 h-16 text-text-secondary mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                        </svg>
+                        <h3 class="text-lg font-semibold text-text-primary mb-2">Get Personalized Recommendations</h3>
+                        <p class="text-text-secondary">Select your business details above to see case studies most relevant to your situation</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Generate recommendations based on selections
+            let recommendations = [];
+
+            if (industry === 'produce') {
+                recommendations.push({
+                    title: 'Sunrise Organic Farms',
+                    description: 'Increased premium sales by 40% through complete supply chain transparency',
+                    metric: '+40% Premium Sales',
+                    image: 'https://images.pexels.com/photos/1459339/pexels-photo-1459339.jpeg'
+                });
+            }
+
+            if (industry === 'livestock') {
+                recommendations.push({
+                    title: 'Heritage Ranch',
+                    description: 'Achieved 100% regulatory compliance and reduced audit time by 75%',
+                    metric: '-75% Audit Time',
+                    image: 'https://images.pixabay.com/photos/2016/12/04/21/58/rabbit-1882699_1280.jpg'
+                });
+            }
+
+            if (goal === 'export') {
+                recommendations.push({
+                    title: 'Golden Harvest Co-op',
+                    description: 'Streamlined international exports, reducing processing time by 60%',
+                    metric: '-60% Processing Time',
+                    image: 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b'
+                });
+            }
+
+            // Default recommendations if no specific matches
+            if (recommendations.length === 0) {
+                recommendations = [
+                    {
+                        title: 'Similar Business Success',
+                        description: 'See how businesses like yours have achieved transparency goals',
+                        metric: 'Relevant Results',
+                        image: 'https://images.unsplash.com/photo-1584824486509-112e4181ff6b'
+                    }
+                ];
+            }
+
+            // Render recommendations
+            recommendedContainer.innerHTML = recommendations.map(rec => `
+                <div class="bg-surface rounded-lg shadow-subtle overflow-hidden hover:shadow-float transition-smooth">
+                    <img src="${rec.image}" alt="${rec.title}" class="w-full h-48 object-cover" loading="lazy">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-text-primary mb-2">${rec.title}</h3>
+                        <p class="text-text-secondary mb-4">${rec.description}</p>
+                        <div class="text-center p-3 bg-primary-50 rounded-lg mb-4">
+                            <div class="text-lg font-bold text-primary">${rec.metric}</div>
+                        </div>
+                        <button class="btn-primary w-full" onclick="openCaseStudy('${rec.title.toLowerCase().replace(/\s+/g, '-')}')">Read Full Case Study</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Initialize filter buttons
+        document.addEventListener('DOMContentLoaded', function () {
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            filterButtons.forEach(btn => {
+                if (!btn.classList.contains('active')) {
+                    btn.classList.add('text-text-secondary', 'bg-gray-100');
+                }
+            });
+
+            // Set active state for "All Stories" button
+            const allButton = document.getElementById('filter-all');
+            allButton.classList.add('active', 'bg-primary', 'text-white');
+            allButton.classList.remove('text-text-secondary', 'bg-gray-100');
+        });
+        document.addEventListener('DOMContentLoaded', function () {
+            const helpButton = document.getElementById('helpButton');
+            const helpOptions = document.getElementById('helpOptions');
+
+            helpButton.addEventListener('click', function () {
+                helpOptions.classList.toggle('active');
+            });
+
+            // Close the options when clicking outside
+            document.addEventListener('click', function (event) {
+                if (!event.target.closest('.help-container')) {
+                    helpOptions.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

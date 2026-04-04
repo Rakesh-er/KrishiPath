@@ -1,0 +1,67 @@
+{
+    "common": {
+        "loading": "लोड हो रहा है...",
+        "save": "सेव करें",
+        "cancel": "रद्द करें",
+        "edit": "संपादित करें",
+        "delete": "हटाएं",
+        "search": "खोजें",
+        "filter": "फिल्टर",
+        "submit": "जमा करें",
+        "back": "वापस",
+        "next": "अगला",
+        "previous": "पिछला"
+    },
+    "auth": {
+        "login": "लॉगिन",
+        "register": "पंजीकरण",
+        "email": "ईमेल",
+        "password": "पासवर्ड",
+        "name": "नाम",
+        "role": "भूमिका",
+        "address": "पता",
+        "phone": "फोन",
+        "walletAddress": "वॉलेट पता",
+        "loginSuccess": "लॉगिन सफल",
+        "registerSuccess": "पंजीकरण सफल",
+        "logout": "लॉगआउट"
+    },
+    "roles": {
+        "farmer": "किसान",
+        "transporter": "परिवहनकर्ता",
+        "retailer": "खुदरा विक्रेता",
+        "consumer": "उपभोक्ता",
+        "government": "सरकार"
+    },
+    "dashboard": {
+        "welcome": "स्वागत",
+        "rewardPoints": "रिवार्ड पॉइंट्स",
+        "totalBatches": "कुल बैच",
+        "activeBatches": "सक्रिय बैच",
+        "completedTransactions": "पूर्ण लेनदेन",
+        "recentActivity": "हाल की गतिविधि"
+    },
+    "produce": {
+        "addProduce": "उत्पाद जोड़ें",
+        "produceName": "उत्पाद का नाम",
+        "quantity": "मात्रा",
+        "unit": "इकाई",
+        "harvestDate": "फसल की तारीख",
+        "location": "स्थान",
+        "quality": "गुणवत्ता",
+        "grade": "ग्रेड",
+        "pricePerUnit": "प्रति इकाई मूल्य",
+        "batchId": "बैच आईडी",
+        "status": "स्थिति",
+        "qrCode": "QR कोड",
+        "timeline": "समयसीमा",
+        "trackProduce": "उत्पाद ट्रैक करें"
+    },
+    "status": {
+        "harvested": "कटाई की गई",
+        "in_transit": "पारगमन में",
+        "at_retailer": "खुदरा विक्रेता के पास",
+        "sold": "बेचा गया",
+        "expired": "समाप्त हो गया"
+    }
+}

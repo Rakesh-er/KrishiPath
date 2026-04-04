@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KrishiPath - Farmer-Focused Supply Chain Transparency</title>
+    <meta name="description"
+        content="Simple blockchain platform for farmers to track products from farm to market with immutable records." />
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h2 {
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+        }
+
+        /* Floating Help Button Styles */
+        .help-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+
+        .main-help-button {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff8a00, #e52e71);
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .main-help-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .main-help-button i {
+            font-size: 28px;
+        }
+
+        .help-options {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+
+        .help-options.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .help-option {
+            display: flex;
+            align-items: center;
+            background: white;
+            color: #333;
+            text-decoration: none;
+            padding: 12px 20px;
+            margin-bottom: 15px;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            width: 200px;
+        }
+
+        .help-option:hover {
+            transform: translateX(-5px);
+            background: #f8f8f8;
+        }
+
+        .help-option i {
+            margin-right: 10px;
+            font-size: 20px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tutorial i {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .chatbot i {
+            background: #2196F3;
+            color: white;
+        }
+
+        /* Language Switcher Styles */
+        .language-switcher {
+            position: relative;
+            margin-left: 20px;
+        }
+
+        .language-button {
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 6px 12px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .language-button:hover {
+            background: #f5f5f5;
+        }
+
+        .language-button i {
+            margin-right: 5px;
+        }
+
+        .language-options {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 150px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .language-options.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .language-option {
+            padding: 10px 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: all 0.2s ease;
+        }
+
+        .language-option:hover {
+            background: #f5f5f5;
+        }
+
+        .language-option.active {
+            background: #e6f4ff;
+            color: #1a73e8;
+        }
+
+        .language-flag {
+            width: 20px;
+            height: 15px;
+            margin-right: 10px;
+            border-radius: 2px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            p {
+                font-size: 1rem;
+            }
+
+            .main-help-button {
+                width: 60px;
+                height: 60px;
+            }
+
+            .help-container {
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .language-switcher {
+                margin-left: 0;
+                margin-top: 15px;
+                width: 100%;
+            }
+
+            .language-button {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .language-options {
+                left: 0;
+                right: auto;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-background text-text-primary">
+    <!-- Floating Help Button -->
+    <div class="help-container">
+        <div class="help-options" id="helpOptions">
+            <a href="https://youtu.be/PIxT5nxzVgE?si=ShP9OGQTJ4i6EvZc" class="help-option tutorial">
+                <i class="fas fa-play-circle"></i>
+                <span data-translate="watch_tutorial">Watch Tutorial</span>
+            </a>
+            <a href="./chatbot.html" class="help-option chatbot">
+                <i class="fas fa-comments"></i>
+                <span data-translate="chatbot">Chatbot</span>
+            </a>
+        </div>
+        <button class="main-help-button" id="helpButton">
+            <i class="fas fa-question"></i>
+        </button>
+    </div>
+
+    <!-- Navigation Header -->
+    <header class="bg-white shadow-subtle sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <svg class="h-8 w-8 text-primary" viewBox="0 0 32 32" fill="currentColor">
+                           <path d="M16 2L8 6v10c0 6.627 3.373 10 8 10s8-3.373 8-10V6l-8-4z" />
+                           <image href="/assets/logo.png" x="0" y="0" width="32" height="32" />
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <h1 class="text-xl font-bold text-primary">KrishiPath</h1>
+                        <p class="text-xs text-text-secondary" data-translate="transparency">Transparency</p>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="homepage.html" class="text-primary font-semibold px-3 py-2 rounded-md text-sm" data-translate="home">Home</a>
+                        <a href="product_journey_viewer.html"
+                            class="text-text-secondary hover:text-primary px-3 py-2 rounded-md text-sm transition-smooth" data-translate="my_products">My
+                            Products</a>
+                        <a href="transparency_dashboard.html"
+                            class="text-text-secondary hover:text-primary px-3 py-2 rounded-md text-sm transition-smooth" data-translate="dashboard">Dashboard</a>
+                        <a href="pricing_plans.html"
+                            class="text-text-secondary hover:text-primary px-3 py-2 rounded-md text-sm transition-smooth" data-translate="pricing">Pricing</a>
+                        <a href="stakeholder_registration_hub.html" class="btn-primary text-sm" data-translate="add_product">Add Product</a>
+                        
+                        <!-- Language Switcher -->
+                        <div class="language-switcher">
+                            <button class="language-button" id="languageButton">
+                                <i class="fas fa-globe"></i>
+                                <span id="currentLanguage">English</span>
+                                <i class="fas fa-chevron-down ml-1" style="font-size: 12px;"></i>
+                            </button>
+                            <div class="language-options" id="languageOptions">
+                                <div class="language-option active" data-lang="en">
+                                    <div class="language-flag">🇺🇸</div>
+                                    <span>English</span>
+                                </div>
+                                <div class="language-option" data-lang="hi">
+                                    <div class="language-flag">🇮🇳</div>
+                                    <span>हिन्दी (Hindi)</span>
+                                </div>
+                                <div class="language-option" data-lang="te">
+                                    <div class="language-flag">🇮🇳</div>
+                                    <span>తెలుగు (Telugu)</span>
+                                </div>
+                                <div class="language-option" data-lang="or">
+                                    <div class="language-flag">🇮🇳</div>
+                                    <span>ଓଡ଼ିଆ (Odia)</span>
+                                </div>
+                                <!-- <div class="language-option" data-lang="ta">
+                                    <div class="language-flag">🇮🇳</div>
+                                    <span>தமிழ் (Tamil)</span>
+                                </div>
+                                <div class="language-option" data-lang="bn">
+                                    <div class="language-flag">🇮🇳</div>
+                                    <span>বাংলা (Bengali)</span>
+                                </div>
+                                <div class="language-option" data-lang="mr">
+                                    <div class="language-flag">🇮🇳</div>
+                                    <span>मराठी (Marathi)</span> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden">
+                    <button type="button"
+                        class="text-text-secondary hover:text-primary focus:outline-none focus:text-primary"
+                        onclick="toggleMobileMenu()">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Navigation Menu -->
+            <div id="mobile-menu" class="md:hidden hidden">
+                <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-border-light">
+                    <a href="homepage.html"
+                        class="text-primary font-semibold block px-3 py-2 rounded-md text-base" data-translate="home">Home</a>
+                    <a href="product_journey_viewer.html"
+                        class="text-text-secondary hover:text-primary block px-3 py-2 rounded-md text-base transition-smooth" data-translate="my_products">My
+                        Products</a>
+                    <a href="transparency_dashboard.html"
+                        class="text-text-secondary hover:text-primary block px-3 py-2 rounded-md text-base transition-smooth" data-translate="dashboard">Dashboard</a>
+                    <a href="pricing_plans.html"
+                        class="text-text-secondary hover:text-primary block px-3 py-2 rounded-md text-base transition-smooth" data-translate="pricing">Pricing</a>
+                    <a href="stakeholder_registration_hub.html" class="btn-primary block text-center mt-4" data-translate="add_product">Add
+                        Product</a>
+                    
+                    <!-- Language Switcher for Mobile -->
+                    <div class="language-switcher">
+                        <button class="language-button" id="mobileLanguageButton">
+                            <i class="fas fa-globe"></i>
+                            <span id="mobileCurrentLanguage">English</span>
+                            <i class="fas fa-chevron-down ml-1" style="font-size: 12px;"></i>
+                        </button>
+                        <div class="language-options" id="mobileLanguageOptions">
+                            <div class="language-option active" data-lang="en">
+                                <div class="language-flag">🇺🇸</div>
+                                <span>English</span>
+                            </div>
+                            <div class="language-option" data-lang="hi">
+                                <div class="language-flag">🇮🇳</div>
+                                <span>हिन्दी (Hindi)</span>
+                            </div>
+                            <div class="language-option" data-lang="te">
+                                <div class="language-flag">🇮🇳</div>
+                                <span>తెలుగు (Telugu)</span>
+                            </div>
+                            <div class="language-option" data-lang="or">
+                                <div class="language-flag">🇮🇳</div>
+                                <span>ଓଡ଼ିଆ (Odia)</span>
+                            </div>
+                            <!-- <div class="language-option" data-lang="ta">
+                                <div class="language-flag">🇮🇳</div>
+                                <span>தமிழ் (Tamil)</span>
+                            </div>
+                            <div class="language-option" data-lang="bn">
+                                <div class="language-flag">🇮🇳</div>
+                                <span>বাংলা (Bengali)</span>
+                            </div>
+                            <div class="language-option" data-lang="mr">
+                                <div class="language-flag">🇮🇳</div>
+                                <span>मराठी (Marathi)</span>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative bg-gradient-to-br from-primary-50 to-accent-50 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+            <div class="grid lg:grid-cols-2 gap-8 items-center">
+                <!-- Left Side - Value Proposition -->
+                <div class="text-center lg:text-left">
+                    <h1 class="text-3xl lg:text-5xl font-bold text-text-primary mb-4" data-translate="hero_title">
+                        Track Your Farm Products<br />
+                        <span class="text-primary">From Field to Market</span>
+                    </h1>
+                    <p class="text-lg text-text-secondary mb-6 max-w-2xl" data-translate="hero_description">
+                        Simple platform to track your products, build trust with buyers, and get better prices for your
+                        produce.
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8">
+                        <a href="stakeholder_registration_hub.html" class="btn-primary text-lg px-6 py-3" data-translate="start_tracking">Start Tracking
+                            Now</a>
+                        <a href="product_journey_viewer.html" class="btn-secondary text-lg px-6 py-3" data-translate="see_example">See Example</a>
+                    </div>
+
+                    <div class="bg-white rounded-lg p-4 shadow-subtle max-w-md">
+                        <div class="flex items-center space-x-2 text-sm text-text-secondary">
+                            <svg class="w-4 h-4 text-success" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                            <span data-translate="feature_1">No technical knowledge needed</span>
+                        </div>
+                        <div class="flex items-center space-x-2 text-sm text-text-secondary mt-2">
+                            <svg class="w-4 h-4 text-success" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                            <span data-translate="feature_2">Works with basic smartphones</span>
+                        </div>
+                        <div class="flex items-center space-x-2 text-sm text-text-secondary mt-2">
+                            <svg class="w-4 h-4 text-success" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                            <span data-translate="feature_3">Available in multiple languages</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Side - Simple Visualization -->
+                <div class="relative">
+                    <div class="bg-white rounded-xl p-6 shadow-elevated">
+                        <h3 class="text-lg font-semibold text-text-primary mb-4" data-translate="how_it_works">How It Works</h3>
+
+                        <!-- Simple Steps -->
+                        <div class="space-y-4">
+                            <div class="flex items-center space-x-3">
+                                <div
+                                    class="w-8 h-8 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
+                                    <span class="text-white font-bold text-sm">1</span>
+                                </div>
+                                <p class="text-text-primary" data-translate="step_1">Register your farm product</p>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <div
+                                    class="w-8 h-8 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
+                                    <span class="text-white font-bold text-sm">2</span>
+                                </div>
+                                <p class="text-text-primary" data-translate="step_2">Get QR code for your product</p>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <div
+                                    class="w-8 h-8 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
+                                    <span class="text-white font-bold text-sm">3</span>
+                                </div>
+                                <p class="text-text-primary" data-translate="step_3">Update at each step (harvest, transport, market)</p>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <div
+                                    class="w-8 h-8 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
+                                    <span class="text-white font-bold text-sm">4</span>
+                                </div>
+                                <p class="text-text-primary" data-translate="step_4">Buyers scan QR to see product journey</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Farmer Benefits Section -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-text-primary mb-4" data-translate="benefits_title">Benefits for Farmers</h2>
+                <p class="text-lg text-text-secondary max-w-3xl mx-auto" data-translate="benefits_subtitle">How KrishiPath helps you get better value for
+                    your produce</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-surface rounded-lg p-6 text-center">
+                    <div class="w-16 h-16 bg-primary-100 rounded-full mx-auto mb-4 flex items-center justify-center">
+                        <svg class="w-8 h-8 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
+                            <path fill-rule="evenodd"
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-text-primary mb-2" data-translate="benefit_1_title">Better Prices</h3>
+                    <p class="text-text-secondary" data-translate="benefit_1_desc">Get 15-25% higher prices when buyers can verify your product quality
+                    </p>
+                </div>
+
+                <div class="bg-surface rounded-lg p-6 text-center">
+                    <div class="w-16 h-16 bg-success-100 rounded-full mx-auto mb-4 flex items-center justify-center">
+                        <svg class="w-8 h-8 text-success" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-text-primary mb-2" data-translate="benefit_2_title">Buyer Trust</h3>
+                    <p class="text-text-secondary" data-translate="benefit_2_desc">Build trust with buyers who can see your farming practices</p>
+                </div>
+
+                <div class="bg-surface rounded-lg p-6 text-center">
+                    <div class="w-16 h-16 bg-accent-100 rounded-full mx-auto mb-4 flex items-center justify-center">
+                        <svg class="w-8 h-8 text-accent" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+                            <path fill-rule="evenodd"
+                                d="M4 5a2 2 0 012-2v1a1 1 0 102 0V3a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm2.5 7a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm2.45.5a2.5 2.5 0 11-4.9 0h4.9zM12 9a1 1 0 100 2h3a1 1 0 100-2h-3zm-1 4a1 1 0 011-1h2a1 1 0 110 2h-2a1 1 0 01-1-1z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-text-primary mb-2" data-translate="benefit_3_title">Easy Records</h3>
+                    <p class="text-text-secondary" data-translate="benefit_3_desc">Keep digital records of your products without paperwork</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="py-16 bg-surface">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-text-primary mb-4" data-translate="simple_title">Simple to Use</h2>
+                <p class="text-lg text-text-secondary max-w-3xl mx-auto" data-translate="simple_subtitle">Three easy steps to start tracking your
+                    products</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <div
+                        class="bg-white rounded-full w-24 h-24 mx-auto mb-6 flex items-center justify-center border-4 border-primary-100">
+                        <span class="text-4xl font-bold text-primary">1</span>
+                    </div>
+                    <h3 class="text-xl font-semibold text-text-primary mb-3" data-translate="step_title_1">Register</h3>
+                    <p class="text-text-secondary" data-translate="step_desc_1">Create an account and add your farm details once</p>
+                </div>
+
+                <div class="text-center">
+                    <div
+                        class="bg-white rounded-full w-24 h-24 mx-auto mb-6 flex items-center justify-center border-4 border-primary-100">
+                        <span class="text-4xl font-bold text-primary">2</span>
+                    </div>
+                    <h3 class="text-xl font-semibold text-text-primary mb-3" data-translate="step_title_2">Add Products</h3>
+                    <p class="text-text-secondary" data-translate="step_desc_2">Scan or create QR codes for your products and batches</p>
+                </div>
+
+                <div class="text-center">
+                    <div
+                        class="bg-white rounded-full w-24 h-24 mx-auto mb-6 flex items-center justify-center border-4 border-primary-100">
+                        <span class="text-4xl font-bold text-primary">3</span>
+                    </div>
+                    <h3 class="text-xl font-semibold text-text-primary mb-3" data-translate="step_title_3">Update Journey</h3>
+                    <p class="text-text-secondary" data-translate="step_desc_3">Update product status at each step from harvest to market</p>
+                </div>
+            </div>
+
+            <div class="text-center mt-12">
+                <a href="stakeholder_registration_hub.html" class="btn-primary text-lg px-8 py-3" data-translate="get_started">Get Started Today</a>
+            </div>
+        </div>
+    </section>
+
+<<<<<<< HEAD
+    <!-- Stakeholder Value Tabs -->
+    <section class="py-16 bg-surface">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl lg:text-4xl font-bold text-text-primary mb-4">Value for Every Stakeholder</h2>
+                <p class="text-xl text-text-secondary max-w-3xl mx-auto">See how KrishiPath Transparency delivers measurable ROI across the entire supply chain</p>
+            </div>
+
+            <!-- Tab Navigation -->
+            <div class="flex flex-wrap justify-center mb-8 bg-white rounded-lg p-2 shadow-subtle">
+                <button onclick="showTab('farmers')" id="farmers-tab" class="tab-button active px-6 py-3 rounded-md font-semibold transition-smooth">Farmers</button>
+                <button onclick="showTab('distributors')" id="distributors-tab" class="tab-button px-6 py-3 rounded-md font-semibold transition-smooth">Distributors</button>
+                <button onclick="showTab('retailers')" id="retailers-tab" class="tab-button px-6 py-3 rounded-md font-semibold transition-smooth">Retailers</button>
+                <button onclick="showTab('consumers')" id="consumers-tab" class="tab-button px-6 py-3 rounded-md font-semibold transition-smooth">Consumers</button>
+            </div>
+
+            <!-- Tab Content -->
+            <div id="farmers-content" class="tab-content">
+                <div class="grid lg:grid-cols-3 gap-8">
+                    <div class="bg-white rounded-lg p-6 shadow-subtle">
+                        <div class="w-12 h-12 bg-primary-100 rounded-lg mb-4 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"/>
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-text-primary mb-3">Premium Pricing</h3>
+                        <p class="text-text-secondary mb-4">Verified transparency commands 15-25% price premiums in premium markets</p>
+                        <div class="text-2xl font-bold text-primary">+22% ROI</div>
+                    </div>
+
+                    <div class="bg-white rounded-lg p-6 shadow-subtle">
+                        <div class="w-12 h-12 bg-success-100 rounded-lg mb-4 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-success" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-text-primary mb-3">Trust Building</h3>
+                        <p class="text-text-secondary mb-4">Build direct relationships with consumers and premium retailers</p>
+                        <div class="text-2xl font-bold text-success">85% Retention</div>
+                    </div>
+
+                    <div class="bg-white rounded-lg p-6 shadow-subtle">
+                        <div class="w-12 h-12 bg-accent-100 rounded-lg mb-4 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-accent" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
+                                <path fill-rule="evenodd" d="M4 5a2 2 0 012-2v1a1 1 0 102 0V3a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm2.5 7a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm2.45.5a2.5 2.5 0 11-4.9 0h4.9zM12 9a1 1 0 100 2h3a1 1 0 100-2h-3zm-1 4a1 1 0 011-1h2a1 1 0 110 2h-2a1 1 0 01-1-1z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-text-primary mb-3">Compliance Ready</h3>
+                        <p class="text-text-secondary mb-4">Automated documentation for organic, fair trade, and sustainability certifications</p>
+                        <div class="text-2xl font-bold text-accent">-60% Admin</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="distributors-content" class="tab-content hidden">
+                <div class="grid lg:grid-cols-3 gap-8">
+                    <div class="bg-white rounded-lg p-6 shadow-subtle">
+                        <div class="w-12 h-12 bg-secondary-100 rounded-lg mb-4 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-secondary" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-text-primary mb-3">Supply Chain Visibility</h3>
+                        <p class="text-text-secondary mb-4">Real-time tracking reduces inventory losses and improves demand forecasting</p>
+                        <div class="text-2xl font-bold text-secondary">-35% Waste</div>
+                    </div>
+
+                    <div class="bg-white rounded-lg p-6 shadow-subtle">
+                        <div class="w-12 h-12 bg-warning-100 rounded-lg mb-4 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-warning" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-text-primary mb-3">Faster Recalls</h3>
+                        <p class="text-text-secondary mb-4">Instant product identification and targeted recalls minimize business disruption</p>
+                        <div class="text-2xl font-bold text-warning">90% Faster</div>
+                    </div>
+
+                    <div class="bg-white rounded-lg p-6 shadow-subtle">
+                        <div class="w-12 h-12 bg-primary-100 rounded-lg mb-4 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-text-primary mb-3">Insurance Benefits</h3>
+                        <p class="text-text-secondary mb-4">Comprehensive tracking data reduces liability insurance premiums</p>
+                        <div class="text-2xl font-bold text-primary">-25% Premiums</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="retailers-content" class="tab-content hidden">
+                <div class="grid lg:grid-cols-3 gap-8">
+                    <div class="bg-white rounded-lg p-6 shadow-subtle">
+                        <div class="w-12 h-12 bg-accent-100 rounded-lg mb-4 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-accent" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-text-primary mb-3">Customer Loyalty</h3>
+                        <p class="text-text-secondary mb-4">Transparency builds trust, increasing customer retention and lifetime value</p>
+                        <div class="text-2xl font-bold text-accent">+40% LTV</div>
+                    </div>
+
+                    <div class="bg-white rounded-lg p-6 shadow-subtle">
+                        <div class="w-12 h-12 bg-success-100 rounded-lg mb-4 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-success" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-text-primary mb-3">Brand Differentiation</h3>
+                        <p class="text-text-secondary mb-4">Stand out in competitive markets with verified sustainability claims</p>
+                        <div class="text-2xl font-bold text-success">18% Sales</div>
+                    </div>
+
+                    <div class="bg-white rounded-lg p-6 shadow-subtle">
+                        <div class="w-12 h-12 bg-error-100 rounded-lg mb-4 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-error" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-text-primary mb-3">Risk Management</h3>
+                        <p class="text-text-secondary mb-4">Proactive quality monitoring prevents costly recalls and reputation damage</p>
+                        <div class="text-2xl font-bold text-error">-80% Incidents</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="consumers-content" class="tab-content hidden">
+                <div class="grid lg:grid-cols-3 gap-8">
+                    <div class="bg-white rounded-lg p-6 shadow-subtle">
+                        <div class="w-12 h-12 bg-primary-100 rounded-lg mb-4 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-text-primary mb-3">Complete Transparency</h3>
+                        <p class="text-text-secondary mb-4">Know exactly where your food comes from and how it was produced</p>
+                        <div class="text-2xl font-bold text-primary">100% Verified</div>
+                    </div>
+
+                    <div class="bg-white rounded-lg p-6 shadow-subtle">
+                        <div class="w-12 h-12 bg-success-100 rounded-lg mb-4 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-success" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-text-primary mb-3">Quality Assurance</h3>
+                        <p class="text-text-secondary mb-4">Verified quality standards and safety protocols at every step</p>
+                        <div class="text-2xl font-bold text-success">Premium Quality</div>
+                    </div>
+
+                    <div class="bg-white rounded-lg p-6 shadow-subtle">
+                        <div class="w-12 h-12 bg-accent-100 rounded-lg mb-4 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-accent" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z" clip-rule="evenodd"/>
+                                <path d="M12.454 16.697L9.75 13.992a4 4 0 01-3.742-3.741L2.335 6.578A9.98 9.98 0 00.458 10c1.274 4.057 5.065 7 9.542 7 .847 0 1.669-.105 2.454-.303z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-text-primary mb-3">Ethical Choices</h3>
+                        <p class="text-text-secondary mb-4">Support sustainable farming practices and fair labor conditions</p>
+                        <div class="text-2xl font-bold text-accent">Impact Driven</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Dashboard Preview -->
+=======
+    <!-- Farmer Stories Section -->
+>>>>>>> e70fa53 (Thsi_Is_The_Final_Project)
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-text-primary mb-4" data-translate="stories_title">Farmers Like You Are Succeeding</h2>
+                <p class="text-lg text-text-secondary max-w-3xl mx-auto" data-translate="stories_subtitle">See how other farmers benefit from transparency
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-surface rounded-lg p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center">
+                            <svg class="w-6 h-6 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="font-semibold text-text-primary">Rajesh Kumar</h4>
+                            <p class="text-sm text-text-secondary" data-translate="farmer_1_location">Vegetable Farmer, Punjab</p>
+                        </div>
+                    </div>
+                    <p class="text-text-secondary" data-translate="farmer_1_quote">"I now get 20% higher prices for my organic vegetables since buyers
+                        can verify my farming methods."</p>
+                </div>
+
+                <div class="bg-surface rounded-lg p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center">
+                            <svg class="w-6 h-6 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="font-semibold text-text-primary">Priya Singh</h4>
+                            <p class="text-sm text-text-secondary" data-translate="farmer_2_location">Fruit Grower, Maharashtra</p>
+                        </div>
+                    </div>
+                    <p class="text-text-secondary" data-translate="farmer_2_quote">"My mangoes now reach better markets because buyers trust the quality
+                        when they see the journey."</p>
+                </div>
+
+                <div class="bg-surface rounded-lg p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center">
+                            <svg class="w-6 h-6 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="font-semibold text-text-primary">Amir Hassan</h4>
+                            <p class="text-sm text-text-secondary" data-translate="farmer_3_location">Rice Farmer, West Bengal</p>
+                        </div>
+                    </div>
+                    <p class="text-text-secondary" data-translate="farmer_3_quote">"The digital records save me time and help me get fair prices for my
+                        specialty rice varieties."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-16 bg-gradient-to-br from-primary to-accent">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl font-bold text-white mb-4" data-translate="cta_title">Start Your Journey Today</h2>
+            <p class="text-lg text-white/90 mb-8 max-w-3xl mx-auto" data-translate="cta_subtitle">Join thousands of farmers getting better value for
+                their produce</p>
+
+            <div class="grid md:grid-cols-2 gap-6 mb-8 max-w-4xl mx-auto">
+                <div class="bg-white/10 backdrop-blur-sm rounded-lg p-6 text-white">
+                    <div class="w-12 h-12 bg-white/20 rounded-lg mx-auto mb-4 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2" data-translate="cta_feature_1_title">Easy Setup</h3>
+                    <p class="text-white/80" data-translate="cta_feature_1_desc">Get started in minutes with simple registration</p>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm rounded-lg p-6 text-white">
+                    <div class="w-12 h-12 bg-white/20 rounded-lg mx-auto mb-4 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2" data-translate="cta_feature_2_title">Support in Your Language</h3>
+                    <p class="text-white/80" data-translate="cta_feature_2_desc">Help available in Hindi, Tamil, Telugu, and more</p>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="stakeholder_registration_hub.html"
+                    class="bg-white text-primary font-semibold py-3 px-8 rounded-lg hover:bg-gray-100 transition-smooth text-lg" data-translate="start_free">Start
+                    Free</a>
+                <a href="pricing_plans.html"
+                    class="bg-white/10 backdrop-blur-sm text-white font-semibold py-3 px-8 rounded-lg hover:bg-white/20 transition-smooth text-lg border border-white/20" data-translate="see_plans">See
+                    Plans</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid lg:grid-cols-4 gap-8">
+                <!-- Company Info -->
+                <div class="lg:col-span-1">
+                    <div class="flex items-center mb-4">
+                        <svg class="h-8 w-8 text-primary" viewBox="0 0 32 32" fill="currentColor">
+                            <path d="M16 2L8 6v10c0 6.627 3.373 10 8 10s8-3.373 8-10V6l-8-4z" />
+                            <circle cx="16" cy="12" r="3" fill="white" />
+                            <path d="M12 20h8v2h-8z" fill="white" />
+                        </svg>
+                        <div class="ml-3">
+                            <h3 class="text-xl font-bold">KrishiPath</h3>
+                            <p class="text-sm text-gray-400" data-translate="for_farmers">For Farmers</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 mb-4" data-translate="footer_description">Helping farmers get fair value for their quality produce.</p>
+                </div>
+
+                <!-- Platform Links -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-4" data-translate="for_farmers">For Farmers</h4>
+                    <ul class="space-y-2">
+                        <li><a href="product_journey_viewer.html"
+                                class="text-gray-400 hover:text-white transition-smooth" data-translate="my_products">My Products</a></li>
+                        <li><a href="transparency_dashboard.html"
+                                class="text-gray-400 hover:text-white transition-smooth" data-translate="dashboard">Dashboard</a></li>
+                        <li><a href="stakeholder_registration_hub.html"
+                                class="text-gray-400 hover:text-white transition-smooth" data-translate="add_product">Add Product</a></li>
+                        <li><a href="pricing_plans.html"
+                                class="text-gray-400 hover:text-white transition-smooth" data-translate="pricing">Pricing</a></li>
+                    </ul>
+                </div>
+
+                <!-- Help Links -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-4" data-translate="help_support">Help & Support</h4>
+                    <ul class="space-y-2">
+                        <li><a href="javascript:void(0)" class="text-gray-400 hover:text-white transition-smooth" data-translate="how_to_videos">How To
+                                Videos</a></li>
+                        <li><a href="javascript:void(0)" class="text-gray-400 hover:text-white transition-smooth" data-translate="farmer_guide">Farmer
+                                Guide</a></li>
+                        <li><a href="/KrishiPath/pages/chatbot.html"
+                                class="text-gray-400 hover:text-white transition-smooth" data-translate="support">Support</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact Info -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-4" data-translate="contact">Contact</h4>
+                    <ul class="space-y-2">
+                        <li class="text-gray-400">Toll Free: 1800-123-4567</li>
+                        <li class="text-gray-400">WhatsApp: +91 8984463742</li>
+                        <li class="text-gray-400">Email: sarakarrakesh486@gmail.com</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center">
+                <p class="text-gray-400">© 2025 KrishiPath. <span data-translate="made_for_farmers">Made for farmers</span>.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Language translations
+        const translations = {
+            en: {
+                // Navigation
+                "home": "Home",
+                "my_products": "My Products",
+                "dashboard": "Dashboard",
+                "pricing": "Pricing",
+                "add_product": "Add Product",
+                "transparency": "Transparency",
+                
+                // Hero section
+                "hero_title": "Track Your Farm Products<br /><span class=\"text-primary\">From Field to Market</span>",
+                "hero_description": "Simple platform to track your products, build trust with buyers, and get better prices for your produce.",
+                "start_tracking": "Start Tracking Now",
+                "see_example": "See Example",
+                "feature_1": "No technical knowledge needed",
+                "feature_2": "Works with basic smartphones",
+                "feature_3": "Available in multiple languages",
+                
+                // Benefits section
+                "benefits_title": "Benefits for Farmers",
+                "benefits_subtitle": "How KrishiPath helps you get better value for your produce",
+                "benefit_1_title": "Better Prices",
+                "benefit_1_desc": "Get 15-25% higher prices when buyers can verify your product quality",
+                "benefit_2_title": "Buyer Trust",
+                "benefit_2_desc": "Build trust with buyers who can see your farming practices",
+                "benefit_3_title": "Easy Records",
+                "benefit_3_desc": "Keep digital records of your products without paperwork",
+                
+                // How it works
+                "how_it_works": "How It Works",
+                "step_1": "Register your farm product",
+                "step_2": "Get QR code for your product",
+                "step_3": "Update at each step (harvest, transport, market)",
+                "step_4": "Buyers scan QR to see product journey",
+                
+                // Simple to use
+                "simple_title": "Simple to Use",
+                "simple_subtitle": "Three easy steps to start tracking your products",
+                "step_title_1": "Register",
+                "step_desc_1": "Create an account and add your farm details once",
+                "step_title_2": "Add Products",
+                "step_desc_2": "Scan or create QR codes for your products and batches",
+                "step_title_3": "Update Journey",
+                "step_desc_3": "Update product status at each step from harvest to market",
+                "get_started": "Get Started Today",
+                
+                // Stories
+                "stories_title": "Farmers Like You Are Succeeding",
+                "stories_subtitle": "See how other farmers benefit from transparency",
+                "farmer_1_location": "Vegetable Farmer, Punjab",
+                "farmer_1_quote": "\"I now get 20% higher prices for my organic vegetables since buyers can verify my farming methods.\"",
+                "farmer_2_location": "Fruit Grower, Maharashtra",
+                "farmer_2_quote": "\"My mangoes now reach better markets because buyers trust the quality when they see the journey.\"",
+                "farmer_3_location": "Rice Farmer, West Bengal",
+                "farmer_3_quote": "\"The digital records save me time and help me get fair prices for my specialty rice varieties.\"",
+                
+                // CTA
+                "cta_title": "Start Your Journey Today",
+                "cta_subtitle": "Join thousands of farmers getting better value for their produce",
+                "cta_feature_1_title": "Easy Setup",
+                "cta_feature_1_desc": "Get started in minutes with simple registration",
+                "cta_feature_2_title": "Support in Your Language",
+                "cta_feature_2_desc": "Help available in Hindi, Tamil, Telugu, and more",
+                "start_free": "Start Free",
+                "see_plans": "See Plans",
+                
+                // Footer
+                "for_farmers": "For Farmers",
+                "footer_description": "Helping farmers get fair value for their quality produce.",
+                "help_support": "Help & Support",
+                "how_to_videos": "How To Videos",
+                "farmer_guide": "Farmer Guide",
+                "support": "Support",
+                "contact": "Contact",
+                "made_for_farmers": "Made for farmers",
+                
+                // Help button
+                "watch_tutorial": "Watch Tutorial",
+                "chatbot": "Chatbot"
+            },
+            hi: {
+                // Navigation
+                "home": "होम",
+                "my_products": "मेरे उत्पाद",
+                "dashboard": "डैशबोर्ड",
+                "pricing": "मूल्य निर्धारण",
+                "add_product": "उत्पाद जोड़ें",
+                "transparency": "पारदर्शिता",
+                
+                // Hero section
+                "hero_title": "अपने फार्म उत्पादों को ट्रैक करें<br /><span class=\"text-primary\">खेत से बाजार तक</span>",
+                "hero_description": "अपने उत्पादों को ट्रैक करने, खरीदारों के साथ विश्वास बनाने और अपने उत्पादन के बेहतर दाम पाने के लिए सरल प्लेटफॉर्म।",
+                "start_tracking": "अभी ट्रैकिंग शुरू करें",
+                "see_example": "उदाहरण देखें",
+                "feature_1": "कोई तकनीकी ज्ञान आवश्यक नहीं",
+                "feature_2": "बेसिक स्मार्टफोन के साथ काम करता है",
+                "feature_3": "कई भाषाओं में उपलब्ध",
+                
+                // Benefits section
+                "benefits_title": "किसानों के लिए लाभ",
+                "benefits_subtitle": "कृषिपथ आपको अपने उत्पाद का बेहतर मूल्य पाने में कैसे मदद करता है",
+                "benefit_1_title": "बेहतर कीमतें",
+                "benefit_1_desc": "जब खरीदार आपके उत्पाद की गुणवत्ता सत्यापित कर सकते हैं तो 15-25% अधिक कीमतें प्राप्त करें",
+                "benefit_2_title": "खरीदार का विश्वास",
+                "benefit_2_desc": "खरीदारों के साथ विश्वास बनाएं जो आपकी कृषि पद्धतियों को देख सकते हैं",
+                "benefit_3_title": "आसान रिकॉर्ड",
+                "benefit_3_desc": "बिना कागजी कार्रवाई के अपने उत्पादों के डिजिटल रिकॉर्ड रखें",
+                
+                // How it works
+                "how_it_works": "यह कैसे काम करता है",
+                "step_1": "अपने फार्म उत्पाद को पंजीकृत करें",
+                "step_2": "अपने उत्पाद के लिए क्यूआर कोड प्राप्त करें",
+                "step_3": "प्रत्येक चरण पर अद्यतन करें (कटाई, परिवहन, बाजार)",
+                "step_4": "खरीदार उत्पाद की यात्रा देखने के लिए क्यूआर स्कैन करते हैं",
+                
+                // Simple to use
+                "simple_title": "उपयोग में आसान",
+                "simple_subtitle": "अपने उत्पादों को ट्रैक करना शुरू करने के तीन आसान चरण",
+                "step_title_1": "पंजीकरण",
+                "step_desc_1": "एक खाता बनाएं और एक बार अपने फार्म का विवरण जोड़ें",
+                "step_title_2": "उत्पाद जोड़ें",
+                "step_desc_2": "अपने उत्पादों और बैचों के लिए क्यूआर कोड स्कैन करें या बनाएं",
+                "step_title_3": "यात्रा अपडेट करें",
+                "step_desc_3": "कटाई से बाजार तक प्रत्येक चरण पर उत्पाद स्थिति अपडेट करें",
+                "get_started": "आज ही शुरू करें",
+                
+                // Stories
+                "stories_title": "आपकी तरह किसान सफल हो रहे हैं",
+                "stories_subtitle": "देखें कि अन्य किसान पारदर्शिता से कैसे लाभान्वित हो रहे हैं",
+                "farmer_1_location": "सब्जी किसान, पंजाब",
+                "farmer_1_quote": "\"जैविक सब्जियों के लिए मुझे अब 20% अधिक कीमत मिलती है क्योंकि खरीदार मेरी कृषि पद्धतियों को सत्यापित कर सकते हैं।\"",
+                "farmer_2_location": "फल उत्पादक, महाराष्ट्र",
+                "farmer_2_quote": "\"मेरे आम अब बेहतर बाजारों तक पहुंचते हैं क्योंकि खरीदार गुणवत्ता पर भरोसा करते हैं जब वे यात्रा देखते हैं।\"",
+                "farmer_3_location": "चावल किसान, पश्चिम बंगाल",
+                "farmer_3_quote": "\"डिजिटल रिकॉर्ड मेरा समय बचाते हैं और मुझे अपनी विशेष चावल varieties के उचित दाम पाने में मदद करते हैं।\"",
+                
+                // CTA
+                "cta_title": "आज ही अपनी यात्रा शुरू करें",
+                "cta_subtitle": "अपने उत्पादन का बेहतर मूल्य पाने वाले हजारों किसानों में शामिल हों",
+                "cta_feature_1_title": "आसान सेटअप",
+                "cta_feature_1_desc": "सरल पंजीकरण के साथ मिनटों में शुरुआत करें",
+                "cta_feature_2_title": "आपकी भाषा में सहायता",
+                "cta_feature_2_desc": "हिंदी, तमिल, तेलुगु और अन्य भाषाओं में सहायता उपलब्ध",
+                "start_free": "मुफ्त शुरू करें",
+                "see_plans": "योजनाएं देखें",
+                
+                // Footer
+                "for_farmers": "किसानों के लिए",
+                "footer_description": "किसानों को उनकी गुणवत्तापूर्ण उपज का उचित मूल्य दिलाने में मदद करना।",
+                "help_support": "मदद और समर्थन",
+                "how_to_videos": "कैसे करें वीडियो",
+                "farmer_guide": "किसान गाइड",
+                "support": "समर्थन",
+                "contact": "संपर्क करें",
+                "made_for_farmers": "किसानों के लिए बनाया गया",
+                
+                // Help button
+                "watch_tutorial": "ट्यूटोरियल देखें",
+                "chatbot": "चैटबॉट"
+            },
+            te: {
+                // Navigation
+                "home": "హోమ్",
+                "my_products": "నా ఉత్పత్తులు",
+                "dashboard": "డాష్బోర్డ్",
+                "pricing": "ధరలు",
+                "add_product": "ఉత్పత్తిని జోడించండి",
+                "transparency": "పారదర్శకత",
+                
+                // Hero section
+                "hero_title": "మీ వ్యవసాయ ఉత్పత్తులను ట్రాక్ చేయండి<br /><span class=\"text-primary\">వ్యవసాయ భూమి నుండి మార్కెట్ వరకు</span>",
+                "hero_description": "మీ ఉత్పత్తులను ట్రాక్ చేయడానికి, కొనుగోలుదారులతో నమ్మకాన్ని构建 చేయడానికి మరియు మీ ఉత్పత్తికి మంచి ధరలు పొందడానికి సరళమైన వేదిక.",
+                "start_tracking": "ఇప్పుడే ట్రాకింగ్ ప్రారంభించండి",
+                "see_example": "ఉదాహరణ చూడండి",
+                "feature_1": "టెక్నికల్ జ్ఞానం అవసరం లేదు",
+                "feature_2": "బేసిక్ స్మార్ట్ఫోన్లతో పనిచేస్తుంది",
+                "feature_3": "బహుళ భాషల్లో అందుబాటులో ఉంది",
+                
+                // Benefits section
+                "benefits_title": "రైతులకు ప్రయోజనాలు",
+                "benefits_subtitle": "KrishiPath మీ ఉత్పత్తికి మంచి విలువ పొందడానికి ఎలా సహాయపడుతుంది",
+                "benefit_1_title": "మంచి ధరలు",
+                "benefit_1_desc": "కొనుగోలుదారులు మీ ఉత్పత్తి నాణ్యతను ధృవీకరించగలిగినప్పుడు 15-25% ఎక్కువ ధరలు పొందండి",
+                "benefit_2_title": "కొనుగోలుదారుల నమ్మకం",
+                "benefit_2_desc": "మీ వ్యవసాయ పద్ధతులను చూడగలిగే కొనుగోలుదారులతో నమ్మకాన్ని构建 చేయండి",
+                "benefit_3_title": "సులభమైన రికార్డులు",
+                "benefit_3_desc": "కాగితపు work లేకుండా మీ ఉత్పత్తుల డిజిటల్ రికార్డులను ఉంచండి",
+                
+                // How it works
+                "how_it_works": "ఇది ఎలా పనిచేస్తుంది",
+                "step_1": "మీ వ్యవసాయ ఉత్పత్తిని నమోదు చేసుకోండి",
+                "step_2": "మీ ఉత్పత్తికి QR కోడ్ పొందండి",
+                "step_3": "ప్రతి దశలో నవీకరించండి (విత్తుకోత, రవాణా, మార్కెట్)",
+                "step_4": "ఉత్పత్తి ప్రయాణాన్ని చూడటానికి కొనుగోలుదారులు QR స్కాన్ చేస్తారు",
+                
+                // Simple to use
+                "simple_title": "ఉపయోగించడం సులభం",
+                "simple_subtitle": "మీ ఉత్పత్తులను ట్రాక్ చేయడం ప్రారంభించడానికి మూడు సులభమైన దశలు",
+                "step_title_1": "నమోదు",
+                "step_desc_1": "ఖాతా సృష్టించండి మరియు ఒకసారి మీ వ్యవసాయ వివరాలను జోడించండి",
+                "step_title_2": "ఉత్పత్తులను జోడించండి",
+                "step_desc_2": "మీ ఉత్పత్తులు మరియు బ్యాచ్ల కోసం QR కోడ్లను స్కాన్ చేయండి లేదా సృష్టించండి",
+                "step_title_3": "ప్రయాణాన్ని నవీకరించండి",
+                "step_desc_3": "విత్తుకోత నుండి మార్కెట్ వరకు ప్రతి దశలో ఉత్పత్తి స్థితిని నవీకరించండి",
+                "get_started": "ఈరోజే ప్రారంభించండి",
+                
+                // Stories
+                "stories_title": "మీలాగే రైతులు విజయం సాధిస్తున్నారు",
+                "stories_subtitle": "పారదర్శకత నుండి ఇతర రైతులు ఎలా ప్రయోజనం పొందుతున్నారో చూడండి",
+                "farmer_1_location": "కూరగాయల రైతు, పంజాబ్",
+                "farmer_1_quote": "\"జైవిక కూరగాయలకు ఇప్పుడు నాకు 20% ఎక్కువ ధరలు లభిస్తున్నాయి, ఎందుకంటే కొనుగోలుదారులు నా వ్యవసాయ పద్ధతులను ధృవీకరించగలరు.\"",
+                "farmer_2_location": "పండ్ల వ్యవసాయదారు, మహారాష్ట్ర",
+                "farmer_2_quote": "\"కొనుగోలుదారులు నాణ్యతపై నమ్మకం ఉంచుతారు, ఎందుకంటే వారు ప్రయాణాన్ని చూసినప్పుడు, నా మామిడిపండ్లు ఇప్పుడు మంచి మార్కెట్లకు చేరుకుంటాయి.\"",
+                "farmer_3_location": "వరి రైతు, పశ్చিম బెంగాల్",
+                "farmer_3_quote": "\"డిజిటల్ రికార్డులు నా సమయాన్ని ఆదా చేస్తాయి మరియు నా ప్రత్యేక వరి రకాలకు న్యాయమైన ధరలు పొందడంలో నాకు సహాయపడతాయి.\"",
+                
+                // CTA
+                "cta_title": "ఈరోజే మీ ప్రయాణం ప్రారంభించండి",
+                "cta_subtitle": "తమ ఉత్పత్తికి మంచి విలువ పొందే వేలాది రైతులలో చేరండి",
+                "cta_feature_1_title": "సులభమైన సెటప్",
+                "cta_feature_1_desc": "సరళమైన నమోదుతో నిమిషాల్లో ప్రారంభించండి",
+                "cta_feature_2_title": "మీ భాషలో మద్దతు",
+                "cta_feature_2_desc": "హిందీ, తమిళం, తెలుగు మరియు మరిన్ని భాషలలో సహాయం అందుబాటులో ఉంది",
+                "start_free": "ఉచితంగా ప్రారంభించండి",
+                "see_plans": "ప్లాన్లను చూడండి",
+                
+                // Footer
+                "for_farmers": "రైతుల కోసం",
+                "footer_description": "రైతులకు వారి నాణ్యమైన పంటకు న్యాయమైన విలువ పొందడంలో సహాయపడటం.",
+                "help_support": "సహాయం మరియు మద్దతు",
+                "how_to_videos": "ఎలా చేయాలి వీడియోలు",
+                "farmer_guide": "రైతు గైడ్",
+                "support": "మద్దతు",
+                "contact": "సంప్రదించండి",
+                "made_for_farmers": "రైతుల కోసం తయారు చేయబడింది",
+                
+                // Help button
+                "watch_tutorial": "ట్యుటోరియల్ చూడండి",
+                "chatbot": "చాట్బాట్"
+            },
+            or: {
+                // Navigation
+                "home": "ହୋମ୍",
+                "my_products": "ମୋର ଉତ୍ପାଦଗୁଡିକ",
+                "dashboard": "ଡ୍ୟାସବୋର୍ଡ",
+                "pricing": "ମୂଲ୍ୟ ନିର୍ଧାରଣ",
+                "add_product": "ଉତ୍ପାଦ ଯୋଡନ୍ତୁ",
+                "transparency": "ପାରଦର୍ଶିତା",
+                
+                // Hero section
+                "hero_title": "ଆପଣଙ୍କର କୃଷି ଉତ୍ପାଦଗୁଡିକୁ ଟ୍ରାକ୍ କରନ୍ତୁ<br /><span class=\"text-primary\">କ୍ଷେତରୁ ବଜାର ପର୍ଯ୍ୟନ୍ତ</span>",
+                "hero_description": "ଆପଣଙ୍କର ଉତ୍ପାଦଗୁଡିକୁ ଟ୍ରାକ୍ କରିବା, କ୍ରେତାମାନଙ୍କ ସହିତ ବିଶ୍ୱାସ ଗଠନ କରିବା ଏବଂ ଆପଣଙ୍କର ଉତ୍ପାଦନ ପାଇଁ ଭଲ ମୂଲ୍ୟ ପାଇବା ପାଇଁ ସରଳ ପ୍ଲାଟଫର୍ମ |",
+                "start_tracking": "ବର୍ତ୍ତମାନ ଟ୍ରାକିଂ ଆରମ୍ଭ କରନ୍ତୁ",
+                "see_example": "ଉଦାହରଣ ଦେଖନ୍ତୁ",
+                "feature_1": "କୌଣସି ପ୍ରାଯୁକ୍ତିକ ଜ୍ଞାନ ଆବଶ୍ୟକ ନାହିଁ",
+                "feature_2": "ମୌଳିକ ସ୍ମାର୍ଟଫୋନ୍ଗୁଡ଼ିକ ସହିତ କାମ କରେ",
+                "feature_3": "ଏକାଧିକ ଭାଷାରେ ଉପଲବ୍ଧ",
+                
+                // Benefits section
+                "benefits_title": "କୃଷକଙ୍କ ପାଇଁ ଉପକାରିତା",
+                "benefits_subtitle": "କୃଷିପଥ ଆପଣଙ୍କୁ ଆପଣଙ୍କ ଉତ୍ପାଦର ଉନ୍ନତ ମୂଲ୍ୟ ପାଇବାରେ କିପରି ସାହାଯ୍ୟ କରେ",
+                "benefit_1_title": "ଉନ୍ନତ ମୂଲ୍ୟ",
+                "benefit_1_desc": "15-25% ଉଚ୍ଚ ମୂଲ୍ୟ ପାଆନ୍ତୁ ଯେତେବେଳେ କ୍ରେତାମାନେ ଆପଣଙ୍କ ଉତ୍ପାଦ ଗୁଣବତ୍ତା ଯାଞ୍ଚ କରିପାରିବେ",
+                "benefit_2_title": "କ୍ରେତା ବିଶ୍ୱାସ",
+                "benefit_2_desc": "କ୍ରେତାମାନଙ୍କ ସହିତ ବିଶ୍ୱାସ ଗଠନ କରନ୍ତୁ ଯେଉଁମାନେ ଆପଣଙ୍କର କୃଷି ପ୍ରଣାଳୀ ଦେଖିପାରିବେ",
+                "benefit_3_title": "ସହଜ ରେକର୍ଡଗୁଡିକ",
+                "benefit_3_desc": "କାଗଜପত্র ବିନା ଆପଣଙ୍କ ଉତ୍ପାଦଗୁଡିକର ଡିଜିଟାଲ୍ ରେକର୍ଡ ରଖନ୍ତୁ",
+                
+                // How it works
+                "how_it_works": "ଏହା କିପରି କାମ କରେ",
+                "step_1": "ଆପଣଙ୍କର କୃଷି ଉତ୍ପାଦ ପଞ୍ଜିକରଣ କରନ୍ତୁ",
+                "step_2": "ଆପଣଙ୍କ ଉତ୍ପାଦ ପାଇଁ QR କୋଡ୍ ପ୍ରାପ୍ତ କରନ୍ତୁ",
+                "step_3": "ପ୍ରତ୍ୟେକ ପଦକ୍ଷେପରେ ଅଦ୍ୟତନ କରନ୍ତୁ (ଫସଲ କଟାଣ, ପରିବହନ, ବଜାର)",
+                "step_4": "କ୍ରେତାମାନେ ଉତ୍ପାଦ ଯାତ୍ରା ଦେଖିବା ପାଇଁ QR ସ୍କାନ୍ କରନ୍ତି",
+                
+                // Simple to use
+                "simple_title": "ବ୍ୟବହାର କରିବାକୁ ସରଳ",
+                "simple_subtitle": "ଆପଣଙ୍କର ଉତ୍ପାଦଗୁଡିକୁ ଟ୍ରାକ୍ କରିବା ଆରମ୍ଭ କରିବାର ତିନୋଟି ସରଳ ପଦକ୍ଷେପ",
+                "step_title_1": "ପଞ୍ଜିକରଣ",
+                "step_desc_1": "ଏକ ଆକାଉଣ୍ଟ୍ ସୃଷ୍ଟି କରନ୍ତୁ ଏବଂ ଥରେ ଆପଣଙ୍କ କୃଷି ବିବରଣୀ ଯୋଡନ୍ତୁ",
+                "step_title_2": "ଉତ୍ପାଦ ଯୋଡନ୍ତୁ",
+                "step_desc_2": "ଆପଣଙ୍କର ଉତ୍ପାଦଗୁଡିକ ଏବଂ ବ୍ୟାଚ୍ଗୁଡିକ ପାଇଁ QR କୋଡ୍ଗୁଡିକୁ ସ୍କାନ୍ କରନ୍ତୁ କିମ୍ବା ସୃଷ୍ଟି କରନ୍ତୁ",
+                "step_title_3": "ଯାତ୍ରା ଅଦ୍ୟତନ କରନ୍ତୁ",
+                "step_desc_3": "ଫସଲ କଟାଣରୁ ବଜାର ପର୍ଯ୍ୟନ୍ତ ପ୍ରତ୍ୟେକ ପଦକ୍ଷେପରେ ଉତ୍ପାଦ ସ୍ଥିତି ଅଦ୍ୟତନ କରନ୍ତୁ",
+                "get_started": "ଆଜି ଆରମ୍ଭ କରନ୍ତୁ",
+                
+                // Stories
+                "stories_title": "ଆପଣଙ୍କ ପରି କୃଷକମାନେ ସଫଳ ହେଉଛନ୍ତି",
+                "stories_subtitle": "ଅନ୍ୟ କୃଷକମାନେ ପାରଦର୍ଶିତାରୁ କିପରି ଉପକୃତ ହେଉଛନ୍ତି ଦେଖନ୍ତୁ",
+                "farmer_1_location": "ପନିପରିବା କୃଷକ, ପଞ୍ଜାବ",
+                "farmer_1_quote": "\"ଜୈବିକ ପନିପରିବା ପାଇଁ ମୁଁ ବର୍ତ୍ତମାନ 20% ଅଧିକ ମୂଲ୍ୟ ପାଉଛି ଯେହେତୁ କ୍ରେତାମାନେ ମୋର କୃଷି ପଦ୍ଧତିକୁ ଯାଞ୍ଚ କରିପାରୁଛନ୍ତି |\"",
+                "farmer_2_location": "ଫଳ ଚାଷୀ, ମହାରାଷ୍ଟ୍ର",
+                "farmer_2_quote": "\"ମୋର ଆମ୍ବଗୁଡିକ ବର୍ତ୍ତମାନ ଉନ୍ନତ ବଜାରରେ ପହଞ୍ଚୁଛି କାରଣ କ୍ରେତାମାନେ ଗୁଣବତ୍ତା ଉପରେ ବିଶ୍ୱାସ କରନ୍ତି ଯେତେବେଳେ ସେମାନେ ଯାତ୍ରା ଦେଖନ୍ତି |\"",
+                "farmer_3_location": "ଧାନ ଚାଷୀ, ପଶ୍ଚିମବଙ୍ଗ",
+                "farmer_3_quote": "\"ଡିଜିଟାଲ୍ ରେକର୍ଡଗୁଡିକ ମୋର ସମୟ ବଞ୍ଚାଏ ଏବଂ ମୋର ବିଶେଷ ଧାନ ପ୍ରଜାତି ପାଇଁ ଯଥାର୍ଥ ମୂଲ୍ୟ ପାଇବାରେ ମୋତେ ସାହାଯ୍ୟ କରେ |\"",
+                
+                // CTA
+                "cta_title": "ଆଜି ଆପଣଙ୍କର ଯାତ୍ରା ଆରମ୍ଭ କରନ୍ତୁ",
+                "cta_subtitle": "ସେମାନଙ୍କର ଉତ୍ପାଦନ ପାଇଁ ଉନ୍ନତ ମୂଲ୍ୟ ପାଉଥିବା ହଜାରହଜାର କୃଷକଙ୍କ ସହିତ ଯୋଗ ଦିଅନ୍ତୁ",
+                "cta_feature_1_title": "ସହଜ ସେଟଅପ୍",
+                "cta_feature_1_desc": "ସରଳ ପଞ୍ଜିକରଣ ସହିତ ମିନିଟ୍ ମଧ୍ୟରେ ଆରମ୍ଭ କରନ୍ତୁ",
+                "cta_feature_2_title": "ଆପଣଙ୍କ ଭାଷାରେ ସମର୍ଥନ",
+                "cta_feature_2_desc": "ହିନ୍ଦୀ, ତାମିଲ, ତେଲୁଗୁ ଏବଂ ଅନ୍ୟାନ୍ୟ ଭାଷାଗୁଡିକରେ ସାହାଯ୍ୟ ଉପଲବ୍ଧ",
+                "start_free": "ମାଗଣା ଆରମ୍ଭ କରନ୍ତୁ",
+                "see_plans": "ଯୋଜନାଗୁଡିକ ଦେଖନ୍ତୁ",
+                
+                // Footer
+                "for_farmers": "କୃଷକଙ୍କ ପାଇଁ",
+                "footer_description": "କୃଷକଙ୍କୁ ସେମାନଙ୍କର ଗୁଣବତ୍ତାପୂର୍ଣ୍ଣ ଫସଲ ପାଇଁ ଯଥାର୍ଥ ମୂଲ୍ୟ ପାଇବାରେ ସାହାଯ୍ୟ କରିବା |",
+                "help_support": "ସାହାଯ୍ୟ ଏବଂ ସମର୍ଥନ",
+                "how_to_videos": "କିପରି କରିବେ ଭିଡିଓଗୁଡିକ",
+                "farmer_guide": "କୃଷକ ଗାଇଡ୍",
+                "support": "ସମର୍ଥନ",
+                "contact": "ଯୋଗାଯୋଗ କରନ୍ତୁ",
+                "made_for_farmers": "କୃଷକଙ୍କ ପାଇଁ ତିଆରି",
+                
+                // Help button
+                "watch_tutorial": "ଟ୍ୟୁଟୋରିଆଲ୍ ଦେଖନ୍ତୁ",
+                "chatbot": "ଚାଟବଟ୍"
+            }
+            // Additional languages can be added here following the same pattern
+        };
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        }
+
+        // Add smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const helpButton = document.getElementById('helpButton');
+            const helpOptions = document.getElementById('helpOptions');
+
+            helpButton.addEventListener('click', function () {
+                helpOptions.classList.toggle('active');
+            });
+
+            // Close the options when clicking outside
+            document.addEventListener('click', function (event) {
+                if (!event.target.closest('.help-container')) {
+                    helpOptions.classList.remove('active');
+                }
+            });
+
+            // Language switcher functionality
+            const languageButton = document.getElementById('languageButton');
+            const mobileLanguageButton = document.getElementById('mobileLanguageButton');
+            const languageOptions = document.getElementById('languageOptions');
+            const mobileLanguageOptions = document.getElementById('mobileLanguageOptions');
+            const currentLanguage = document.getElementById('currentLanguage');
+            const mobileCurrentLanguage = document.getElementById('mobileCurrentLanguage');
+
+            // Set initial language from localStorage or default to English
+            let currentLang = localStorage.getItem('selectedLanguage') || 'en';
+            changeLanguage(currentLang);
+
+            // Toggle language options
+            if (languageButton) {
+                languageButton.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    languageOptions.classList.toggle('active');
+                });
+            }
+
+            if (mobileLanguageButton) {
+                mobileLanguageButton.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    mobileLanguageOptions.classList.toggle('active');
+                });
+            }
+
+            // Close language options when clicking outside
+            document.addEventListener('click', function () {
+                languageOptions.classList.remove('active');
+                mobileLanguageOptions.classList.remove('active');
+            });
+
+            // Prevent language options from closing when clicking inside
+            languageOptions.addEventListener('click', function (e) {
+                e.stopPropagation();
+            });
+
+            mobileLanguageOptions.addEventListener('click', function (e) {
+                e.stopPropagation();
+            });
+
+            // Handle language selection
+            document.querySelectorAll('.language-option').forEach(option => {
+                option.addEventListener('click', function () {
+                    const lang = this.getAttribute('data-lang');
+                    changeLanguage(lang);
+                    
+                    // Close the dropdowns
+                    languageOptions.classList.remove('active');
+                    mobileLanguageOptions.classList.remove('active');
+                });
+            });
+
+            function changeLanguage(lang) {
+                // Update active class on language options
+                document.querySelectorAll('.language-option').forEach(option => {
+                    option.classList.remove('active');
+                    if (option.getAttribute('data-lang') === lang) {
+                        option.classList.add('active');
+                    }
+                });
+
+                // Update current language text
+                const langName = document.querySelector(`.language-option[data-lang="${lang}"] span`).textContent;
+                if (currentLanguage) currentLanguage.textContent = langName.split(' (')[0];
+                if (mobileCurrentLanguage) mobileCurrentLanguage.textContent = langName.split(' (')[0];
+
+                // Save selected language to localStorage
+                localStorage.setItem('selectedLanguage', lang);
+
+                // Update all translatable elements
+                document.querySelectorAll('[data-translate]').forEach(element => {
+                    const key = element.getAttribute('data-translate');
+                    if (translations[lang] && translations[lang][key]) {
+                        if (element.innerHTML.includes('<span class="text-primary">')) {
+                            // Preserve HTML in the translation
+                            const tempElement = document.createElement('div');
+                            tempElement.innerHTML = translations[lang][key];
+                            if (tempElement.querySelector('.text-primary')) {
+                                element.innerHTML = translations[lang][key];
+                            } else {
+                                element.textContent = translations[lang][key];
+                            }
+                        } else {
+                            element.textContent = translations[lang][key];
+                        }
+                    }
+                });
+
+                // Update the lang attribute of the HTML element
+                document.documentElement.lang = lang;
+            }
+        });
+    </script>
+</body>
+
+</html>
