@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import io from 'socket.io-client';
-import { SERVER_URL } from '../config';
+import { SOCKET_URL } from '../config';
 
 export const useSocketStore = create((set, get) => ({
     socket: null,
@@ -13,8 +13,9 @@ export const useSocketStore = create((set, get) => ({
             prev.disconnect();
         }
 
-        const socket = io(SERVER_URL, {
-            auth: { token }
+        const socket = io(SOCKET_URL, {
+            auth: { token },
+            withCredentials: true
         });
 
         socket.on('connect', () => {

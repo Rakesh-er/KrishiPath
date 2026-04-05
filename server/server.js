@@ -6,6 +6,8 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import OpenAI from 'openai';
 import { Server } from 'socket.io';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
 
 import authRoutes from './routes/auth.js';
 import produceRoutes from './routes/produce.js';
@@ -17,6 +19,23 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Security: Helmet for common security headers
+app.use(helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" }
+}));
+
+// Rate limiting: prevent brute force/DDoS
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // limit each IP to 100 requests per windowMs
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: 'Too many requests from this IP, please try again after 15 minutes'
+});
+
+// Apply rate limiter to all /api routes
+app.use('/api/', limiter);
+
 const allowedOrigins = (
     process.env.CORS_ORIGINS?.split(',').map((s) => s.trim()).filter(Boolean)
 ) || [
@@ -27,10 +46,29 @@ const allowedOrigins = (
     'http://localhost:8080'
 ];
 
+/**
+ * CORS Configuration:
+ * - origin: Dynamic origin whitelist from .env (CORS_ORIGINS)
+ * - methods: Allowed HTTP methods for API communication
+ * - allowedHeaders: Headers allowed in requests (Authorization, Content-Type)
+ * - credentials: true allows passing cookies/authorization headers
+ * - preflight: handled by cors middleware (optionsSuccessStatus: 204)
+ */
 app.use(cors({
-    origin: allowedOrigins,
+    origin: function (origin, callback) {
+        // allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.indexOf(origin) === -1) {
+            const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+            return callback(new Error(msg), false);
+        }
+        return callback(null, true);
+    },
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+    credentials: true,
+    preflightContinue: false,
+    optionsSuccessStatus: 204
 }));
 app.use(bodyParser.json({ limit: '2mb' }));
 
@@ -126,7 +164,8 @@ const httpServer = http.createServer(app);
 const io = new Server(httpServer, {
     cors: {
         origin: allowedOrigins,
-        methods: ['GET', 'POST']
+        methods: ['GET', 'POST'],
+        credentials: true
     }
 });
 
